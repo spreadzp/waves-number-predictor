@@ -1,0 +1,44 @@
+@startuml
+
+title Game - find number into 0 - 100
+
+
+start
+
+:Start the game;
+:Case when number < 50
+if (num <= 50?) then (yes)
+    :Number from 1 to 50; 
+    if (num < 25?) then (yes) 
+        :Number from 1 to 25; 
+        if (num < 12?) then (yes)
+            :Number from 1 to 12; 
+            if (num < 6?) then (yes)
+                :Number from 1 to 6; 
+                if (num < 3?) then (yes)
+                    if (num < 2?) then (yes)
+                        :Number = 1;
+                    else (no)
+                        :Number = 2;
+                        endif
+               :Game over;
+               stop
+                else (no) 
+                    if (num < 4?) then (yes)
+                        :Number = 3;
+                        :Game over;
+                        stop
+                    else (no)
+                        if (num < 5?) then (yes)
+                            :Number = 4;
+                            :Game over;
+                            stop
+                        else (no) 
+                            :Number = 5;
+                            :Game over;
+                            stop 
+                  
+:Winner get prize!; 
+stop
+
+@enduml

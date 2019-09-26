@@ -1,0 +1,229 @@
+{-# STDLIB_VERSION 3 #-}
+{-# CONTENT_TYPE DAPP #-}
+{-# SCRIPT_TYPE ACCOUNT #-}
+
+let startRoundHeight = 5
+
+func randomizer(inv: Invocation) = {
+    let lastPlay = match getBinary(this, "lastPlay") {
+        case s:ByteVector => s
+        case a:Unit => base64'V2F2ZXNMb3R0b1Yy'
+    }
+
+    let rand = lastPlay + inv.transactionId + inv.callerPublicKey + lastBlock.generationSignature + toBytes(lastBlock.timestamp) + toBytes(lastBlock.height)
+    sha256(rand)
+}
+func getCurrentNumberRound() = {
+  match getInteger(this, "numberRound") { 
+    case a:Int => a
+    case _ => 1
+  } 
+}
+
+func getCurrentNumberGame() = {
+  match getInteger(this, "numberGame") { 
+    case a:Int => a
+    case _ => 1
+  } 
+}
+
+func getCurrentGameAndRound() = {
+  getCurrentNumberGame().toString() + "_" + getCurrentNumberRound().toString()
+}
+
+func getCurrentGameAndPrevRound() = {
+  let prevRound = getCurrentNumberRound() - 1
+  getCurrentNumberGame().toString() + "_" + prevRound.toString() + "_"
+}
+
+func setWinnersPrevRound(currRound: Int, randhash: Int) = {
+  let prevNumberRound = getCurrentGameAndPrevRound()
+  if (randhash > 500) then
+    WriteSet([
+      DataEntry(prevNumberRound + "lastRoundWinner", prevNumberRound + "more_" ),
+      DataEntry("numberRound", currRound) ,
+      DataEntry("startGame", true),
+      DataEntry("randhash", randhash)
+      ] 
+    )  
+  else  
+    WriteSet([
+      DataEntry(prevNumberRound + "lastRoundWinner", prevNumberRound + "less_" ),
+      DataEntry("numberRound", currRound),
+      DataEntry("startGame", true),
+      DataEntry("randhash", randhash)
+        ]
+    ) 
+}
+
+func getGamerBet(addressGamer: String, direction: String) = {
+  match getInteger(this, getCurrentGameAndRound() + "_" + direction + "_" + addressGamer) { 
+        case g:Int => g
+        case _ => 0
+  } 
+}
+
+func setGamerBet(addressGamer: String, directionRate: String, directionGamer: String, currentBet: Int) = {
+    let newNumberOfRound = getCurrentNumberRound()
+    let numOfGamersCurrDirection = match getInteger(this, getCurrentGameAndRound() + directionGamer) { 
+      case g:Int => g
+      case _ => 0
+    }
+    let sumOfBank = match getInteger(this, getCurrentNumberGame().toString() + "_bankOfGame") { 
+      case g:Int => g
+      case _ => 0
+    }
+    let sumGamerBets = match getInteger(this, getCurrentNumberGame().toString() + "_" + addressGamer) { 
+      case s:Int => s
+      case _ => 0
+    }  
+    WriteSet([
+      DataEntry(getCurrentGameAndRound() + directionRate + addressGamer, currentBet),
+      DataEntry(getCurrentGameAndRound() + directionGamer, numOfGamersCurrDirection + 1),
+      DataEntry(getCurrentNumberGame().toString() + "_bankOfGame", sumOfBank + currentBet),
+      DataEntry(getCurrentNumberGame().toString() + "_" + addressGamer, sumGamerBets + currentBet)
+      ]) 
+}
+
+func getBet(round: Int, addressGamer: String) =  {
+  let minBet = 100000000
+  if(round > 1 ) then { 
+    let winnerOfPrevRound = getCurrentGameAndPrevRound()
+    let winnerBetFromPrevRound = match getInteger(this, winnerOfPrevRound + addressGamer) {
+      case w: Int => w
+      case _ => 0
+    }
+    let ratesGamerInGame = match getInteger(this, getCurrentNumberGame().toString() + "_" + addressGamer) {
+          case r: Int => r
+          case _ => 0
+        }
+    if(winnerBetFromPrevRound != 0) then 
+       minBet 
+    else if (winnerBetFromPrevRound == 0 && ratesGamerInGame != 0) then 
+      minBet # * round * 2  - ratesGamerInGame
+    else if (winnerBetFromPrevRound == 0 && ratesGamerInGame == 0) then
+      minBet * round * 2
+    else 
+      minBet  
+  } 
+  else 
+    minBet
+}
+
+func isOppositeRate() = {
+  let numberOfRound = getCurrentNumberRound()
+    let numberOfGamersUp = match getInteger(this, numberOfRound.toString() + "_countGamersUp") { 
+      case g:Int => g
+      case _ => 0
+    }
+    let numberOfGamersDown = match getInteger(this, numberOfRound.toString() + "_countGamersDown") { 
+      case g:Int => g
+      case _ => 0
+    }
+    numberOfGamersUp > 0 && numberOfGamersDown > 0
+}
+
+func getNextNumberGame() = {
+  match getInteger(this, "numberGame") { 
+    case a:Int => a + 1
+    case _ => 1
+  }
+}
+
+func sendPrize(currentNumberGame: Int) = {
+  TransferSet([ScriptTransfer(i.caller, amount, unit)])
+}
+
+@Callable(i)
+func startRound() = {
+  let numberOfRound = getCurrentNumberRound()
+  let randhash = randomizer(i)
+  let isGameStarted = match getBoolean(this, "startGame") {
+    case g:Boolean => g
+    case _ => false
+  }
+  if(i.caller != this) then
+    throw("Only owner can start the game.") 
+  else if(numberOfRound == 0 && i.caller == this ) then
+    let currentNumberGame = getCurrentNumberGame() 
+    # invoke script
+    sendPrize(currentNumberGame)  
+    let newNumberGame = currentNumberGame + 1
+    WriteSet([
+      DataEntry("numberGame", newNumberGame),
+      DataEntry("startGame", !isGameStarted),
+      DataEntry("numberRound", 1),
+      DataEntry(newNumberGame.toString() + "_bankOfGame", 0)
+      ]) 
+  else if (numberOfRound > 1 && i.caller == this && !isGameStarted) then 
+    setWinnersPrevRound(numberOfRound, randhash.toInt() % 1000)
+  else
+    throw("Same error." + numberOfRound.toString() + isGameStarted.toString())  
+} 
+
+@Callable(i)
+func stopGame() = {
+  let isGameStarted = match getBoolean(this, "startGame") {
+    case g:Boolean => g
+    case _ => false
+  } #isOppositeRate() &&  && !isGameStarted
+  if(i.caller == this) then
+  let newNumberOfRound = (getCurrentNumberRound() + 1) % 8
+    WriteSet([
+      DataEntry("startGame", !isGameStarted),
+      DataEntry("numberRound", newNumberOfRound)
+    ])
+  else
+    throw("Only owner can start the game.")  
+} 
+
+@Callable(i)
+func makeBetLess() = {
+  let isGameStarted = match getBoolean(this, "startGame") {
+    case g:Boolean => g
+    case _ => false
+  } 
+  let pmt = extract(i.payment)
+  let addressGamer = toBase58String(i.caller.bytes)
+  let currentRound = getCurrentNumberRound()
+  let countBet = getBet(currentRound, addressGamer)
+  let gamerAlreadyOppositeBet = getGamerBet(addressGamer, "more")
+  if (gamerAlreadyOppositeBet != 0) then 
+    throw("The gamer already made opposite a bet in the round!")  
+  else if(countBet > pmt.amount) then 
+    throw("Payment must be more for the round!" + countBet.toString() + pmt.amount.toString() + currentRound.toString() + addressGamer)  
+  else if (gamerAlreadyOppositeBet == 0 && !isDefined(pmt.assetId) && countBet <= pmt.amount && isGameStarted) then    
+    setGamerBet(addressGamer, "_less_", "_countGamersDown", pmt.amount)  
+  else
+    throw("works with waves only")
+}
+
+@Callable(i)
+func makeBetMore() = {
+  let isGameStarted = match getBoolean(this, "startGame") {
+    case g:Boolean => g
+    case _ => false
+  } 
+  let pmt = extract(i.payment)
+  let addressGamer = toBase58String(i.caller.bytes)
+  let currentRound = getCurrentNumberRound()
+  let countBet = getBet(currentRound, addressGamer)
+  let gamerAlreadyOppositeBet = getGamerBet(addressGamer, "less")
+  if (gamerAlreadyOppositeBet != 0 ) then 
+    throw("The gamer already made opposite bet in the round!")
+  else if(countBet > pmt.amount) then
+    throw("Payment must be more for the round!" + countBet.toString() + pmt.amount.toString() + currentRound.toString() + addressGamer)
+  else if (gamerAlreadyOppositeBet == 0 && !isDefined(pmt.assetId) && countBet <= pmt.amount && isGameStarted) then
+    setGamerBet(addressGamer, "_more_", "_countGamersUp", pmt.amount) 
+  else
+    throw("works with waves only")
+}
+
+@Verifier(tx)
+func verify() = {
+    match(tx) {
+        case t:DataTransaction => false
+        case t:SetScriptTransaction => false
+        case _ => sigVerify(tx.bodyBytes, tx.proofs[0], tx.senderPublicKey)
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "ride_directory": "contracts",
+    "test_directory": "test-contracts",
+    "envs": {
+        "devnet": {
+            "API_BASE": "http://34.67.151.232:6869/",
+            "CHAIN_ID": "R",
+            "SEED": "tooth great gown say drill repair fluid unveil mosquito column design pyramid dust wreck safe",
+            "timeout": 60000
+        },
+        "testnet": {
+            "API_BASE": "https://testnodes.wavesnodes.com/",
+            "CHAIN_ID": "T",
+            "SEED": "perfect decline slice surface culture apology head merit bench shed meat melt",
+            "timeout": 60000
+        },
+        "mainnet": {
+            "API_BASE": "https://nodes.wavesnodes.com/",
+            "CHAIN_ID": "W",
+            "SEED": "YOUR MAIN NET SEED",
+            "timeout": 60000
+        }
+       
+    },
+    "defaultEnv": "devnet",
+    "mocha": {
+        "timeout": 60000
+    }
+}
