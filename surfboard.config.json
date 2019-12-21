@@ -5,7 +5,7 @@
         "devnet": {
             "API_BASE": "http://34.67.151.232:6869/",
             "CHAIN_ID": "R",
-            "SEED": "toth great gown say drill repair fluid unveil mosquito column design pyramid dust wreck safe",
+            "SEED": "tooth great gown say drill repair fluid unveil mosquito column design pyramid dust wreck safe",
             "timeout": 60000
         },
         "testnet": {

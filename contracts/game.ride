@@ -146,8 +146,8 @@ func startRound() = {
     throw("Only owner can start the game.") 
   else if(numberOfRound == 0 && i.caller == this ) then
     let currentNumberGame = getCurrentNumberGame() 
-    # invoke script
-    sendPrize(currentNumberGame)  
+    #invoke script
+    # sendPrize(currentNumberGame)  ?
     let newNumberGame = currentNumberGame + 1
     WriteSet([
       DataEntry("numberGame", newNumberGame),

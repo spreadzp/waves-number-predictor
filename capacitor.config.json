@@ -1,6 +1,7 @@
 {
-  "appId": "com.ionic.movies",
-  "appName": "angular-ionic-ngxs-movies",
+  "appId": "io.ionic.starter",
+  "appName": "Gambling Game",
   "bundledWebRuntime": false,
-  "webDir": "dist"
+  "webDir": "www",
+  "npmClient": "npm"
 }

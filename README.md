@@ -3,25 +3,6 @@
 DAPP is  a Gambling Game 
 with Waves blockchain and APP with Angular, Ionic 4, Capacitor and NGXS (State Management).
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.4.
-
-This project shows you how to:
-
-    * Use Capacitor in Ionic 4.
-    * Use NGXS for state management in Ionic 4.
-    * Use NGXS plugins:
-        * Devtools: Plugin with integration with the Redux Devtools extension.
-        * Logger: A simple console log plugin to log actions as they are processed.
-        * Forms: Plugin that helps to keep your forms and state in sync.
-
-Technologies: Angular, Ionic, Capacitor, NGXS, TypeScript.
-
-
-
-## App Example
-
-
-
 ## Start fake json server
 
 ```bash
@@ -65,11 +46,3 @@ Run `ng generate component component-name` to generate a new component. You can 
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
