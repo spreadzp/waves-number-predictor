@@ -16,6 +16,7 @@ import { StarRatingModule } from 'angular-star-rating';
 import { GenreCarouselComponent } from '../../components/genre-carousel/genre-carousel.component';
 
 import { FilterPipe } from '../../pipes/filter.pipe';
+import { GameCarouselComponent } from '../../components/game-carousel/game-carousel.component';
 
 @NgModule({
   imports: [
@@ -27,8 +28,8 @@ import { FilterPipe } from '../../pipes/filter.pipe';
     FormsModule,
     StarRatingModule.forRoot()
   ],
-  declarations: [HomeComponent, MovieModalComponent, FilterMoviePopoverComponent, FavoritesMoviesModalComponent, GenreCarouselComponent,
+  declarations: [HomeComponent, MovieModalComponent, FilterMoviePopoverComponent, FavoritesMoviesModalComponent, GenreCarouselComponent, GameCarouselComponent,
                  FilterPipe],
-  entryComponents: [HomeComponent, MovieModalComponent, FilterMoviePopoverComponent, FavoritesMoviesModalComponent, GenreCarouselComponent],
+  entryComponents: [HomeComponent, MovieModalComponent, FilterMoviePopoverComponent, FavoritesMoviesModalComponent, GenreCarouselComponent, GameCarouselComponent],
 })
 export class HomeModule {}

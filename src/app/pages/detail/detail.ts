@@ -22,7 +22,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { IziToastService } from '../../providers/izi-toast.service';
 import { WavesService } from '../../providers/waves-service';
-import { Game, Round } from '../../models/game';
+import { Game, Round } from '../../models/game.model';
 
 @Component({
   selector: 'app-page-detail',

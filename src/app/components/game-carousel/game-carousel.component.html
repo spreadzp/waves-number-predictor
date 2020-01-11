@@ -1,0 +1,6 @@
+<div class="image-thumbnail">
+    <div *ngFor="let game of games; let i=index;" tappable (click)="selectGame(game, i)">
+      <ion-img [ngStyle]="{'border':i === selected ? '1px solid grey' : 'none' }" [src]="game.src"></ion-img>
+      <p text-center>{{ game.text }}</p>
+    </div>
+</div>

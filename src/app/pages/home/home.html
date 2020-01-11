@@ -38,11 +38,47 @@
       <h2>Gambling CARAVAN</h2>
   </ion-item>
 
-  <app-genre-carousel></app-genre-carousel>
+  <!-- <app-genre-carousel></app-genre-carousel> -->
+  <app-game-carousel></app-game-carousel>
 
   <ion-item *ngIf="movies$ | async; let movies">
     <ion-badge item-end slot="end">Results {{ movies.length }}</ion-badge>
   </ion-item>
+  <ion-item *ngIf="games$ | async; let games">
+    <ion-badge item-end slot="end">Results {{ games.length }}</ion-badge>
+  </ion-item>
+
+  <!-- Games List View. -->
+  <!--<ion-list *ngIf="!showSkeleton">-->
+    <ion-list *ngIf="iconView === 'apps'">
+      <!--<ion-item *ngFor="let movie of movies$ | async" detail="true" tappable routerLink="/detail/{{ movie.title }}">-->
+      <!--<ion-item-sliding *ngFor="let movie of movies; let i = index">-->
+      <ion-item-sliding *ngFor="let game of games$ | async; let i = index">
+        <ion-item tappable (click)="viewGameDetails(game)">
+        <ion-thumbnail slot="start">
+          <img [src]="game.poster" alt="Game Poster">
+        </ion-thumbnail>
+        <ion-label>
+          <h2>{{ game.typeGame }}</h2>
+          <h3 class="notes"><ion-icon name="calendar" color="primary" slot="start"></ion-icon>{{ game.bankGame }}</h3>
+          <h5 class="notes">
+            <span *ngIf="game.rounds.length !== undefined"><ion-icon name="thumbs-up" color="primary" slot="start"></ion-icon>{{ game.rounds.length }} | </span>
+            <span *ngIf="game.rate !== undefined"><ion-icon name="star" color="tertiary" slot="start"></ion-icon>{{ game.rate }}</span>
+          </h5>
+          <h4 class="notes">{{ game.notes }}</h4>
+        </ion-label>
+        <ion-note slot="end">
+            <ion-icon name="swap"></ion-icon>
+        </ion-note>
+        </ion-item>
+  
+        <!-- Sliding options. -->
+        <ion-item-options side="end">
+          <ion-item-option class="round-button" color="primary" (click)="editGame(game)"><ion-icon name="create"></ion-icon></ion-item-option>
+          <ion-item-option class="round-button" color="danger" (click)="deleteGame(game)"><ion-icon name="trash"></ion-icon></ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
 
   <!-- Movies List View. -->
   <!--<ion-list *ngIf="!showSkeleton">-->
@@ -50,7 +86,7 @@
     <!--<ion-item *ngFor="let movie of movies$ | async" detail="true" tappable routerLink="/detail/{{ movie.title }}">-->
     <!--<ion-item-sliding *ngFor="let movie of movies; let i = index">-->
     <ion-item-sliding *ngFor="let movie of movies$ | async | filter:search.value:movie; let i = index">
-      <ion-item tappable (click)="viewMovieDetails(movie)">
+      <ion-item tappable (click)="viewGameDetails(movie)">
       <ion-thumbnail slot="start">
         <img [src]="movie.poster" alt="Movie Poster">
       </ion-thumbnail>
@@ -99,7 +135,7 @@
   <ion-grid *ngIf="iconView === 'list'">
       <ion-row>
           <ion-col align-self-center size="6" *ngFor="let movie of movies$ | async; let i = index">
-            <ion-card style="width: 300px;" (click)="viewMovieDetails(movie)">
+            <ion-card style="width: 300px;" (click)="viewGameDetails(movie)">
                 <ion-item>
                   <h2><b>{{ movie?.title }}</b></h2>
                 </ion-item>
@@ -149,7 +185,7 @@
 
 <ion-footer>
     <ion-toolbar color="primary">
-        <ion-title>© {{ currentYear }} CARAVAN</ion-title>
+        <ion-title>© {{ currentYear }} CARAVAN </ion-title>
         <ion-buttons slot="end">
           <div class="github-button"><iframe allowtransparency="true" scrolling="no" frameborder="0" src="https://buttons.github.io/buttons.html#href=https%3A%2F%2Fgithub.com%2Fabritopach%2Fangular-ionic-master-detail&amp;title=&amp;aria-label=Star%20abritopach%2Fangular-ionic-master-detail%20on%20GitHub&amp;data-icon=octicon-star&amp;data-text=Star" style="width: 50px; height: 20px; border: none; padding-right: 5px"></iframe></div>
           <div class="github-button"><iframe allowtransparency="true" scrolling="no" frameborder="0" src="https://buttons.github.io/buttons.html#href=https%3A%2F%2Fgithub.com%2Fabritopach&amp;title=&amp;aria-label=Follow%20%40abritopach%20on%20GitHub&amp;data-text=GitHub" style="width: 67px; height: 20px; border: none;"></iframe></div>

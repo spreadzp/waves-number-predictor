@@ -110,7 +110,7 @@ export class FilterMoviePopoverComponent implements OnInit, OnDestroy {
   }
 
   filterMovies() {
-    console.log(this.filterForm.value);
+    console.log('113 ',this.filterForm.value);
     this.store.dispatch([
       new FilterMovies(this.filterForm.value/*this.filters*/),
       new SaveFilterMovies(this.filterForm.value/*this.filters*/)

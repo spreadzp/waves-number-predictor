@@ -21,6 +21,8 @@ import { FormControl } from '@angular/forms';
 import 'rxjs/add/operator/debounceTime';
 
 import { IziToastService } from '../../providers/izi-toast.service';
+import { Game } from '../../models/game.model';
+import { FetchGames } from '../../store/actions/games.actions';
 
 @Component({
   selector: 'app-page-home',
@@ -33,6 +35,7 @@ export class HomeComponent implements OnInit {
   currentYear = new Date().getFullYear();
   // Reads the name of the store from the store class.
   @Select(state => state.catalog.movies) movies$: Observable<Movie[]>;
+  @Select(state => state.catalogGame.games) games$: Observable<Game[]>;
   // movies$: Observable<Movie[]>;
   start: number;
   end: number;
@@ -77,6 +80,7 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     console.log('ngOnInit home');
     this.fetchMovies(this.start, this.end);
+    this.fetchGames(this.start, this.end);
      // Check if we have movies in local storage.
      if (localStorage.getItem('@@STATE') !== 'undefined') {
       const state = JSON.parse(localStorage.getItem('@@STATE'));
@@ -118,10 +122,28 @@ export class HomeComponent implements OnInit {
     );
   }
 
-  viewMovieDetails(movie: Movie) {
+  fetchGames(start, end) {
+    console.log('HomePage::fetchGames | method called', start, end);
+    // this.presentLoading();
+    this.store.dispatch(new FetchGames({start: start, end: end})).pipe(withLatestFrom(this.games$))
+      .subscribe(([games]) => {
+        console.log('movies', games);
+        setTimeout( () => {
+          // this.dismissLoading();
+          this.showSkeleton = false;
+        }, 2000);
+      },
+      err => console.log('HomePage::fetchGames() | method called -> received error' + err)
+    );
+  }
+
+  viewGameDetails(item: Movie | Game) {
     // console.log('viewMovieDetails', movie);
-    const movieDetailsURL = `/detail/${movie.id}`;
-    this.router.navigate([movieDetailsURL]);
+    console.log('item as Game :', item as Game);
+    const route = (item as Game).rounds !== undefined ? '/game-details/' : '/detail/';
+    console.log('!!!!!!!!!!!route :', route);
+    const detailsURL = `${route}${item.id}`;
+    this.router.navigate([detailsURL]);
   }
 
   async presentModal(componentProps: any, component) {

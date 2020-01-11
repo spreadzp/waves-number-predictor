@@ -1,0 +1,64 @@
+POST http://localhost:3000/games HTTP/1.1
+content-type: application/json
+
+  {
+    "id": "3",
+    "typeGame": "512",
+    "bankGame": 58,
+    "winNumber": null,
+    "winners": [
+      {
+        "addressWinner": "adf",
+        "sumPrize": 15
+      },
+      {
+        "addressWinner": "ajdf",
+        "sumPrize": 15
+      }
+    ],
+    "rounds": [
+      {
+        "round": "1",
+        "winDirection": 0,
+        "gameMinNumber": 0,
+        "gameMaxNamber": 512,
+        "rates": [
+          {
+            "address": "abc",
+            "bet": 1,
+            "betDirection": 0
+          },
+          {
+            "address": "fjh",
+            "bet": 1,
+            "betDirection": 1
+          }
+        ]
+      },
+      {
+        "round": "2",
+        "winDirection": 1,
+        "gameMinNumber": 0,
+        "gameMaxNamber": 255,
+        "rates": [
+          {
+            "address": "abc",
+            "bet": 1,
+            "betDirection": 0
+          },
+          {
+            "address": "fjh",
+            "bet": 1,
+            "betDirection": 1
+          }
+        ]
+      }
+    ]
+  }
+
+
+http://localhost:3000/games?id=3
+
+http://localhost:3000/statGames?typeGame=1024&&isFinished=false
+
+http://localhost:3000/games?genre=Crime&year_gte=1900&year_lte=2020&_sort=year,title&_order=desc,asc&_limit=20

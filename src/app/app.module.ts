@@ -19,6 +19,8 @@ import { MoviesService } from './providers/movies-service';
 import { YoutubeApiService } from './providers/youtube-api-service';
 import { SearchImageService } from './providers/search-image-service';
 import { WavesService } from './providers/waves-service';
+import { GamesService } from './providers/games-service';
+import { GameState } from './store/state/games.state';
 // import { GenreCarouselComponent } from './components/genre-carousel/genre-carousel.component';
 
 @NgModule({
@@ -31,13 +33,13 @@ import { WavesService } from './providers/waves-service';
     HttpClientModule,
     AppRoutingModule,
     IonicModule.forRoot(),
-    NgxsModule.forRoot([ MovieState ]),
+    NgxsModule.forRoot([ MovieState, GameState]),
     NgxsStoragePluginModule.forRoot(),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
     NgxsFormPluginModule.forRoot()
   ],
-  providers: [MoviesService, YoutubeApiService, SearchImageService, WavesService],
+  providers: [MoviesService, YoutubeApiService, SearchImageService, WavesService, GamesService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
