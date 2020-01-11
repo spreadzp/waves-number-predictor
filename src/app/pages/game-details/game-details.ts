@@ -24,6 +24,7 @@ import { IziToastService } from '../../providers/izi-toast.service';
 import { WavesService } from '../../providers/waves-service';
 import { Game, Round } from '../../models/game.model';
 import { GamesService } from '../../providers/games-service';
+import { GameState } from '../../store/state/games.state';
 
 @Component({
   selector: 'app-page-game-details',
@@ -35,7 +36,9 @@ export class GameDetailsComponent implements OnInit {
 
   currentYear = new Date().getFullYear();
   selectedMovie: Observable<Movie>;
+  selectedGame: Observable<Game>;
   movie: Movie;
+  game: Game;
   games: Game[] = [];
   currentGame: Game = null;
   currentRound: Round = null;
@@ -128,23 +131,23 @@ export class GameDetailsComponent implements OnInit {
 
   getGameDetails(id: string) {
     console.log('id :', id);
-    /* this.selectedMovie = this.store.select(MovieState.movieById).pipe(map(filterFn => filterFn(id)));
-    this.selectedMovie.subscribe(movie => {
-      console.log(movie);
-      this.movie = movie;
-      if (this.movie !== null) {
-        const genre = this.movie.genre.toLowerCase().split(',', 1)[0];
+    this.selectedGame = this.store.select(GameState.gameById).pipe(map(filterFn => filterFn(id)));
+    this.selectedGame.subscribe(game => {
+      console.log(game);
+      this.game = game;
+      if (this.game !== null) {
+        const genre = this.game.genre.toLowerCase().split(',', 1)[0];
         if (this.genreImages.indexOf(genre) !== -1) {
-          this.movie.genreImage = 'assets/movies-genres/' + genre + '.png';
+          this.game.genreImage = 'assets/movies-genres/' + genre + '.png';
         }
       }
-    }); */
+    });
   }
 
   watchTrailer() {
     console.log('GameDetailssPage::watchTrailer | method called');
 
-    // Code to use Youtube Api Service: providers/youtube-api-service.ts
+    //  Code to use Youtube Api Service: providers/youtube-api-service.ts
     this.youtubeApiService.searchMovieTrailer(this.movie.title)
       .subscribe(result => {
         if (result.items.length > 0) {

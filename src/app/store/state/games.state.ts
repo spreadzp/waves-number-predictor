@@ -63,8 +63,8 @@ export class GameState implements NgxsOnInit {
 
     @Selector()
     static gameById(state: GamesStateModel) {
-        return (id: number) => {
-            return state.games.filter(game => game.numberGame === id)[0];
+        return (id: string) => {
+            return state.games.filter(game => game.id === id)[0];
         };
     }
 

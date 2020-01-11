@@ -21,11 +21,14 @@ import { SearchImageService } from './providers/search-image-service';
 import { WavesService } from './providers/waves-service';
 import { GamesService } from './providers/games-service';
 import { GameState } from './store/state/games.state';
+import { YoutubeModalComponent } from './modals/youtube-modal/youtube.modal';
+import { PagesModule } from './pages/pages.module';
 // import { GenreCarouselComponent } from './components/genre-carousel/genre-carousel.component';
+
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
     // GenreCarouselComponent,
   ],
   imports: [
@@ -37,7 +40,8 @@ import { GameState } from './store/state/games.state';
     NgxsStoragePluginModule.forRoot(),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
-    NgxsFormPluginModule.forRoot()
+    NgxsFormPluginModule.forRoot(),
+    PagesModule
   ],
   providers: [MoviesService, YoutubeApiService, SearchImageService, WavesService, GamesService],
   bootstrap: [AppComponent]

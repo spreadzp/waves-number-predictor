@@ -1,5 +1,7 @@
 export class Game {
     id: string;
+    genre: string;
+    genreImage: string;
     numberGame: number;
     secretNumberOfGame: number;
     gamerBets: GamerBet;
