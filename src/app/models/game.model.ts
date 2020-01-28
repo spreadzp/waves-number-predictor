@@ -71,6 +71,7 @@ export interface GamerBet {
 export class Round {
     numberRound: number;
     isLastWinnerRangeUp: boolean;
+    isRoundFinish: boolean;
     gamersBetUp: Array<string>;
     gamersBetDown: Array<string>;
     minNumberRange: number;

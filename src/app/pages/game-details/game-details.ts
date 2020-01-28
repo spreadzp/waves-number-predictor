@@ -129,24 +129,39 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
         //  this.startNewGame();
         this.defineRanges(this.startMinNumberRange, this.startMaxNumberRange);
       }
-      if (game.gameOver) {
+      else if (game.gameOver) {
         this.showGameOver(game.secretNumberOfGame, game.winners);
       } else {
         this.currentGame = game;
-        this.defineCurrentRound(this.currentGame.rounds);
-        const numRounds = this.currentRound.numberRound - 1;
-        console.log('numRounds :', numRounds);
-        this.defineRanges(this.currentGame.rounds[this.currentRound.numberRound - 1].minNumberRange,
-          this.currentGame.rounds[this.currentRound.numberRound - 1].maxNumberRange);
+         if (!this.currentGame.rounds.length) {
+          this.currentGame.rounds.push(new Round());
+          this.defineRanges(this.startMinNumberRange, this.startMaxNumberRange);
+          this.defineCurrentRound(this.currentGame.rounds);
+          this.currentGame.rounds[this.currentRound.numberRound - 1].minNumberRange = this.startMinNumberRange;
+          this.currentGame.rounds[this.currentRound.numberRound - 1].maxNumberRange = this.startMaxNumberRange;
+        } if (this.currentGame.rounds.length && this.checkRoundRangeNumbers(this.currentGame.rounds.length - 1)) {
+          this.defineCurrentRound(this.currentGame.rounds);
+          const numRounds = this.currentRound.numberRound - 1;
+          console.log('numRounds :', numRounds);
+          this.defineRanges(this.currentGame.rounds[this.currentRound.numberRound - 1].minNumberRange,
+            this.currentGame.rounds[this.currentRound.numberRound - 1].maxNumberRange);
+        }
       }
     })
     console.log('#################this.currentRound :', this.currentRound);
   }
 
+  checkRoundRangeNumbers(numberRange) {
+    const r = this.currentGame.rounds[numberRange].minNumberRange;
+    const e = this.currentGame.rounds[numberRange].maxNumberRange;
+    return  (r + e) ? true : false;
+
+  }
+
   defineCurrentRound(rounds: Round[]) {
     // this.currentRound = new Round();
     if (rounds && rounds.length) {
-      this.currentRound.numberRound = rounds.length + 1 ;
+      this.currentRound.numberRound = rounds.length ;
     } else {
       this.currentRound.numberRound = 1
     }
@@ -399,7 +414,7 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
     if (!this.currentRound.gamersBetUp.includes(this.selectedRadioGroup.value)) {
       this.currentRound.gamersBetDown.push(this.selectedRadioGroup.value);
       this.currentGame.bank += this.betValue;
-      this.currentGame.rounds[this.currentRound.numberRound - 1].gamersBetUp.push(this.selectedRadioGroup.value);1
+      this.currentGame.rounds[this.currentRound.numberRound - 1].gamersBetDown.push(this.selectedRadioGroup.value);1
       this.store.dispatch(
         new EditGame(this.currentGame)
       ).subscribe((t) => console.log('471 t :', t)
@@ -445,6 +460,14 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
     } else {
       this.defineRanges(minRange, lastAvgRange - 1);
     }
+    this.currentGame.rounds[this.currentRound.numberRound - 1].isLastWinnerRangeUp = isWinnerDirectionUp;
+    this.currentGame.rounds[this.currentRound.numberRound - 1].maxNumberRange = this.currentRound.maxNumberRange;
+    this.currentGame.rounds[this.currentRound.numberRound - 1].minNumberRange = this.currentRound.minNumberRange;
+    this.currentGame.rounds[this.currentRound.numberRound - 1].numberRound = this.currentRound.numberRound;
+    this.store.dispatch(
+      new EditGame(this.currentGame)
+    ).subscribe((t) => console.log('471 t :', t)
+    );
   }
   checkOppositeBet() {
     if (this.currentRound.gamersBetDown.length > 0 && this.currentRound.gamersBetUp.length > 0) {
@@ -473,7 +496,6 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
       console.log(' ++++nextRoundthis.currentGame :', this.currentGame);
       const round = this.currentRound;
       this.currentGame.rounds.push(this.currentRound);
-      this.currentRound = new Round();
       this.numberRound++;
       this.currentRound.isLastWinnerRangeUp = this.winnerRangeDirection();
 
@@ -519,6 +541,8 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
         this.showSecretGame = false;
         this.setRange(this.currentRound.isLastWinnerRangeUp, this.avgRange, round.minNumberRange, round.maxNumberRange);
       }
+      this.currentRound = new Round();
+
       this.currentRound.numberRound = this.numberRound;
     }
   }
