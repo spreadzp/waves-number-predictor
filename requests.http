@@ -2,8 +2,9 @@ POST http://localhost:3000/games HTTP/1.1
 content-type: application/json
 
   {
-    "id": "3",
-    "typeGame": "512",
+    "id": "7",
+    "genre": "Crime",
+    "typeGame": "1024",
     "bankGame": 58,
     "winNumber": null,
     "winners": [
@@ -58,6 +59,7 @@ content-type: application/json
 
 
 http://localhost:3000/games?id=3
+http://localhost:3000/games?typeGame=8&&gameOver=false
 
 http://localhost:3000/statGames?typeGame=1024&&isFinished=false
 

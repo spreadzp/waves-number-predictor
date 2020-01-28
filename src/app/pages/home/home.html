@@ -59,10 +59,11 @@
           <img [src]="game.poster" alt="Game Poster">
         </ion-thumbnail>
         <ion-label>
-          <h2>{{ game.typeGame }}</h2>
-          <h3 class="notes"><ion-icon name="calendar" color="primary" slot="start"></ion-icon>{{ game.bankGame }}</h3>
+          <h2>{{ game.typeGame }}Id game {{game.id}}</h2>
+          <h3 class="notes"><ion-icon name="calendar" color="primary" slot="start"></ion-icon>Bank game {{ game.bank }}</h3>
+          <h2>{{ (game.gameOver) ? 'The game is over': 'Current round : ' + game.rounds.length + ' You can play the game!'}}</h2>
           <h5 class="notes">
-            <span *ngIf="game.rounds.length !== undefined"><ion-icon name="thumbs-up" color="primary" slot="start"></ion-icon>{{ game.rounds.length }} | </span>
+            <span *ngIf="game && game.rounds && game.rounds.length !== undefined"><ion-icon name="thumbs-up" color="primary" slot="start"></ion-icon>{{ game.rounds.length }} | </span>
             <span *ngIf="game.rate !== undefined"><ion-icon name="star" color="tertiary" slot="start"></ion-icon>{{ game.rate }}</span>
           </h5>
           <h4 class="notes">{{ game.notes }}</h4>
@@ -71,7 +72,7 @@
             <ion-icon name="swap"></ion-icon>
         </ion-note>
         </ion-item>
-  
+
         <!-- Sliding options. -->
         <ion-item-options side="end">
           <ion-item-option class="round-button" color="primary" (click)="editGame(game)"><ion-icon name="create"></ion-icon></ion-item-option>

@@ -5,6 +5,7 @@ import { ModalController, NavParams} from '@ionic/angular';
 import { SearchImageService } from './../../providers/search-image-service';
 
 import { LoaderService } from '../../providers/loader.service';
+import { Game } from '../../models/game.model';
 
 @Component({
   selector: 'app-show-actors-modal',
@@ -15,6 +16,7 @@ import { LoaderService } from '../../providers/loader.service';
 export class ShowActorsModalComponent implements OnInit {
 
   actors: any = [];
+  game: Game;
 
   constructor(private modalCtrl: ModalController, private navParams: NavParams, private searchImageService: SearchImageService,
               private loaderService: LoaderService) {
@@ -22,11 +24,14 @@ export class ShowActorsModalComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.game = { ...this.navParams.data.modalProps.game};
     console.log('ShowActorsModalComponent::ngOnInit | method called');
+console.log('this.game :', this.game);
+    this.loaderService.present('Please wait, loading actors...')
+    .then(() => this.loaderService.dismiss());
+    // let actors = this.navParams.data.modalProps.actors;
 
-    this.loaderService.present('Please wait, loading actors...');
-    let actors = this.navParams.data.modalProps.actors;
-    actors = actors.split(',');
+    // actors = actors.split(',');
     // console.log('actors', actors);
 
     /*
@@ -44,7 +49,7 @@ export class ShowActorsModalComponent implements OnInit {
     */
 
     forkJoin(
-      actors.map(actor => {
+    /*   actors.map(actor => {
         // Code to use Google Custom Search Api.
         return this.searchImageService.searchImage(actor);
       })
@@ -57,7 +62,8 @@ export class ShowActorsModalComponent implements OnInit {
         });
         this.loaderService.dismiss();
       }
-    });
+    } */
+    );
   }
 
   dismiss() {

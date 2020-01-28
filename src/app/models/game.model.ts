@@ -1,7 +1,17 @@
 export class Game {
     id: string;
+    typeGame: string;
+    gameOver: boolean;
     genre: string;
+    title: string;
     genreImage: string;
+    notes: string;
+    poster: string;
+    likes: number;
+    rate: number;
+    comments: string[];
+    price: number;
+    count: number;
     numberGame: number;
     secretNumberOfGame: number;
     gamerBets: GamerBet;
@@ -49,6 +59,10 @@ export class Game {
         ]
       } */
 
+export interface ResultsGames {
+  idGame: string,
+  isFinished: boolean
+}
 export interface GamerBet {
     addressGamer: string;
     sumBets: number
@@ -57,8 +71,8 @@ export interface GamerBet {
 export class Round {
     numberRound: number;
     isLastWinnerRangeUp: boolean;
-    gamersBetUp: GamerRoundBet[];
-    gamersBetDown: GamerRoundBet[];
+    gamersBetUp: Array<string>;
+    gamersBetDown: Array<string>;
     minNumberRange: number;
     maxNumberRange: number;
     constructor() {
@@ -70,4 +84,9 @@ export class Round {
 export interface GamerRoundBet {
     roundAndAddressGamer: string;
     bet: number
+}
+
+export enum DirectionBet {
+  RangeDown = 1,
+  RangeUp = 2
 }

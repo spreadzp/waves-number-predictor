@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 
 import { EditMovie } from '../../store/actions/movies.actions';
 import { Store, Actions } from '@ngxs/store';
+import { EditGame } from '../../store/actions/games.actions';
 
 @Component({
   selector: 'app-comment-modal',
@@ -45,11 +46,31 @@ export class CommentModalComponent implements OnInit {
 
   commentFormSubmit() {
     console.log('CommentModalComponent::commentFormSubmit | method called');
-    // console.log(this.modal.movie);
+    console.log('$$$$this.modal.game',this.modal);
     // console.log(this.commentForm.value);
     console.log(this.commentForm.value.rating);
     let comments;
-    if (typeof this.modal.movie.comments === 'undefined') {
+    if (typeof this.modal.game.comments === 'undefined') {
+      comments = [];
+    } else {
+      comments = this.modal.game.comments;
+    }
+
+    if (typeof this.modal.game.rate === 'undefined') {
+      this.modal.game.rate = this.commentForm.value.rating;
+      this.modal.game.numVotes = 1;
+    } else {
+      this.modal.game.numVotes += 1;
+      this.modal.game.rate = (this.modal.game.rate + this.commentForm.value.rating) / this.modal.game.numVotes;
+    }
+
+    // console.log('comments', comments);
+    comments.push(this.commentForm.value.comment);
+    this.modal.game.comments = comments;
+    this.store.dispatch(new EditGame(this.modal.game));
+    this.dismiss();
+
+  /*   if (typeof this.modal.movie.comments === 'undefined') {
       comments = [];
     } else {
       comments = this.modal.movie.comments;
@@ -66,7 +87,7 @@ export class CommentModalComponent implements OnInit {
     // console.log('comments', comments);
     comments.push(this.commentForm.value.comment);
     this.modal.movie.comments = comments;
-    this.store.dispatch(new EditMovie(this.modal.movie));
+    this.store.dispatch(new EditMovie(this.modal.movie)); */
   }
 
 }

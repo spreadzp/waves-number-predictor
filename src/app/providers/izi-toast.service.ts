@@ -35,6 +35,11 @@ export class IziToastService {
     iziToast.success({...this.defaultIziToastSettings, ...newSettings});
   }
 
+  gameOver (title, message) {
+    const newSettings: IziToastSettings = {title: title, message: message, color: 'blue'};
+    iziToast.show({...this.defaultIziToastSettings, ...newSettings});
+  }
+
   destroy() {
     iziToast.destroy();
   }

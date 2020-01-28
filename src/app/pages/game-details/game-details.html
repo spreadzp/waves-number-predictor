@@ -12,47 +12,47 @@
     <ion-grid fixed>
       <ion-row align-items-stretch>
         <ion-col col-12 align-self-stretch align-self-center>
-          <ion-card *ngIf="movie">
+          <ion-card *ngIf="game && !game.gameOver">
             <ion-item>
-              <h2><b>{{ movie?.title }}</b></h2>
+              <h2><b>{{ game?.title }}</b></h2>
               <ion-chip color="tertiary" slot="end">
-                <ion-icon *ngIf="!movie.genreImage" name="pricetag" color="tertiary"></ion-icon>
-                <ion-img *ngIf="movie.genreImage" [src]="movie.genreImage" class="genre-image"></ion-img>
-                <ion-label>{{ movie?.genre }}</ion-label>
+                <ion-icon *ngIf="!game.genreImage" name="pricetag" color="tertiary"></ion-icon>
+                <ion-img *ngIf="game.genreImage" [src]="game.genreImage" class="genre-image"></ion-img>
+                <ion-label>{{ game?.genre }}</ion-label>
               </ion-chip>
             </ion-item>
             <ion-item class="image">
-              <img *ngIf="movie.poster" [src]="movie?.poster" height="300px" alt="Movie Poster GameDetals Page">
-              <img *ngIf="!movie.poster"
+              <img *ngIf="game.poster" [src]="movie?.poster" height="300px" alt="Movie Poster GameDetals Page">
+              <img *ngIf="!game.poster"
                 src="https://in.bmscdn.com/iedb/movies/images/website/poster/large/ela-cheppanu-et00016781-24-03-2017-18-31-40.jpg"
                 height="300px" alt="Empty Movie Poster GameDetals Page">
             </ion-item>
             <ion-card-content>
               <ion-item>
                 <p>
-                  <ion-icon name="information-circle-outline"></ion-icon> {{ movie?.notes }}
+                  <ion-icon name="information-circle-outline"></ion-icon> Game {{ game.id }}
                 </p>
                 <ion-badge tappable slot="end" (click)="watchTrailer()">
                   <ion-icon name="eye"></ion-icon> Trailer
                 </ion-badge>
               </ion-item>
               <ion-row>
-                <ion-item *ngIf="movie.cast.length !== 0">
+                <ion-item >
                   <p>
-                    <ion-icon name="people"></ion-icon> {{ movie?.cast }}
+                    <ion-icon name="people"></ion-icon> {{ game?.cast }}
                   </p>
-                  <ion-badge tappable slot="end" (click)="showActors()">
-                    <ion-icon name="eye"></ion-icon> Actors
+                  <ion-badge tappable slot="end" (click)="showGamers()">
+                    <ion-icon name="eye"></ion-icon> Gamers
                   </ion-badge>
                 </ion-item>
               </ion-row>
               <ion-row>
-                <ion-item *ngIf="movie.price">
+                <ion-item *ngIf="game.price">
                   <p>
-                    <ion-icon name="people"></ion-icon> {{ movie?.price }}
+                    <ion-icon name="people"></ion-icon> {{ game?.price }}
                   </p>
                   <ion-badge tappable slot="end" (click)="makeBet()">
-                    <ion-icon name="eye"></ion-icon> Actors
+                    <ion-icon name="eye"></ion-icon> Gamers
                   </ion-badge>
                 </ion-item>
               </ion-row>
@@ -76,55 +76,65 @@
 
               </ion-row>
               <ion-row>
+                <p><b>Current round {{currentRound.numberRound}}</b><br />
+                  </p>
+              </ion-row>
+              <ion-row>
+                <p ><b>Bank of the game: </b><br />
+                  {{currentGame.bank}}</p>
+              </ion-row>
+              <ion-row>
                   <p><b>Current range</b><br />
                     {{firstRangeMin + " - " + secondRangeMax}}</p>
 
-                    
-                <ion-item *ngIf="movie.price">
-                  <ion-badge tappable slot="end" (click)="makeBetDown()">
-                    <ion-icon name="eye"></ion-icon> {{(firstRangeMax - firstRangeMin) === 0 ?
-                      firstRangeMax : firstRangeMin + " - " + firstRangeMax }}
+                   <!--  *ngIf="game.price" -->
+                <ion-item >
+                  <ion-badge tappable slot="end" #betDown id="betDown" (click)="makeBetDown()">
+                    <ion-icon name="eye"></ion-icon> {{defineRange(1)}}
                   </ion-badge>
-                  <ion-badge tappable slot="end" (click)="makeBetUp()">
-                    <ion-icon name="eye"></ion-icon> {{(secondRangeMax - secondRangeMin) === 0 ?
-                      secondRangeMax : secondRangeMin + " - " + secondRangeMax}}
+                  <ion-badge tappable slot="end" #betUp id="betUp" (click)="makeBetUp()">
+                    <ion-icon name="eye"></ion-icon> {{defineRange(2)}}
                   </ion-badge>
                 </ion-item>
               </ion-row>
               <ion-row>
-                  <p ><b>Bank the game: </b><br />
-                    {{currentGame.bank}}</p>
+
+                  <p ><b>The round {{currentRound.numberRound}} will finish: </b><br />
+                      {{timeNextRound}} seconds</p>
+                      <countdown  #cd [config]="configTime" (event)="handleEvent($event)"></countdown>
                   <p *ngIf="showSecretGame"><b>Secret number the game: </b><br />
                     {{currentGame.secretNumberOfGame}}</p>
-                      <ion-item *ngIf="movie.price">
-                        <ion-badge tappable slot="end" (click)="nextRound()">
-                          <ion-icon name="eye"></ion-icon> {{"Round:"}} {{numberRound}}
+
+                    <!-- *ngIf="game.price" -->
+                      <ion-item *ngIf="checkOppositeBet()">
+                        <ion-badge tappable slot="end" (click)="nextRound()" >
+                          <ion-icon name="eye"></ion-icon> {{"Round:"}} {{currentRound.numberRound}}
                         </ion-badge>
                       </ion-item>
                     </ion-row>
                     <ion-row>
-                <ion-item *ngIf="movie.count">
+                <ion-item *ngIf="game.count">
                   <p>
-                    <ion-icon name="people"></ion-icon> {{ movie?.count }}
+                    <ion-icon name="people"></ion-icon> {{ game?.count }}
                   </p>
                   <ion-badge tappable slot="end" (click)="showActors()">
-                    <ion-icon name="eye"></ion-icon> Actors
+                    <ion-icon name="eye"></ion-icon> Gamers
                   </ion-badge>
                 </ion-item>
               </ion-row>
             </ion-card-content>
             <ion-row>
               <ion-item style="width: 100%">
-                <ion-button icon-left clear small class="action-button" *ngIf="movie.likes !== undefined">
+                <ion-button icon-left clear small class="action-button" *ngIf="game.likes !== undefined">
                   <ion-icon name="thumbs-up"></ion-icon>
-                  <div>{{ movie?.likes }} Likes</div>
+                  <div>{{ game?.likes }} Likes</div>
                 </ion-button>
-                <ion-button icon-left clear small *ngIf="movie.comments !== undefined" (click)="onClickShowComment()">
+                <ion-button icon-left clear small *ngIf="game.comments !== undefined" (click)="onClickShowComment()">
                   <ion-icon name="text"></ion-icon>
-                  <div>{{ movie?.comments.length }} Comments</div>
+                  <div>{{ game?.comments.length }} Comments</div>
                 </ion-button>
                 <ion-note slot="end">
-                  {{ movie?.year }} <ion-icon name='calendar' slot="start"></ion-icon>
+                  {{ game?.year }} <ion-icon name='calendar' slot="start"></ion-icon>
                 </ion-note>
               </ion-item>
             </ion-row>

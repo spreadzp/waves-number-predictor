@@ -5,7 +5,6 @@ import { timeout, retryWhen, delay, map, filter } from 'rxjs/operators';
 import { v4 as uuid } from 'uuid';
 
 import { Game } from '../models/game.model';
-import { Movie } from '../models/movie.model';
 
 @Injectable()
 export class GamesService {
@@ -19,7 +18,7 @@ export class GamesService {
   getGames(start: number, end: number): Observable<Game[]> {
     return this.http
     // Type-checking the response => .get<Game[]>
-    .get<Game[]>(this.URL_BASE + `Games?_start=${start}&_end=${end}&_sort=year,title&_order=desc,asc`)
+    .get<Game[]>(this.URL_BASE + `games?_start=${start}&_end=${end}&_sort=year,title&_order=desc,asc`)
     .pipe(
       retryWhen(error => error.pipe(delay(500))),
       timeout(5000)
@@ -30,7 +29,7 @@ export class GamesService {
     // console.log(encodeURI(this.URL_BASE + `Games?title=${title}`));
     return this.http
     // Type-checking the response => .get<Game>
-    .get<Game>(encodeURI(this.URL_BASE + `Games?title=${title}`))
+    .get<Game>(encodeURI(this.URL_BASE + `games?title=${title}`))
     .pipe(
       retryWhen(error => error.pipe(delay(500))),
       timeout(5000)
@@ -50,7 +49,7 @@ export class GamesService {
     // console.log('Game in addGame', Game);
     return this.http
       // Type-checking the response => .post<Game>
-    .post<Game>(encodeURI(this.URL_BASE + `games/`), Game, httpOptions)
+    .post<Game>(encodeURI(this.URL_BASE + `games/`), game, httpOptions)
     .pipe(
       retryWhen(error => error.pipe(delay(500))),
       timeout(5000)
@@ -65,10 +64,13 @@ export class GamesService {
       })
     };
 
+    console.log('@@@game :', game);
+    let t = encodeURI(this.URL_BASE + `games/${game['id']}`);
+    console.log('t :', t);
     // console.log('Game in editGame', Game);
     return this.http
       // Type-checking the response => .post<Game>
-    .put<Game>(encodeURI(this.URL_BASE + `Games/${game['id']}`), game, httpOptions)
+    .put<Game>(encodeURI(this.URL_BASE + `games/${game['id']}`), game, httpOptions)
     .pipe(
       retryWhen(error => error.pipe(delay(500))),
       timeout(5000)
@@ -80,7 +82,7 @@ export class GamesService {
     // console.log('Game in deleteGame', Game);
     return this.http
       // Type-checking the response => .post<Game>
-    .delete<Game>(encodeURI(this.URL_BASE + `Games/${game['id']}`))
+    .delete<Game>(encodeURI(this.URL_BASE + `games/${game['id']}`))
     .pipe(
       retryWhen(error => error.pipe(delay(500))),
       timeout(5000)
@@ -94,7 +96,22 @@ export class GamesService {
     console.log('strFilters', strFilters);
     return this.http
     // Type-checking the response => .get<Game[]>
-    .get<Game[]>(this.URL_BASE + 'statGames?typeGame=1024&&isFinished=false') // `games${strFilters}_sort=year,title&_order=desc,asc&_limit=20`)
+    .get<Game[]>(this.URL_BASE + 'game?typeGame=1024&&isFinished=false') // `games${strFilters}_sort=year,title&_order=desc,asc&_limit=20`)
+    .pipe(
+      retryWhen(error => error.pipe(delay(500))),
+      timeout(5000)
+    );
+  }
+
+  filterNotFinishGames(filters): Observable<Game[]> {
+    console.log('filterGames in Games-services', filters);
+
+    const strFilters = this.checkFilters(filters);
+    console.log('strFilters', strFilters);
+    return this.http
+    // Type-checking the response => .get<Game[]>
+    .get<Game[]>(this.URL_BASE + `games?typeGame=${filters}&&gameOver=false`)
+    // `games${strFilters}_sort=year,title&_order=desc,asc&_limit=20`)
     .pipe(
       retryWhen(error => error.pipe(delay(500))),
       timeout(5000)

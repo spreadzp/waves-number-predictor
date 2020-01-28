@@ -166,7 +166,7 @@ export class GameState implements NgxsOnInit {
     @Action(FilterGames, { cancelUncompleted: true })
     filterGames({ getState, setState }: StateContext<GamesStateModel>, { payload }) {
         console.log('167 filterGames getState :', getState);
-        return this.gamesService.filterGames(payload).pipe(
+        return this.gamesService.filterNotFinishGames(payload).pipe(
             catchError((x, caught) => {
                 // console.log('inside catchError', x);
                 return throwError(x);

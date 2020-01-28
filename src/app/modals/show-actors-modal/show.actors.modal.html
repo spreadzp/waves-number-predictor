@@ -1,20 +1,79 @@
 <ion-header>
-    <ion-toolbar color="tertiary">
-        <ion-buttons slot="end">
-            <ion-button (click)="dismiss()">
-                <ion-icon name="close" color="light"></ion-icon>
-            </ion-button>
-        </ion-buttons>
-        <ion-title>
-          Actors
-        </ion-title>
-    </ion-toolbar>
+  <ion-toolbar color="tertiary">
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      Game from 0 to {{game.typeGame}}
+    </ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content class="outer-content" padding>
+  <ion-row>
+    GAME {{game.id}}
+  </ion-row>
+  <ion-row>
+    {{(game.winners.length) ? 'The game over' : 'Current round the game: ' + (game.rounds.length + 1)}}
+  </ion-row>
+  <ion-row>
+    Bank of the game {{game.bank}}
+  </ion-row>
+  <ion-row *ngIf="game && game.rounds.length">
+    <ion-col *ngFor="let round of game.rounds" size="6" size-sm>
+      <ion-card tappable>
+        <ion-card-header>
+          <ion-card-title>
+            <!-- <ion-avatar>
+                   <img [src]="actor.image">
+                  </ion-avatar> -->
+          </ion-card-title>
+        </ion-card-header>
 
-    <ion-row>
-        <ion-col  *ngFor="let actor of actors" size="6" size-sm>
+        <ion-card-content>
+          <h2 text-center>Round {{round.numberRound}}</h2>
+          <ion-card-title>
+            <h2> <ion-icon name="people"></ion-icon>  {{(round.minNumberRange + round.maxNumberRange + 1)/2}} -
+              {{round.maxNumberRange}}</h2>
+            <ion-card-content *ngFor="let gamersBetUp of round.gamersBetUp; let i = index">
+
+              <h3 text-center>{{i + 1}} {{gamersBetUp}}</h3>
+            </ion-card-content>
+          </ion-card-title>
+
+          <ion-card-title>
+            <h2><ion-icon name="people"></ion-icon>  {{round.minNumberRange}} -
+              {{(round.minNumberRange + round.maxNumberRange - 1)/2}}</h2>
+            <ion-card-content *ngFor="let gamersBetDown of round.gamersBetDown; let i = index">
+              <h3 text-center>{{i + 1}} {{gamersBetDown}}</h3>
+            </ion-card-content>
+          </ion-card-title>
+
+
+        </ion-card-content>
+
+      </ion-card>
+
+    </ion-col>
+    <ion-col *ngIf="game.winners.length">
+      <ion-card>
+        <ion-card-content>
+          <ion-card-title  class="winner">
+            <h2>List of winners in the game {{game.id}}</h2>
+            <ion-card-content *ngFor="let winners of game.winners; let i = index">
+              <h3 text-center>{{i + 1}} {{winners.addressGamer}} won prize {{winners.sumBets}}</h3>
+            </ion-card-content>
+          </ion-card-title>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+
+
+    <!-- <ion-col  *ngFor="let actor of actors" size="6" size-sm>
             <ion-card tappable>
                 <ion-card-header>
                     <ion-card-title>
@@ -27,6 +86,6 @@
                     <h1 text-center>{{actor.name}}</h1>
                 </ion-card-content>
             </ion-card>
-        </ion-col>
-    </ion-row>
+        </ion-col> -->
+  </ion-row>
 </ion-content>

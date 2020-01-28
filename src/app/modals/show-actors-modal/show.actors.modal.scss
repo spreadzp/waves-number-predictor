@@ -2,6 +2,10 @@ app-show-actors-modal {
 
     ion-card {
         width: 200px;
+        .winner {
+          color: red;
+          font-style: italic;
+        }
     }
 
     ion-avatar {

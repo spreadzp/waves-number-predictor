@@ -1,9 +1,6 @@
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
-
-import { Movie } from '../../models/movie.model';
-
+import { Component, ViewEncapsulation, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription, timer } from 'rxjs';
 
 import { YoutubeApiService } from '../../providers/youtube-api-service';
 
@@ -16,15 +13,18 @@ import { ShowCommentsModalComponent } from '../../modals/show-comments-modal/sho
 import { ShowActorsModalComponent } from '../../modals/show-actors-modal/show.actors.modal';
 
 import { LikeMovie, FavoriteMovie } from '../../store/actions/movies.actions';
-import { MovieState } from '../../store/state/movies.state';
-import { map } from 'rxjs/operators';
+import { map, skip, takeUntil, filter, scan, withLatestFrom } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 
 import { IziToastService } from '../../providers/izi-toast.service';
 import { WavesService } from '../../providers/waves-service';
-import { Game, Round } from '../../models/game.model';
+import { Game, Round, DirectionBet, GamerBet } from '../../models/game.model';
 import { GamesService } from '../../providers/games-service';
 import { GameState } from '../../store/state/games.state';
+import { LikeGame, AddGame, FilterGames, EditGame } from '../../store/actions/games.actions';
+import { SoundsService } from '../../providers/sounds.service';
+import { interval } from 'rxjs/observable/interval';
+import { CountdownComponent } from 'ngx-countdown';
 
 @Component({
   selector: 'app-page-game-details',
@@ -32,20 +32,23 @@ import { GameState } from '../../store/state/games.state';
   styleUrls: ['./game-details.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class GameDetailsComponent implements OnInit {
+export class GameDetailsComponent implements OnInit, AfterViewInit {
 
   currentYear = new Date().getFullYear();
-  selectedMovie: Observable<Movie>;
   selectedGame: Observable<Game>;
-  movie: Movie;
+  // movie: Movie;
   game: Game;
   games: Game[] = [];
   currentGame: Game = null;
   currentRound: Round = null;
   defaultSelectedRadio = "gamer_2";
   numberRound = 1;
+  // timeNextRound = 10;
   startMinNumberRange = 0;
-  startMaxNumberRange = 1023;
+  startMaxNumberRange = 7;
+  degreeGame = Math.log2(this.startMaxNumberRange + 1);
+  downRange = '';
+  upRange = '';
   firstRangeMin = 0;
   firstRangeMax = 0;
   secondRangeMin = 0;
@@ -53,11 +56,20 @@ export class GameDetailsComponent implements OnInit {
   isWinnerRangeUp = false
   avgRange = 0;
   showSecretGame = false;
+  betValue = 1;
+  timerEndRound: Subscription;
+  timeLeft: number = 60;
+  interval;
+  subscribeTimer: any;
+  configTime = { leftTime: 30 };
+  filters: any = {
+    typeGame: 128,
+    id: ''
+  }
 
 
   //Get value on ionChange on IonRadioGroup
   selectedRadioGroup: any;
-  //Get value on ionSelect on IonRadio item
   selectedRadioItem: any;
 
   radio_list = [
@@ -90,54 +102,126 @@ export class GameDetailsComponent implements OnInit {
   genreImages: string[] = ['action', 'comedy', 'crime', 'documentary', 'drama', 'fantasy', 'film noir',
     'horror', 'romance', 'science fiction', 'westerns', 'animation', 'food'];
 
+  @ViewChild('betDown', { static: false }) betDown: any;
+  @ViewChild('betUp', { static: false }) betUp: any;
+  @ViewChild('cd', { static: false }) private countdown: CountdownComponent;
+
   constructor(private store: Store, private youtubeApiService: YoutubeApiService, private modalCtrl: ModalController,
-    private activatedRoute: ActivatedRoute, private iziToast: IziToastService, private wavesService: WavesService, private gamesService: GamesService) {
+    private activatedRoute: ActivatedRoute, private iziToast: IziToastService, private wavesService: WavesService,
+    private gamesService: GamesService, private soundsService: SoundsService) {
   }
 
   ngOnInit() {
-
-    this.startNewGame()
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
+    const gameFromId = this.getGameDetails(id);
     this.currentRound = new Round();
-    this.currentRound.numberRound = 1;
-    this.defineRanges(this.startMinNumberRange, this.startMaxNumberRange);
+    this.setImageGame(gameFromId);
+    // this.startNewGame(); start 128 512 1024 type of games
+    /* this.notFinishGame(this.startMaxNumberRange + 1)
+      .subscribe(game => {
+        if (!game) {
+          this.startNewGame();
+        }
+      }); */
+    gameFromId.subscribe(game => {
+      if (!game) {
+        console.log('????game :', game);
+        //  this.startNewGame();
+        this.defineRanges(this.startMinNumberRange, this.startMaxNumberRange);
+      }
+      if (game.gameOver) {
+        this.showGameOver(game.secretNumberOfGame, game.winners);
+      } else {
+        this.currentGame = game;
+        this.defineCurrentRound(this.currentGame.rounds);
+        const numRounds = this.currentRound.numberRound - 1;
+        console.log('numRounds :', numRounds);
+        this.defineRanges(this.currentGame.rounds[this.currentRound.numberRound - 1].minNumberRange,
+          this.currentGame.rounds[this.currentRound.numberRound - 1].maxNumberRange);
+      }
+    })
     console.log('#################this.currentRound :', this.currentRound);
   }
+
+  defineCurrentRound(rounds: Round[]) {
+    // this.currentRound = new Round();
+    if (rounds && rounds.length) {
+      this.currentRound.numberRound = rounds.length + 1 ;
+    } else {
+      this.currentRound.numberRound = 1
+    }
+  }
+
+  ngAfterViewInit() {
+    this.soundsService.preload('click', 'assets/sounds/click.mp3');
+    if (this.betDown && this.betUp) {
+      this.betDown.ionChange.pipe(skip(1)).subscribe((ev) => {
+
+        this.soundsService.play('click');
+
+      });
+      this.betUp.ionChange.pipe(skip(1)).subscribe((ev) => {
+
+        this.soundsService.play('click');
+
+      });
+    }
+  }
+
+  notFinishGame(typeGame: number): Observable<Game> {
+    this.filters.typeGame = typeGame;
+    return this.store.dispatch([
+      new FilterGames(this.filters.typeGame),
+    ]);
+  }
+
   ionViewWillEnter() {
-    // console.log('ionViewWillEnter');
+    console.log('ionViewWillEnter');
 
-    /*
-    this.selectedMovie = this.store.select(state => state.catalog.selectedMovie);
 
-    this.selectedMovie.subscribe(
+    /* this.selectedGame = this.store.select(state => state.catalogGame.selectedGame);
+    console.log('this.selectedGame :', this.selectedGame);
+    this.selectedGame.subscribe(
       data => {
-          // console.log(data);
-          this.movie = data;
-          if (this.movie !== null) {
-            const genre = this.movie.genre.toLowerCase().split(',', 1)[0];
+           console.log('@@data',data);
+          this.game = data;
+          if (this.game !== null) {
+            const genre = this.game.genre.toLowerCase().split(',', 1)[0];
             if (this.genreImages.indexOf(genre) !== -1) {
-              this.movie.genreImage = 'assets/movies-genres/' + genre + '.png';
+              this.game.genreImage = 'assets/movies-genres/' + genre + '.png';
             }
           }
       },
       error => {
           console.log(<any>error);
       }
-    );
-    */
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
+    );  */
+
+    /* const id = this.activatedRoute.snapshot.paramMap.get('id');
     console.log('id :', id);
-    this.getGameDetails(id);
+    this.getGameDetails(id); */
   }
 
   getGameDetails(id: string) {
     console.log('id :', id);
-    this.selectedGame = this.store.select(GameState.gameById).pipe(map(filterFn => filterFn(id)));
-    this.selectedGame.subscribe(game => {
+    return this.store.select(GameState.gameById).pipe(map(filterFn => filterFn(id)));
+
+  }
+
+  setImageGame(game: Observable<Game>) {
+    game.subscribe(game => {
       console.log(game);
       this.game = game;
-      if (this.game !== null) {
-        const genre = this.game.genre.toLowerCase().split(',', 1)[0];
+      console.log('187 this.game :', this.game);
+      let genre = '';
+      if (this.game && this.game.genre) {
+        genre = this.game.genre.toLowerCase().split(',', 1)[0];
         if (this.genreImages.indexOf(genre) !== -1) {
+          this.game.genreImage = 'assets/movies-genres/' + genre + '.png';
+        }
+      } else {
+        genre = 'action';
+        if (this.game && this.genreImages.indexOf(genre) !== -1) {
           this.game.genreImage = 'assets/movies-genres/' + genre + '.png';
         }
       }
@@ -148,17 +232,17 @@ export class GameDetailsComponent implements OnInit {
     console.log('GameDetailssPage::watchTrailer | method called');
 
     //  Code to use Youtube Api Service: providers/youtube-api-service.ts
-    this.youtubeApiService.searchMovieTrailer(this.movie.title)
+    this.youtubeApiService.searchMovieTrailer(this.game.title)
       .subscribe(result => {
         if (result.items.length > 0) {
           console.log(result);
           const { videoId } = result.items[0].id;
-          this.movie.videoId = videoId;
+          //this.game.videoId = videoId;
 
           // Code to use capacitor-youtube-player plugin.
           console.log('GameDetailssPage::watchTrailer -> platform: ' + Capacitor.platform);
           if (Capacitor.platform === 'web') {
-            const componentProps = { modalProps: { item: this.movie } };
+            const componentProps = { modalProps: { item: this.game } };
             this.presentModal(componentProps, YoutubeModalComponent);
           } else { // Native
             this.testYoutubePlayerPlugin();
@@ -180,14 +264,13 @@ export class GameDetailsComponent implements OnInit {
   }
 
   async presentModal(componentProps: any, component) {
-    console.log('GameDetailssPage::presentModal | method called -> movie', this.movie);
-    // const componentProps = { modalProps: { item: this.movie}};
+    console.log('GameDetailssPage::presentModal | method called -> movie', this.game);
+    // const componentProps = { modalProps: { item: this.game}};
     const modal = await this.modalCtrl.create({
       component: component,
       componentProps: componentProps
     });
     await modal.present();
-
     const { data } = await modal.onWillDismiss();
     if (data) {
       console.log('data', data);
@@ -201,30 +284,32 @@ export class GameDetailsComponent implements OnInit {
     const result = await YoutubePlayer.echo({ value: 'hola' });
     console.log('result', result);
 
-    const options = { width: 640, height: 360, videoId: this.movie.videoId };
-    const playerReady = await YoutubePlayer.initialize(options);
+    //const options = { width: 640, height: 360, videoId: this.game.videoId };
+    //const playerReady = await YoutubePlayer.initialize(options);
   }
 
   onClickLike() {
     console.log('GameDetailssPage::onClickLike');
-    console.log(this.movie);
-    if (typeof this.movie.likes === 'undefined') {
-      this.movie.likes = 0;
+    console.log(this.game);
+    if (typeof this.game.likes === 'undefined') {
+      this.game.likes = 0;
+    } else {
+      console.log(this.game.likes);
+      this.game.likes += 1;
     }
-    console.log(this.movie.likes);
-    this.movie.likes += 1;
-    this.store.dispatch(new LikeMovie(this.movie));
+
+    this.store.dispatch(new LikeGame(this.game));
   }
 
   onClickComment() {
     console.log('GameDetailssPage::onClickComment');
-    const componentProps = { modalProps: { title: 'Comment', movie: this.movie } };
+    const componentProps = { modalProps: { title: 'Comment', game: this.game } };
     this.presentModal(componentProps, CommentModalComponent);
   }
 
   onClickShowComment() {
     console.log('GameDetailssPage::onClickShowComment');
-    const componentProps = { modalProps: { title: 'Comments', movie: this.movie } };
+    const componentProps = { modalProps: { title: 'Comments', game: this.game } };
     this.presentModal(componentProps, ShowCommentsModalComponent);
   }
 
@@ -238,12 +323,12 @@ export class GameDetailsComponent implements OnInit {
       if (typeof favorites !== 'undefined') {
 
         const exist = favorites.filter(item => {
-          return item.title === this.movie.title;
+          return item.title === this.game.title;
         });
 
         if (exist.length === 0) {
           this.store.dispatch(
-            new FavoriteMovie(this.movie)).subscribe(() => {
+            new FavoriteMovie(this.game)).subscribe(() => {
               this.iziToast.success('Favorite movie', 'Favorite Movie added.');
             });
         } else {
@@ -268,14 +353,19 @@ export class GameDetailsComponent implements OnInit {
     }
   }
 
-  showActors() {
+  showGamers() {
     console.log('GameDetailssPage::showActors | method called');
-    const componentProps = { modalProps: { actors: this.movie.cast } };
+    console.log('this.currentGame :', this.currentGame);
+    const componentProps = {
+      modalProps: {
+        game: this.currentGame
+      }
+    };
     this.presentModal(componentProps, ShowActorsModalComponent);
   }
 
   radioGroupChange(event) {
-    console.log("radioGroupChange", event.detail);
+    // console.log("radioGroupChange", event.detail);
     this.selectedRadioGroup = event.detail;
   }
 
@@ -293,21 +383,48 @@ export class GameDetailsComponent implements OnInit {
   makeBet() {
     return this.wavesService.makeBet(0.5);
   }
+
+  defineRange(flagRange: DirectionBet) {
+    if (flagRange === DirectionBet.RangeDown) {
+      return (this.firstRangeMax - this.firstRangeMin) === 0 ?
+        this.firstRangeMax.toString() : this.firstRangeMin.toString() + " - " + this.firstRangeMax.toString();
+
+    } else {
+      return (this.secondRangeMax - this.secondRangeMin) === 0 ?
+        this.secondRangeMax.toString() : this.secondRangeMin.toString() + " - " + this.secondRangeMax.toString()
+    }
+  }
+
   makeBetDown() {
     if (!this.currentRound.gamersBetUp.includes(this.selectedRadioGroup.value)) {
-      this.currentGame.bank += 1;
       this.currentRound.gamersBetDown.push(this.selectedRadioGroup.value);
+      this.currentGame.bank += this.betValue;
+      this.currentGame.rounds[this.currentRound.numberRound - 1].gamersBetUp.push(this.selectedRadioGroup.value);1
+      this.store.dispatch(
+        new EditGame(this.currentGame)
+      ).subscribe((t) => console.log('471 t :', t)
+      );
+      // this.soundsService.play('click');
+      this.iziToast.success(`Success bet in the range ${this.defineRange(DirectionBet.RangeDown)}`, `${this.selectedRadioGroup.value} made bet ${this.betValue} tokens`);
     } else {
-      console.log('had opposite bit :');
+      this.iziToast.show('Fail bet', `You has already been bet in the range ${this.defineRange(DirectionBet.RangeUp)}`, 'red', 'ico-error', 'assets/avatar.png');
     }
 
   }
+
   makeBetUp() {
     if (!this.currentRound.gamersBetDown.includes(this.selectedRadioGroup.value)) {
       this.currentRound.gamersBetUp.push(this.selectedRadioGroup.value);
-      this.currentGame.bank += 1;
+      this.currentGame.bank += this.betValue;
+      this.currentGame.rounds[this.currentRound.numberRound - 1].gamersBetUp.push(this.selectedRadioGroup.value);1
+      this.store.dispatch(
+        new EditGame(this.currentGame)
+      ).subscribe((t) => console.log('471 t :', t)
+      );
+      // this.soundsService.play('click');
+      this.iziToast.success(`Success bet in the range ${this.defineRange(DirectionBet.RangeUp)}`, `${this.selectedRadioGroup.value}  made bet ${this.betValue} tokens`);
     } else {
-      console.log('had opposite bit :');
+      this.iziToast.show('Fail bet', `You has already been bet in the range ${this.defineRange(DirectionBet.RangeDown)}`, 'red', 'ico-error', 'assets/avatar.png');
     }
 
   }
@@ -330,32 +447,75 @@ export class GameDetailsComponent implements OnInit {
     }
   }
   checkOppositeBet() {
-    if (this.currentRound.gamersBetDown.length > 0 && this.currentRound.gamersBetUp.length > 0)
+    if (this.currentRound.gamersBetDown.length > 0 && this.currentRound.gamersBetUp.length > 0) {
+      this.timerForStartNextRound();
       return true;
+    }
+
+  }
+
+  handleEvent($event) {
+    if ($event.action === 'done') {
+      this.nextRound();
+      this.countdown.begin();
+    }
+    // console.log(' $event :', $event);
+  }
+
+  timerForStartNextRound() {
+    this.countdown.restart();
+    this.countdown.begin();
   }
 
   nextRound() {
     if (this.checkOppositeBet()) {
-      console.log('++++nextRoundthis.currentGame :', this.currentGame);
+      this.timerForStartNextRound();
+      console.log(' ++++nextRoundthis.currentGame :', this.currentGame);
       const round = this.currentRound;
       this.currentGame.rounds.push(this.currentRound);
       this.currentRound = new Round();
       this.numberRound++;
       this.currentRound.isLastWinnerRangeUp = this.winnerRangeDirection();
 
-      if ((this.numberRound % 11 === 0)) {
+      if ((this.numberRound % (this.degreeGame + 1) === 0)) {
         const secretNumber = (this.currentRound.isLastWinnerRangeUp) ?
           round.maxNumberRange : round.minNumberRange;
         this.currentGame.secretNumberOfGame = secretNumber;
-        this.showSecretGame = true;
-      } else if ((this.numberRound === 12)) {
+        let listWinnersWithPrizes = '';
+        let countWinners = (this.currentRound.isLastWinnerRangeUp) ? round.gamersBetUp.length : round.gamersBetDown.length;
+        let avgPrize = this.currentGame.bank / countWinners;
+        console.log('this.currentRound :', this.currentRound);
+        console.log('this.currentGame.bank  :', this.currentGame.bank);
+        console.log('countWinners :', countWinners);
+        console.log('avgPrize :', avgPrize);
+        /// need refactoring
+        if (this.currentRound.isLastWinnerRangeUp) {
+          for (const item of round.gamersBetUp) {
+            this.currentGame.winners.push({
+              addressGamer: item,
+              sumBets: avgPrize
+            })
+            console.log('item :', item);
+            listWinnersWithPrizes += `${item} : ${avgPrize}`;
+          }
+        } else {
+          for (const item of round.gamersBetDown) {
+            this.currentGame.winners.push({
+              addressGamer: item,
+              sumBets: avgPrize
+            })
+            /* console.log('item :', item);
+            listWinnersWithPrizes += `${item} : ${avgPrize}`; */
+          }
+          this.showSecretGame = false;
+          this.currentGame.gameOver = true;
+        }
+        // console.log('listWinnersWithPrizes :', listWinnersWithPrizes);
 
-        this.numberRound = 1;
-        this.showSecretGame = false;
-        this.startNewGame(this.currentGame);
-        this.defineRanges(this.startMinNumberRange, this.startMaxNumberRange);
-      }
-      else {
+        this.showGameOver(secretNumber, this.currentGame.winners);
+        //this.iziToast.gameOver(`Secret number of the game is ${secretNumber}`, `Winners got prize ${listWinnersWithPrizes}`);
+        this.finishOldAndStartNewGame();
+      } else {
         this.showSecretGame = false;
         this.setRange(this.currentRound.isLastWinnerRangeUp, this.avgRange, round.minNumberRange, round.maxNumberRange);
       }
@@ -363,16 +523,42 @@ export class GameDetailsComponent implements OnInit {
     }
   }
 
+  showGameOver(secretNumber: any, winners: GamerBet[]) {
+    let listWinnersWithPrizes = '';
+    for (const item of winners) {
+      listWinnersWithPrizes += `${item.addressGamer} : ${item.sumBets}`;
+    }
+    this.iziToast.gameOver(`The game is over! Secret number of the game is ${secretNumber}`, `Winners got prize ${listWinnersWithPrizes}`);
+  }
+
+  finishOldAndStartNewGame() {
+    this.numberRound = 1;
+    this.startNewGame(this.currentGame);
+    this.defineRanges(this.startMinNumberRange, this.startMaxNumberRange);
+  }
+
   startNewGame(game?: Game) {
-    this.currentGame = new Game();
     if (!game) {
+      this.currentGame = new Game();
+      this.currentGame.bank = 0;
+      this.currentGame.gameOver = false;
+      this.currentGame.typeGame = (this.startMaxNumberRange + 1).toString();
       this.currentGame.numberGame = 1;
+      this.store.dispatch(
+        new AddGame(this.currentGame)
+      ).subscribe((t) => console.log('471 t :', t)
+      );
     } else {
       this.games.push(game);
+      this.store.dispatch(
+        new EditGame(this.currentGame)
+      ).subscribe((t) => console.log('471 t :', t)
+      );
       this.currentGame.numberGame = game.numberGame + 1;
     }
-    this.currentGame.bank = 0;
+    /// this.gamesService.addNewGame(this.currentGame);
   }
+
   winnerRangeDirection() {
     return this.isWinnerRangeUp = Math.round((Math.random() * 1) + 0) === 0;
   }

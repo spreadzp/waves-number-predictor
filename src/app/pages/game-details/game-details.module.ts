@@ -9,6 +9,10 @@ import { GameDetailsComponentRoutingModule } from './game-details-routing.module
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { StarRatingModule } from 'angular-star-rating';
+import { CommentModalComponent } from '../../modals/comment-modal/comment.modal';
+import { ShowCommentsModalComponent } from '../../modals/show-comments-modal/show.comments.modal';
+import { ShowActorsModalComponent } from '../../modals/show-actors-modal/show.actors.modal';
+import { CountdownModule } from 'ngx-countdown';
 
 @NgModule({
   imports: [
@@ -17,9 +21,10 @@ import { StarRatingModule } from 'angular-star-rating';
     GameDetailsComponentRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    StarRatingModule.forRoot()
+    StarRatingModule.forRoot(),
+    CountdownModule
   ],
-  declarations: [GameDetailsComponent],
-  entryComponents: [GameDetailsComponent],
+  declarations: [GameDetailsComponent, CommentModalComponent, ShowCommentsModalComponent, ShowActorsModalComponent],
+  entryComponents: [GameDetailsComponent, CommentModalComponent, ShowCommentsModalComponent, ShowActorsModalComponent],
 })
 export class GameDetailsModule {}

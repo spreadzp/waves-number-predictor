@@ -1,7 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http';
+import { IonicErrorHandler } from 'ionic-angular';
 
 // NGXS
 import { MovieState } from '../app/store/state/movies.state';
@@ -23,7 +24,9 @@ import { GamesService } from './providers/games-service';
 import { GameState } from './store/state/games.state';
 import { YoutubeModalComponent } from './modals/youtube-modal/youtube.modal';
 import { PagesModule } from './pages/pages.module';
-// import { GenreCarouselComponent } from './components/genre-carousel/genre-carousel.component';
+import { CommentModule } from './modals/comment-modal/comment.module';
+import { SoundsService } from './providers/sounds.service';
+import { NativeAudio } from '@ionic-native/native-audio/ngx';
 
 
 @NgModule({
@@ -43,7 +46,9 @@ import { PagesModule } from './pages/pages.module';
     NgxsFormPluginModule.forRoot(),
     PagesModule
   ],
-  providers: [MoviesService, YoutubeApiService, SearchImageService, WavesService, GamesService],
+  providers: [MoviesService, YoutubeApiService, SearchImageService, WavesService, GamesService,
+     SoundsService, NativeAudio, // New provider, don't forget to add comma
+     {provide: ErrorHandler, useClass: ErrorHandler}],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
