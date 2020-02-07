@@ -25,15 +25,20 @@ export class GamesService {
     );
   }
 
-  getGame(title: string): Observable<Game> {
+  getGame(id: string): Observable<Game> {
     // console.log(encodeURI(this.URL_BASE + `Games?title=${title}`));
-    return this.http
-    // Type-checking the response => .get<Game>
-    .get<Game>(encodeURI(this.URL_BASE + `games?title=${title}`))
-    .pipe(
-      retryWhen(error => error.pipe(delay(500))),
-      timeout(5000)
-    );
+    if(id) {
+      return this.http
+      // Type-checking the response => .get<Game>
+      .get<Game>(encodeURI(this.URL_BASE + `games?id=${id}`))
+      .pipe(
+        retryWhen(error => {
+          return error.pipe(delay(500))}
+        ),
+        timeout(5000)
+      );
+    }
+
   }
 
   addNewGame(game: Game): Observable<Game> {
@@ -108,9 +113,10 @@ export class GamesService {
 
     const strFilters = this.checkFilters(filters);
     console.log('strFilters', strFilters);
+   // const t: Game[];
     return this.http
     // Type-checking the response => .get<Game[]>
-    .get<Game[]>(this.URL_BASE + `games?typeGame=${filters}&&gameOver=false`)
+    .get<Game[]>(this.URL_BASE + `games?typeGame=${strFilters}&&gameOver=false`)
     // `games${strFilters}_sort=year,title&_order=desc,asc&_limit=20`)
     .pipe(
       retryWhen(error => error.pipe(delay(500))),
@@ -120,9 +126,9 @@ export class GamesService {
 
   checkFilters(filters: any) {
     let strFilters = '';
-    strFilters += typeof filters['genre'] !== 'undefined' && filters['genre'] !== ''  ? `?genre=${filters.genre}&` : '?';
-    strFilters += typeof filters['years'] !== 'undefined' ? `year_gte=${filters.years.lower}&year_lte=${filters.years.upper}&` : '';
-    strFilters += typeof filters['rate'] !== 'undefined' ? `rate=${filters.rate}&` : '';
+    strFilters += typeof filters['genre'] !== 'undefined' && filters['genre'] !== ''  ? `${filters.genre}` : '?';
+    /* strFilters += typeof filters['years'] !== 'undefined' ? `year_gte=${filters.years.lower}&year_lte=${filters.years.upper}&` : '';
+    strFilters += typeof filters['rate'] !== 'undefined' ? `rate=${filters.rate}&` : ''; */
     return strFilters;
   }
 

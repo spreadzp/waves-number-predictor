@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
- <ion-content class="outer-content">
+<ion-content class="outer-content">
   <ion-list>
     <ion-grid fixed>
       <ion-row align-items-stretch>
@@ -37,7 +37,7 @@
                 </ion-badge>
               </ion-item>
               <ion-row>
-                <ion-item >
+                <ion-item>
                   <p>
                     <ion-icon name="people"></ion-icon> {{ game?.cast }}
                   </p>
@@ -68,7 +68,7 @@
                       (ionSelect)="radioSelect($event)" (ionBlur)="radioBlur()">
                       <ion-label>{{item.text}}</ion-label>
                       <ion-radio slot="start" name="{{item.name}}" value="{{item.value}}" checked="{{item.checked}}"
-                        color="{{item.color}}" disabled="{{item.disabled}}"></ion-radio>
+                        color="{{item.color}}" disabled="{{item.disabled}}"></ion-radio>&nbsp;<span>Current bet: {{defineBet(item.value)}}</span>&nbsp; <span>The gamer made bets: {{totalGamersBeds(item.value)}}</span>
                     </ion-item>
 
                   </ion-radio-group>
@@ -77,18 +77,22 @@
               </ion-row>
               <ion-row>
                 <p><b>Current round {{currentRound.numberRound}}</b><br />
-                  </p>
+                </p>
               </ion-row>
               <ion-row>
-                <p ><b>Bank of the game: </b><br />
-                  {{currentGame.bank}}</p>
+                <p><b>Bet of the round : {{currentRound.numberRound}}</b><br />
+                  {{(currentRound.numberRound) * currentGame.minBet}}</p>
               </ion-row>
               <ion-row>
-                  <p><b>Current range</b><br />
-                    {{firstRangeMin + " - " + secondRangeMax}}</p>
+                <p><b>Bank of the game: </b><br />
+                  {{currentGame?.bank}}</p>
+              </ion-row>
+              <ion-row>
+                <p><b>Current range</b><br />
+                  {{firstRangeMin + " - " + secondRangeMax}}</p>
 
-                   <!--  *ngIf="game.price" -->
-                <ion-item >
+                <!--  *ngIf="game.price" -->
+                <ion-item>
                   <ion-badge tappable slot="end" #betDown id="betDown" (click)="makeBetDown()">
                     <ion-icon name="eye"></ion-icon> {{defineRange(1)}}
                   </ion-badge>
@@ -99,20 +103,20 @@
               </ion-row>
               <ion-row>
 
-                  <p ><b>The round {{currentRound.numberRound}} will finish: </b><br />
-                      {{timeNextRound}} seconds</p>
-                      <countdown  #cd [config]="configTime" (event)="handleEvent($event)"></countdown>
-                  <p *ngIf="showSecretGame"><b>Secret number the game: </b><br />
-                    {{currentGame.secretNumberOfGame}}</p>
+                <p><b>The round {{currentRound.numberRound}} will finish: </b><br />
+                  {{timeNextRound}} seconds</p>
+                <countdown #cd [config]="configTime" (event)="handleEvent($event)"></countdown>
+                <p *ngIf="showSecretGame"><b>Secret number the game: </b><br />
+                  {{currentGame.secretNumberOfGame}}</p>
 
-                    <!-- *ngIf="game.price" -->
-                      <ion-item *ngIf="checkOppositeBet()">
-                        <ion-badge tappable slot="end" (click)="nextRound()" >
-                          <ion-icon name="eye"></ion-icon> {{"Round:"}} {{currentRound.numberRound}}
-                        </ion-badge>
-                      </ion-item>
-                    </ion-row>
-                    <ion-row>
+                <!-- *ngIf="game.price" -->
+                <ion-item *ngIf="checkOppositeBet()">
+                  <ion-badge tappable slot="end" (click)="nextRound()">
+                    <ion-icon name="eye"></ion-icon> {{"Round:"}} {{currentRound.numberRound}}
+                  </ion-badge>
+                </ion-item>
+              </ion-row>
+              <ion-row>
                 <ion-item *ngIf="game.count">
                   <p>
                     <ion-icon name="people"></ion-icon> {{ game?.count }}

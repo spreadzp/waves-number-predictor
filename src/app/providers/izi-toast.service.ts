@@ -30,6 +30,11 @@ export class IziToastService {
     iziToast.show({...this.defaultIziToastSettings, ...newSettings});
   }
 
+  errorConnection(title, message, color) {
+    const newSettings: IziToastSettings = {title: title, message: message, color: color};
+    iziToast.error({...this.defaultIziToastSettings, ...newSettings});
+  }
+
   success(title, message) {
     const newSettings: IziToastSettings = {title: title, message: message, position: 'bottomCenter'};
     iziToast.success({...this.defaultIziToastSettings, ...newSettings});
@@ -37,7 +42,7 @@ export class IziToastService {
 
   gameOver (title, message) {
     const newSettings: IziToastSettings = {title: title, message: message, color: 'blue'};
-    iziToast.show({...this.defaultIziToastSettings, ...newSettings});
+    return iziToast.show({...this.defaultIziToastSettings, ...newSettings});
   }
 
   destroy() {

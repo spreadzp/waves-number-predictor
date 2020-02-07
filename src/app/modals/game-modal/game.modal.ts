@@ -44,8 +44,20 @@ export class GameModalComponent implements OnInit, AfterViewInit {
 
   // Reads the name of the store from the store class.
   movieForm$: Observable<Movie[]>;
-
   genres = [
+    {id: 1, name: '0-127', image: 'assets/movies-genres/action.png'},
+    {id: 2, name: '0-255', image: 'assets/movies-genres/comedy.png'},
+    {id: 3, name: '0-511', image: 'assets/movies-genres/crime.png'},
+    {id: 4, name: '0-1023', image: 'assets/movies-genres/documentary.png'},
+    {id: 5, name: 'FAQ', image: 'assets/movies-genres/drama.png'},
+    {id: 6, name: 'Info', image: 'assets/movies-genres/fantasy.png'},
+    {id: 7, name: 'Statistic', image: 'assets/movies-genres/film noir.png'},
+    {id: 8, name: 'Hot games', image: 'assets/movies-genres/horror.png'},
+    {id: 9, name: 'Demo games', image: 'assets/movies-genres/romance.png'},
+    {id: 10, name: 'Help', image: 'assets/movies-genres/science fiction.png'},
+    {id: 11, name: 'About', image: 'assets/movies-genres/westerns.png'}
+];
+  genres1 = [
     {id: 1, name: 'Action', image: 'assets/movies-genres/action.png'},
     {id: 2, name: 'Comedy', image: 'assets/movies-genres/comedy.png'},
     {id: 3, name: 'Crime', image: 'assets/movies-genres/crime.png'},

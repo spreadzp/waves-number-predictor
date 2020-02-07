@@ -1,7 +1,7 @@
 import { State, Action, StateContext, Selector, NgxsOnInit } from '@ngxs/store';
 import { patch, append, removeItem, insertItem, updateItem } from '@ngxs/store/operators';
-import { tap, catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { tap, catchError, concatMap } from 'rxjs/operators';
+import { throwError, from, timer } from 'rxjs';
 import { Game } from '../../models/game.model';
 import { FetchGames, AddGame, EditGame, DeleteGame, FilterGames, SaveFilterGames,
          /*SearchGames,*/ GetGameTrailer, ClearGames, LikeGame, CommentGame, FavoriteGame,
@@ -98,15 +98,20 @@ export class GameState implements NgxsOnInit {
     fetchGames({ getState, setState }: StateContext<GamesStateModel>, { payload }) {
         // console.log('GameState::fetchGames() | method called');
         // console.log('fetchGames payload', payload);
+        let state;
         const { start, end } = payload;
-        return this.gamesService.getGames(start, end).pipe(
+        return timer(0, 30000)
+        .pipe(concatMap(() => from(this.gamesService.getGames(start, end))))
+        .pipe(
             catchError((x, caught) => {
                 // console.log('inside catchError', x);
                 return throwError(x);
             }),
             tap((result) => {
             // console.log('fetchGames result', result);
-            const state = getState();
+            if (!state) {
+              state = getState();
+            }
             // console.log('state', state);
             setState({
                 ...state,

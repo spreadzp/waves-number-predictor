@@ -10,15 +10,16 @@ export class Game {
     likes: number;
     rate: number;
     comments: string[];
-    price: number;
+    minBet: number;
     count: number;
     numberGame: number;
     secretNumberOfGame: number;
-    gamerBets: GamerBet;
+    gamerBets: GamerBet[];
     bank: number;
     rounds: Round[];
     winners: GamerBet[]
     constructor() {
+        this.gamerBets = new Array();
         this.rounds = new Array();
         this.winners = new Array();
     }

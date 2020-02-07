@@ -17,7 +17,7 @@ export class GameCarouselComponent implements OnInit {
       lower: 1900,
       upper: new Date().getFullYear()
     },
-    genre: 'Food',
+    genre: '0-127',
     rating: 0
   };
   selected: Number = -1;
@@ -25,20 +25,18 @@ export class GameCarouselComponent implements OnInit {
   constructor(private store: Store) {
     // list items on carusel page
     this.games = [
-      {text: 'Science fiction', src: 'assets/movies-genres/image1.png'},
-      {text: 'Westerns', src: 'assets/movies-genres/image2.png'},
-      {text: 'Crime', src: 'assets/movies-genres/image3.png'},
-       /*    {text: 'Romance', src: 'assets/movies-genres/image4.png'},
-      {text: 'Comedy', src: 'assets/movies-genres/image5.png'},
-      {text: 'Drama', src: 'assets/movies-genres/image6.png'},
-      {text: 'Cartoon', src: 'assets/movies-genres/image7.png'},
-      {text: 'Action', src: 'assets/movies-genres/image8.png'},
-      {text: 'Adventure', src: 'assets/movies-genres/image9.png'},
-      {text: 'Thriller', src: 'assets/movies-genres/image10.png'},
-      {text: 'Fantasy', src: 'assets/movies-genres/image11.png'},
-      {text: 'Horror', src: 'assets/movies-genres/image12.png'}, */
-      {text: 'Food', src: 'assets/movies-genres/image13.png'},
-    ];
+      {id: 1, name: '0-127', src: 'assets/movies-genres/0-127.png'},
+      {id: 2, name: '0-255', src: 'assets/movies-genres/0-255.png'},
+      {id: 3, name: '0-511', src: 'assets/movies-genres/0-511.png'},
+      {id: 4, name: '0-1023', src: 'assets/movies-genres/0-1023.png'},
+      {id: 5, name: 'FAQ', src: 'assets/movies-genres/drama.png'},
+      {id: 6, name: 'Info', src: 'assets/movies-genres/fantasy.png'},
+      {id: 7, name: 'Statistic', src: 'assets/movies-genres/film noir.png'},
+      {id: 8, name: 'Hot games', src: 'assets/movies-genres/horror.png'},
+      {id: 9, name: 'Demo games', src: 'assets/movies-genres/romance.png'},
+      {id: 10, name: 'Help', src: 'assets/movies-genres/science fiction.png'},
+      {id: 11, name: 'About', src: 'assets/movies-genres/westerns.png'}
+  ];
   }
 
   ngOnInit() {
@@ -48,7 +46,7 @@ export class GameCarouselComponent implements OnInit {
     console.log('GameCarouselComponent::selectGame() | method called');
     console.log(game);
     this.selected = index;
-    this.filters.genre = game.text;
+    this.filters.genre = game.name;
     this.store.dispatch([
       new FilterGames(this.filters),
     ]);

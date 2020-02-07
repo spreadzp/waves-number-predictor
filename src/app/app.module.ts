@@ -27,6 +27,7 @@ import { PagesModule } from './pages/pages.module';
 import { CommentModule } from './modals/comment-modal/comment.module';
 import { SoundsService } from './providers/sounds.service';
 import { NativeAudio } from '@ionic-native/native-audio/ngx';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -44,7 +45,8 @@ import { NativeAudio } from '@ionic-native/native-audio/ngx';
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
     NgxsFormPluginModule.forRoot(),
-    PagesModule
+    PagesModule,
+    BrowserAnimationsModule
   ],
   providers: [MoviesService, YoutubeApiService, SearchImageService, WavesService, GamesService,
      SoundsService, NativeAudio, // New provider, don't forget to add comma

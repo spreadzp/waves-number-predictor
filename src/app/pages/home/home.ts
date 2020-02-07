@@ -21,14 +21,21 @@ import { FormControl } from '@angular/forms';
 import 'rxjs/add/operator/debounceTime';
 
 import { IziToastService } from '../../providers/izi-toast.service';
-import { Game } from '../../models/game.model';
+import { Game, GamerBet } from '../../models/game.model';
 import { FetchGames } from '../../store/actions/games.actions';
+import { trigger, state, transition, style, query, animate } from '@angular/animations';
+import { fadeInAnimation } from '../../animations/fade-in.animation';
 
 @Component({
   selector: 'app-page-home',
   templateUrl: './home.html',
   styleUrls: ['./home.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  // make fade in animation available to this component
+  // animations: [fadeInAnimation],
+
+  // attach the fade in animation to the host (root) element of this component
+  // host: { '[@fadeInAnimation]': '' }
 })
 export class HomeComponent implements OnInit {
 
@@ -52,7 +59,7 @@ export class HomeComponent implements OnInit {
               private iziToast: IziToastService) {
     console.log('constructor home');
     this.start = 0;
-    this.end = 20;
+    this.end = 50;
     this.searchControl = new FormControl();
   }
 
@@ -79,7 +86,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     console.log('ngOnInit home');
-    this.fetchMovies(this.start, this.end);
+    // this.fetchMovies(this.start, this.end);
     this.fetchGames(this.start, this.end);
      // Check if we have movies in local storage.
      if (localStorage.getItem('@@STATE') !== 'undefined') {
@@ -105,6 +112,7 @@ export class HomeComponent implements OnInit {
       this.iziToast.success('Delete movie', 'Movie deleted successfully.');
     },
     err => console.log('HomePage::ngOnInit ofActionSuccessful(DeleteMovie) | method called -> received error' + err));
+
   }
 
   fetchMovies(start, end) {
@@ -139,11 +147,26 @@ export class HomeComponent implements OnInit {
 
   viewGameDetails(item: Movie | Game) {
     // console.log('viewMovieDetails', movie);
-    console.log('item as Game :', item as Game);
-    const route = (item as Game).rounds !== undefined ? '/game-details/' : '/detail/';
-    console.log('!!!!!!!!!!!route :', route);
-    const detailsURL = `${route}${item.id}`;
-    this.router.navigate([detailsURL]);
+    if ((item as Game).gameOver === true) {
+      const selectedGame = (item as Game);
+      this.showGameOver(selectedGame.secretNumberOfGame, selectedGame.winners);
+    } else {
+      console.log('item as Game :', item as Game);
+      const route = (item as Game).rounds !== undefined ? '/game-details/' : '/detail/';
+      console.log('!!!!!!!!!!!route :', route);
+      const detailsURL = `${route}${item.id}`;
+      this.router.navigate([detailsURL]);
+    }
+
+  }
+
+  showGameOver(secretNumber: any, winners: GamerBet[]) {
+    let listWinnersWithPrizes = '';
+    for (const item of winners) {
+      listWinnersWithPrizes += `${item.addressGamer} : ${item.sumBets}`;
+    }
+    this.iziToast.gameOver(`The game is over! Secret number of the game is ${secretNumber}`,
+      `Winners got prize ${listWinnersWithPrizes}`);
   }
 
   async presentModal(componentProps: any, component) {
@@ -181,7 +204,7 @@ export class HomeComponent implements OnInit {
     event.target.complete();
     this.showSkeleton = true;
     this.start = this.end;
-    this.end += 20;
+    this.end += 50;
     this.showScrollTop = true;
     this.fetchMovies(this.start, this.end);
   }

@@ -1,6 +1,6 @@
 <ion-header no-border>
   <ion-toolbar color='primary'>
-      <ion-title>Movies List</ion-title>
+      <ion-title>Games List</ion-title>
       <ion-buttons slot='end'>
         <ion-button (click)="showFavoritesMovies()">
             <ion-icon slot="icon-only" name="heart"></ion-icon>
@@ -61,9 +61,10 @@
         <ion-label>
           <h2>{{ game.typeGame }}Id game {{game.id}}</h2>
           <h3 class="notes"><ion-icon name="calendar" color="primary" slot="start"></ion-icon>Bank game {{ game.bank }}</h3>
-          <h2>{{ (game.gameOver) ? 'The game is over': 'Current round : ' + (game.rounds.length +1) + ' You can play the game!'}}</h2>
+          <h2 
+          [className]="(!game.gameOver) ? 'blinking' : ''">{{ (game.gameOver) ? 'The game is over': 'Current round : ' + (game.rounds.length +1) + ' You can play the game!'}}</h2>
           <h5 class="notes">
-            <span *ngIf="game && game.rounds && game.rounds.length !== undefined"><ion-icon name="thumbs-up" color="primary" slot="start"></ion-icon>{{ game.rounds.length }} | </span>
+           <!--  <span *ngIf="game && game.rounds && game.rounds.length !== undefined"><ion-icon name="thumbs-up" color="primary" slot="start"></ion-icon>{{ game.rounds.length }} | </span> -->
             <span *ngIf="game.rate !== undefined"><ion-icon name="star" color="tertiary" slot="start"></ion-icon>{{ game.rate }}</span>
           </h5>
           <h4 class="notes">{{ game.notes }}</h4>

@@ -14,7 +14,7 @@ import { ShowActorsModalComponent } from '../../modals/show-actors-modal/show.ac
 
 import { LikeMovie, FavoriteMovie } from '../../store/actions/movies.actions';
 import { map, skip, takeUntil, filter, scan, withLatestFrom } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { IziToastService } from '../../providers/izi-toast.service';
 import { WavesService } from '../../providers/waves-service';
@@ -25,6 +25,7 @@ import { LikeGame, AddGame, FilterGames, EditGame } from '../../store/actions/ga
 import { SoundsService } from '../../providers/sounds.service';
 import { interval } from 'rxjs/observable/interval';
 import { CountdownComponent } from 'ngx-countdown';
+import { TypeGame } from '../../helpers/type-game';
 
 @Component({
   selector: 'app-page-game-details',
@@ -36,7 +37,9 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
 
   currentYear = new Date().getFullYear();
   selectedGame: Observable<Game>;
-  // movie: Movie;
+  id: string;
+  genreGame: string;
+  countDownStart = false;
   game: Game;
   games: Game[] = [];
   currentGame: Game = null;
@@ -45,8 +48,8 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
   numberRound = 1;
   // timeNextRound = 10;
   startMinNumberRange = 0;
-  startMaxNumberRange = 7;
-  degreeGame = Math.log2(this.startMaxNumberRange + 1);
+  startMaxNumberRange: number;
+  degreeGame: number;
   downRange = '';
   upRange = '';
   firstRangeMin = 0;
@@ -99,7 +102,7 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
       color: 'danger'
     },
   ];
-  genreImages: string[] = ['action', 'comedy', 'crime', 'documentary', 'drama', 'fantasy', 'film noir',
+  genreImages: string[] = ['0-127', 'comedy', 'crime', 'documentary', 'drama', 'fantasy', 'film noir',
     'horror', 'romance', 'science fiction', 'westerns', 'animation', 'food'];
 
   @ViewChild('betDown', { static: false }) betDown: any;
@@ -108,14 +111,61 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
 
   constructor(private store: Store, private youtubeApiService: YoutubeApiService, private modalCtrl: ModalController,
     private activatedRoute: ActivatedRoute, private iziToast: IziToastService, private wavesService: WavesService,
-    private gamesService: GamesService, private soundsService: SoundsService) {
+    private gamesService: GamesService, private soundsService: SoundsService, private router: Router) {
   }
 
   ngOnInit() {
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
-    const gameFromId = this.getGameDetails(id);
+
+    this.id = this.activatedRoute.snapshot.paramMap.get('id');
+    const gameFromId = this.getGameDetails(this.id);
     this.currentRound = new Round();
     this.setImageGame(gameFromId);
+    timer(0, 1000).subscribe(() => {
+      this.fetchGameById(this.id).subscribe(
+        game => {
+        if (game && Array.isArray(game)) {
+          this.fetchGameState(game[0]);
+          this.currentRound.numberRound = game[0].rounds.length;
+        }
+
+      },
+      err => {
+        this.iziToast.errorConnection('Error connection!', `You have error connection ${err}`,'red');
+      }
+      );
+    })
+    /* this.gamesService.getGame(this.id).subscribe(game => {
+      if (game && Array.isArray(game)) {
+        this.currentGame = game[0];
+
+      }
+
+    }); */
+
+  }
+
+  fetchGameById(id: string) {
+    return this.gamesService.getGame(id);
+    /* new Observable((observer) => {
+
+      // observable execution
+      observer.next("hello")
+      observer.complete()
+  })
+    let gameById: Game;
+     return this.gamesService.getGame(this.id).subscribe(game => {
+      if (game && Array.isArray(game)) {
+
+        this.currentRound.numberRound = game[0].rounds.length;
+        gameById =  game[0];
+      }
+      return gameById;
+  }); */
+
+  }
+
+  fetchGameState(game: Game) {
+
     // this.startNewGame(); start 128 512 1024 type of games
     /* this.notFinishGame(this.startMaxNumberRange + 1)
       .subscribe(game => {
@@ -123,45 +173,57 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
           this.startNewGame();
         }
       }); */
-    gameFromId.subscribe(game => {
-      if (!game) {
-        console.log('????game :', game);
-        //  this.startNewGame();
-        this.defineRanges(this.startMinNumberRange, this.startMaxNumberRange);
-      }
-      else if (game.gameOver) {
-        this.showGameOver(game.secretNumberOfGame, game.winners);
-      } else {
-        this.currentGame = game;
-         if (!this.currentGame.rounds.length) {
-          this.currentGame.rounds.push(new Round());
-          this.defineRanges(this.startMinNumberRange, this.startMaxNumberRange);
-          this.defineCurrentRound(this.currentGame.rounds);
-          this.currentGame.rounds[this.currentRound.numberRound - 1].minNumberRange = this.startMinNumberRange;
-          this.currentGame.rounds[this.currentRound.numberRound - 1].maxNumberRange = this.startMaxNumberRange;
-        } if (this.currentGame.rounds.length && this.checkRoundRangeNumbers(this.currentGame.rounds.length - 1)) {
-          this.defineCurrentRound(this.currentGame.rounds);
-          const numRounds = this.currentRound.numberRound - 1;
-          console.log('numRounds :', numRounds);
-          this.defineRanges(this.currentGame.rounds[this.currentRound.numberRound - 1].minNumberRange,
-            this.currentGame.rounds[this.currentRound.numberRound - 1].maxNumberRange);
+    // console.log('game.gameOver && game.id :', game.gameOver + game.id);
+    if (!game) {
+
+      this.fetchGameById(this.id).subscribe(game => {
+        // console.log('@@@@@@@@@@@@@@@@@game :', game);
+
+        if (game && Array.isArray(game)) {
+          this.fetchGameState(game[0]);
+          this.currentRound.numberRound = game[0].rounds.length;
         }
+
+      });
+      /*  this.router.navigateByUrl('/home');
+
+       //  this.startNewGame();
+       this.defineRanges(this.startMinNumberRange, this.startMaxNumberRange); */
+    } else if (game.gameOver && game.id === this.id) {
+      //this.showGameOver(game.secretNumberOfGame, game.winners);
+      this.router.navigateByUrl('/home');
+    } else {
+      this.currentGame = game;
+      this.genreGame = this.currentGame.typeGame;
+      this.startMaxNumberRange = TypeGame[this.genreGame];
+      this.degreeGame = Math.log2(this.startMaxNumberRange + 1);
+      if (!this.currentGame.rounds.length) {
+        this.currentGame.rounds.push(new Round());
+        this.defineRanges(this.startMinNumberRange, this.startMaxNumberRange);
+        this.defineCurrentRound(this.currentGame.rounds);
+        this.currentGame.rounds[this.currentRound.numberRound - 1].minNumberRange = this.startMinNumberRange;
+        this.currentGame.rounds[this.currentRound.numberRound - 1].maxNumberRange = this.startMaxNumberRange;
+      } if (this.currentGame.rounds.length && this.checkRoundRangeNumbers(this.currentGame.rounds.length - 1)) {
+        this.defineCurrentRound(this.currentGame.rounds);
+        const numRounds = this.currentRound.numberRound - 1;
+        //console.log('numRounds :', numRounds);
+        this.defineRanges(this.currentGame.rounds[this.currentRound.numberRound - 1].minNumberRange,
+          this.currentGame.rounds[this.currentRound.numberRound - 1].maxNumberRange);
       }
-    })
-    console.log('#################this.currentRound :', this.currentRound);
+    }
+
   }
 
   checkRoundRangeNumbers(numberRange) {
     const r = this.currentGame.rounds[numberRange].minNumberRange;
     const e = this.currentGame.rounds[numberRange].maxNumberRange;
-    return  (r + e) ? true : false;
+    return (r + e) ? true : false;
 
   }
 
   defineCurrentRound(rounds: Round[]) {
-    // this.currentRound = new Round();
     if (rounds && rounds.length) {
-      this.currentRound.numberRound = rounds.length ;
+      this.currentRound.numberRound = rounds.length;
     } else {
       this.currentRound.numberRound = 1
     }
@@ -169,7 +231,7 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.soundsService.preload('click', 'assets/sounds/click.mp3');
-    if (this.betDown && this.betUp) {
+    if (this.betDown && this.betUp && this.betDown.ionChange && this.betUp.ionChange) {
       this.betDown.ionChange.pipe(skip(1)).subscribe((ev) => {
 
         this.soundsService.play('click');
@@ -181,6 +243,7 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
 
       });
     }
+
   }
 
   notFinishGame(typeGame: number): Observable<Game> {
@@ -191,30 +254,8 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
   }
 
   ionViewWillEnter() {
-    console.log('ionViewWillEnter');
+    console.log('252 ionViewWillEnter');
 
-
-    /* this.selectedGame = this.store.select(state => state.catalogGame.selectedGame);
-    console.log('this.selectedGame :', this.selectedGame);
-    this.selectedGame.subscribe(
-      data => {
-           console.log('@@data',data);
-          this.game = data;
-          if (this.game !== null) {
-            const genre = this.game.genre.toLowerCase().split(',', 1)[0];
-            if (this.genreImages.indexOf(genre) !== -1) {
-              this.game.genreImage = 'assets/movies-genres/' + genre + '.png';
-            }
-          }
-      },
-      error => {
-          console.log(<any>error);
-      }
-    );  */
-
-    /* const id = this.activatedRoute.snapshot.paramMap.get('id');
-    console.log('id :', id);
-    this.getGameDetails(id); */
   }
 
   getGameDetails(id: string) {
@@ -225,9 +266,9 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
 
   setImageGame(game: Observable<Game>) {
     game.subscribe(game => {
-      console.log(game);
+      // console.log(game);
       this.game = game;
-      console.log('187 this.game :', this.game);
+      // console.log('187 this.game :', this.game);
       let genre = '';
       if (this.game && this.game.genre) {
         genre = this.game.genre.toLowerCase().split(',', 1)[0];
@@ -411,14 +452,11 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
   }
 
   makeBetDown() {
-    if (!this.currentRound.gamersBetUp.includes(this.selectedRadioGroup.value)) {
+    //!this.currentRound.gamersBetUp.includes(this.selectedRadioGroup.value) &&
+    if (!this.currentGame.rounds[this.currentRound.numberRound - 1].gamersBetUp.includes(this.selectedRadioGroup.value)) {
       this.currentRound.gamersBetDown.push(this.selectedRadioGroup.value);
-      this.currentGame.bank += this.betValue;
-      this.currentGame.rounds[this.currentRound.numberRound - 1].gamersBetDown.push(this.selectedRadioGroup.value);1
-      this.store.dispatch(
-        new EditGame(this.currentGame)
-      ).subscribe((t) => console.log('471 t :', t)
-      );
+      this.addGamerBet(this.selectedRadioGroup.value);
+      this.updateGame(this.currentRound.numberRound - 1, { 'gamersBetDown': this.selectedRadioGroup.value });
       // this.soundsService.play('click');
       this.iziToast.success(`Success bet in the range ${this.defineRange(DirectionBet.RangeDown)}`, `${this.selectedRadioGroup.value} made bet ${this.betValue} tokens`);
     } else {
@@ -427,15 +465,70 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
 
   }
 
+  findIndexGamersBet(gamerAddress) {
+    if (this.currentGame) {
+      if (this.currentGame.gamerBets.length > 0) {
+        return this.currentGame.gamerBets.findIndex(item => item.addressGamer === gamerAddress);
+      } else {
+        return 0;
+      }
+    }
+  }
+
+  totalGamersBeds(gamerAddress) {
+    if (this.currentGame) {
+      if (this.currentGame.gamerBets.length > 0) {
+        const gamerBet = this.currentGame.gamerBets.find(item => item.addressGamer === gamerAddress);
+        return (gamerBet) ? gamerBet.sumBets : 0;
+      } else {
+        return 0;
+      }
+    }
+  }
+
+  defineBet(gamerAddress) {
+    if (this.currentRound.numberRound === 1) {
+      return this.currentGame.minBet;
+    } else {
+      if (this.currentGame) {
+        const prevRound = this.currentGame.rounds[this.currentRound.numberRound - 1];
+        const isTrueLastBet = prevRound.isLastWinnerRangeUp ?
+          prevRound.gamersBetUp.includes(gamerAddress) :
+          prevRound.gamersBetDown.includes(gamerAddress);
+        return isTrueLastBet ? this.currentGame.minBet :
+          this.currentGame.minBet * (this.currentRound.numberRound) > this.totalGamersBeds(gamerAddress) ?
+            this.currentGame.minBet * (this.currentRound.numberRound) - this.totalGamersBeds(gamerAddress) :
+            this.currentGame.minBet;
+      }
+    }
+  }
+
+  defineRoundBet() {
+
+  }
+
+  addGamerBet(addressGamer) {
+    const gamerBet = this.defineBet(addressGamer);
+    this.currentGame.bank += gamerBet;
+    const indexGamerBets = this.findIndexGamersBet(addressGamer);
+    if (indexGamerBets === -1 || this.currentGame.gamerBets.length === 0) {
+      const newBets = {
+        addressGamer: addressGamer,
+        sumBets: gamerBet
+      };
+      this.currentGame.gamerBets.push(newBets);
+    } else {
+      this.currentGame.gamerBets[indexGamerBets].addressGamer = addressGamer;
+      this.currentGame.gamerBets[indexGamerBets].sumBets += gamerBet;
+    }
+  }
+
   makeBetUp() {
-    if (!this.currentRound.gamersBetDown.includes(this.selectedRadioGroup.value)) {
+    //!this.currentRound.gamersBetDown.includes(this.selectedRadioGroup.value) &&
+    if (!this.currentGame.rounds[this.currentRound.numberRound - 1].gamersBetDown.includes(this.selectedRadioGroup.value)) {
       this.currentRound.gamersBetUp.push(this.selectedRadioGroup.value);
-      this.currentGame.bank += this.betValue;
-      this.currentGame.rounds[this.currentRound.numberRound - 1].gamersBetUp.push(this.selectedRadioGroup.value);1
-      this.store.dispatch(
-        new EditGame(this.currentGame)
-      ).subscribe((t) => console.log('471 t :', t)
-      );
+      this.addGamerBet(this.selectedRadioGroup.value);
+      this.updateGame(this.currentRound.numberRound - 1, { 'gamersBetUp': this.selectedRadioGroup.value });
       // this.soundsService.play('click');
       this.iziToast.success(`Success bet in the range ${this.defineRange(DirectionBet.RangeUp)}`, `${this.selectedRadioGroup.value}  made bet ${this.betValue} tokens`);
     } else {
@@ -454,27 +547,99 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
     this.currentRound.maxNumberRange = maxNumber;
   }
 
+  defineRangesRound(minNumber: number, maxNumber: number) {
+    let sumMinAndMax = maxNumber + minNumber;
+    this.avgRange = sumMinAndMax % 2 === 0 ? sumMinAndMax / 2 : (sumMinAndMax + 1) / 2;
+    this.firstRangeMin = minNumber;
+    this.firstRangeMax = this.avgRange - 1;
+    this.secondRangeMin = this.avgRange;
+    this.secondRangeMax = maxNumber;
+    this.currentRound.minNumberRange = minNumber;
+    this.currentRound.maxNumberRange = maxNumber;
+    return { min: minNumber, max: maxNumber };
+  }
+
   setRange(isWinnerDirectionUp: boolean, lastAvgRange: number, minRange: number, maxRange: number) {
-    if (isWinnerDirectionUp) {
-      this.defineRanges(lastAvgRange, maxRange);
-    } else {
-      this.defineRanges(minRange, lastAvgRange - 1);
-    }
-    this.currentGame.rounds[this.currentRound.numberRound - 1].isLastWinnerRangeUp = isWinnerDirectionUp;
+
+    /* this.currentGame.rounds[this.currentRound.numberRound - 1].isLastWinnerRangeUp = isWinnerDirectionUp;
     this.currentGame.rounds[this.currentRound.numberRound - 1].maxNumberRange = this.currentRound.maxNumberRange;
     this.currentGame.rounds[this.currentRound.numberRound - 1].minNumberRange = this.currentRound.minNumberRange;
     this.currentGame.rounds[this.currentRound.numberRound - 1].numberRound = this.currentRound.numberRound;
     this.store.dispatch(
       new EditGame(this.currentGame)
     ).subscribe((t) => console.log('471 t :', t)
+    ); */
+    let newRanges: { min: number, max: number };
+    if (isWinnerDirectionUp) {
+      newRanges = this.defineRangesRound(lastAvgRange, maxRange);
+    } else {
+      newRanges = this.defineRangesRound(minRange, lastAvgRange - 1);
+    }
+    const newRound = new Round();
+    newRound.numberRound = this.currentRound.numberRound + 1;
+    newRound.maxNumberRange = newRanges.max;
+    newRound.minNumberRange = newRanges.min;
+    this.currentGame.rounds.push(newRound);
+    this.updateGame(this.currentRound.numberRound, {
+      'isLastWinnerRangeUp': isWinnerDirectionUp,
+      'maxNumberRange': this.currentRound.maxNumberRange,
+      'minNumberRange': this.currentRound.minNumberRange,
+      'numberRound': this.currentRound.numberRound
+    });
+    /* if (this.currentRound.numberRound !== 1) {
+      this.updateGame(this.currentRound.numberRound, {
+        'isLastWinnerRangeUp': isWinnerDirectionUp,
+        'maxNumberRange': this.currentRound.maxNumberRange,
+        'minNumberRange': this.currentRound.minNumberRange,
+        'numberRound': this.currentRound.numberRound
+      });
+    } else {
+      this.updateGame(this.currentRound.numberRound - 1, {
+        'isLastWinnerRangeUp': isWinnerDirectionUp,
+        'numberRound': this.currentRound.numberRound
+      })
+    } */
+
+
+  }
+
+  updateGame(numberRound: number, data: Object) {
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        debugger;
+        if (Array.isArray(this.currentGame.rounds[numberRound][key])) {
+          this.currentGame.rounds[numberRound][key].push(data[key]);
+          console.log('data[key] 1:', data[key]);
+        } else if (this.currentGame.hasOwnProperty(key) === data.hasOwnProperty(key)) {
+          this.currentGame[key] = data[key];
+          console.log('data[key] 2:', data[key]);
+        } else {
+          this.currentGame.rounds[numberRound][key] = data[key];
+          console.log('data[key] 3:', data[key]);
+        }
+      }
+    }
+    this.store.dispatch(
+      new EditGame(this.currentGame)
+    ).subscribe((t) => console.log('471 t :', t)
     );
   }
-  checkOppositeBet() {
-    if (this.currentRound.gamersBetDown.length > 0 && this.currentRound.gamersBetUp.length > 0) {
-      this.timerForStartNextRound();
-      return true;
-    }
 
+  checkOppositeBet() {
+    /* const roundsLength = this.currentGame.rounds.length;
+    console.log('this.currentGame.rounds :', this.currentGame.rounds); */
+    if (!this.currentGame || !this.currentGame.rounds.length) {
+      return false;
+    } else {
+      const countBetUp = this.currentGame.rounds[this.currentRound.numberRound - 1].gamersBetUp.length;
+      const countBetDown = this.currentGame.rounds[this.currentRound.numberRound - 1].gamersBetDown.length;
+      if (countBetUp > 0 && countBetDown > 0) {
+        this.timerForStartNextRound();
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 
   handleEvent($event) {
@@ -486,8 +651,9 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
   }
 
   timerForStartNextRound() {
-    this.countdown.restart();
-    this.countdown.begin();
+    /* this.countdown.restart();
+    this.countdown.begin(); */
+    this.countDownStart = true;
   }
 
   nextRound() {
@@ -495,11 +661,12 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
       this.timerForStartNextRound();
       console.log(' ++++nextRoundthis.currentGame :', this.currentGame);
       const round = this.currentRound;
-      this.currentGame.rounds.push(this.currentRound);
+      //
+      console.log(' ?????nextRoundthis.currentGame :', this.currentGame);
       this.numberRound++;
       this.currentRound.isLastWinnerRangeUp = this.winnerRangeDirection();
 
-      if ((this.numberRound % (this.degreeGame + 1) === 0)) {
+      if (((this.currentRound.numberRound) % (this.degreeGame) === 0)) {
         const secretNumber = (this.currentRound.isLastWinnerRangeUp) ?
           round.maxNumberRange : round.minNumberRange;
         this.currentGame.secretNumberOfGame = secretNumber;
@@ -518,7 +685,7 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
               sumBets: avgPrize
             })
             console.log('item :', item);
-            listWinnersWithPrizes += `${item} : ${avgPrize}`;
+            // listWinnersWithPrizes += `${item} : ${avgPrize}`;
           }
         } else {
           for (const item of round.gamersBetDown) {
@@ -528,22 +695,30 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
             })
             /* console.log('item :', item);
             listWinnersWithPrizes += `${item} : ${avgPrize}`; */
-          }
-          this.showSecretGame = false;
-          this.currentGame.gameOver = true;
-        }
-        // console.log('listWinnersWithPrizes :', listWinnersWithPrizes);
 
-        this.showGameOver(secretNumber, this.currentGame.winners);
-        //this.iziToast.gameOver(`Secret number of the game is ${secretNumber}`, `Winners got prize ${listWinnersWithPrizes}`);
+          }
+
+          this.showSecretGame = true;
+          this.currentGame.gameOver = true;
+
+        }
+        this.updateGame(this.currentRound.numberRound - 1, {
+          'secretNumberOfGame': this.currentGame.secretNumberOfGame,
+          'isLastWinnerRangeUp': this.currentRound.isLastWinnerRangeUp,
+          'gameOver': true,
+          'winners': this.currentGame.winners
+        })
+        // console.log('listWinnersWithPrizes :', listWinnersWithPrizes);
         this.finishOldAndStartNewGame();
+
+
+        //this.iziToast.gameOver(`Secret number of the game is ${secretNumber}`, `Winners got prize ${listWinnersWithPrizes}`);
+
       } else {
         this.showSecretGame = false;
         this.setRange(this.currentRound.isLastWinnerRangeUp, this.avgRange, round.minNumberRange, round.maxNumberRange);
       }
-      this.currentRound = new Round();
 
-      this.currentRound.numberRound = this.numberRound;
     }
   }
 
@@ -553,33 +728,39 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
       listWinnersWithPrizes += `${item.addressGamer} : ${item.sumBets}`;
     }
     this.iziToast.gameOver(`The game is over! Secret number of the game is ${secretNumber}`, `Winners got prize ${listWinnersWithPrizes}`);
+
   }
 
   finishOldAndStartNewGame() {
     this.numberRound = 1;
+
     this.startNewGame(this.currentGame);
     this.defineRanges(this.startMinNumberRange, this.startMaxNumberRange);
+
   }
 
   startNewGame(game?: Game) {
-    if (!game) {
-      this.currentGame = new Game();
-      this.currentGame.bank = 0;
-      this.currentGame.gameOver = false;
-      this.currentGame.typeGame = (this.startMaxNumberRange + 1).toString();
-      this.currentGame.numberGame = 1;
-      this.store.dispatch(
-        new AddGame(this.currentGame)
-      ).subscribe((t) => console.log('471 t :', t)
-      );
-    } else {
-      this.games.push(game);
-      this.store.dispatch(
-        new EditGame(this.currentGame)
-      ).subscribe((t) => console.log('471 t :', t)
-      );
-      this.currentGame.numberGame = game.numberGame + 1;
+    const endedGame = game;
+    this.currentGame = new Game();
+    this.currentGame.bank = 0;
+    this.currentGame.gameOver = false;
+    this.currentGame.typeGame = this.genreGame;
+    this.currentGame.numberGame = game.numberGame + 1;
+    this.currentGame.minBet = game.minBet;
+    console.log('startNewGame :', this.currentGame);
+    this.id = '';
+    this.store.dispatch(
+      new AddGame(this.currentGame)
+    ).subscribe((t) => {
+
+      if (endedGame.gameOver) {
+        console.log('game.gameOver :', game.gameOver);
+        this.showGameOver(endedGame.secretNumberOfGame, endedGame.winners);
+        this.router.navigateByUrl('/home');
+      }
+
     }
+    );
     /// this.gamesService.addNewGame(this.currentGame);
   }
 
