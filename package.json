@@ -15,7 +15,7 @@
     "tg": "npx surfboard test game-test.js",
     "tr": "npx surfboard test transfer.js",
     "updAng": "ng update @angular/cli@8 @angular/core@8 --force",
-    "upgrAng": "ng update @angular/cli @angular/core"
+    "upgrAng": "ng update @angular/cli @angular/core --force"
   },
   "private": true,
   "dependencies": {
