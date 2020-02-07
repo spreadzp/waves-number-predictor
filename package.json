@@ -13,7 +13,8 @@
     "e2e": "ng e2e",
     "serv": "cd json-server && json-server --watch db.json",
     "tg": "npx surfboard test game-test.js",
-    "tr": "npx surfboard test transfer.js"
+    "tr": "npx surfboard test transfer.js",
+    "updAng": "ng update @angular/cli@8 @angular/core@8"
   },
   "private": true,
   "dependencies": {
