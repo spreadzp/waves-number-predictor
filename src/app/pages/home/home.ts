@@ -11,7 +11,7 @@ import { FetchMovies, DeleteMovie, AddMovie, EditMovie, /*SearchMovies,*/
          ClearMovies } from '../../store/actions/movies.actions';
 import { Observable } from 'rxjs';
 
-import { MovieModalComponent } from '../../modals/movie-modal/movie.modal';
+//import { MovieModalComponent } from '../../modals/movie-modal/movie.modal';
 import { FilterMoviePopoverComponent } from '../../popovers/filter-movie.popover';
 import { FavoritesMoviesModalComponent } from '../../modals/favorites-movies-modal/favorites.movies.modal';
 
@@ -185,13 +185,13 @@ export class HomeComponent implements OnInit {
   addMovie() {
     // console.log('addMovie');
     const componentProps = { modalProps: { title: 'Add Movie', buttonText: 'Add Movie'}, option: 'add'};
-    this.presentModal(componentProps, MovieModalComponent);
+    //this.presentModal(componentProps, MovieModalComponent);
   }
 
   editMovie(movie: Movie) {
     // console.log('editMovie', movie);
     const componentProps = { modalProps: { title: 'Edit Movie', buttonText: 'Edit Movie', movie: movie}, option: 'edit'};
-    this.presentModal(componentProps, MovieModalComponent);
+    //this.presentModal(componentProps, MovieModalComponent);
   }
 
   deleteMovie(movie: Movie) {

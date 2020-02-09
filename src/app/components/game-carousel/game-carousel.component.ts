@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Store } from '@ngxs/store';
-import { FilterMovies } from '../../store/actions/movies.actions';
 import { FilterGames } from '../../store/actions/games.actions';
 
 @Component({
@@ -13,12 +12,9 @@ export class GameCarouselComponent implements OnInit {
 
   games: any;
   filters: any = {
-    years: {
-      lower: 1900,
-      upper: new Date().getFullYear()
-    },
-    genre: '0-127',
-    rating: 0
+    typeAddRate: 0,
+    gameOver: false,
+    genre: '0-127'
   };
   selected: Number = -1;
 

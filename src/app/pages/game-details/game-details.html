@@ -68,7 +68,9 @@
                       (ionSelect)="radioSelect($event)" (ionBlur)="radioBlur()">
                       <ion-label>{{item.text}}</ion-label>
                       <ion-radio slot="start" name="{{item.name}}" value="{{item.value}}" checked="{{item.checked}}"
-                        color="{{item.color}}" disabled="{{item.disabled}}"></ion-radio>&nbsp;<span>Current bet: {{defineBet(item.value)}}</span>&nbsp; <span>The gamer made bets: {{totalGamersBeds(item.value)}}</span>
+                        color="{{item.color}}" disabled="{{item.disabled}}"></ion-radio>&nbsp;
+                        <span>Current bet: {{(currentGame) ? defineBet(item.value) : ''}}</span>&nbsp;
+                         <span>The gamer made bets: {{totalGamersBeds(item.value)}}</span>
                     </ion-item>
 
                   </ion-radio-group>
@@ -81,7 +83,7 @@
               </ion-row>
               <ion-row>
                 <p><b>Bet of the round : {{currentRound.numberRound}}</b><br />
-                  {{(currentRound.numberRound) * currentGame.minBet}}</p>
+                  {{defineRoundBet()}}</p>
               </ion-row>
               <ion-row>
                 <p><b>Bank of the game: </b><br />

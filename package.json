@@ -1,6 +1,6 @@
 {
   "name": "gambling-on-waves",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "spread2009@gmail.com",
   "description": "Gambling game with waves blockchain.",
   "license": "MIT",
@@ -15,15 +15,20 @@
     "tg": "npx surfboard test game-test.js",
     "tr": "npx surfboard test transfer.js",
     "updAng": "ng update @angular/cli@8 @angular/core@8 --force",
-    "upgrAng": "ng update @angular/cli @angular/core --force"
+    "upgrAng": "ng update @angular/cli @angular/core --force",
+    "18ru": "npx ng xi18n --i18n-locale ru",
+    "18zh": "npx ng xi18n --i18n-locale zh",
+    "build-i18n": "for lang in en; do ng build --output-path=dist/$lang --aot --prod --base-href /$lang/ --i18n-file=src/app/localize/messages.$lang.xlf --i18n-format=xlf --i18n-locale=$lang; done"
   },
   "private": true,
   "dependencies": {
+    "@angular-devkit/build-angular": "^0.900.1",
     "@angular/animations": "^8.2.14",
     "@angular/common": "^8.2.14",
     "@angular/core": "^8.2.14",
     "@angular/forms": "^8.2.14",
     "@angular/http": "^7.2.15",
+    "@angular/localize": "^9.0.0",
     "@angular/platform-browser": "^8.2.14",
     "@angular/platform-browser-dynamic": "^8.2.14",
     "@angular/router": "^8.2.14",
@@ -59,7 +64,6 @@
     "zone.js": "^0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "0.803.25",
     "@angular/cli": "~8.3.25",
     "@angular/compiler": "^8.2.14",
     "@angular/compiler-cli": "^8.2.14",

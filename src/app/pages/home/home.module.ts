@@ -4,7 +4,6 @@ import { IonicModule } from '@ionic/angular';
 
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HomeComponent } from './home';
-import { MovieModalComponent  } from '../../modals/movie-modal/movie.modal';
 import { FavoritesMoviesModalComponent } from '../../modals/favorites-movies-modal/favorites.movies.modal';
 import { FilterMoviePopoverComponent } from '../../popovers/filter-movie.popover';
 import { HomeComponentRoutingModule } from './home-routing.module';
@@ -28,8 +27,8 @@ import { GameCarouselComponent } from '../../components/game-carousel/game-carou
     FormsModule,
     StarRatingModule.forRoot()
   ],
-  declarations: [HomeComponent, MovieModalComponent, FilterMoviePopoverComponent, FavoritesMoviesModalComponent, GenreCarouselComponent, GameCarouselComponent,
+  declarations: [HomeComponent, FilterMoviePopoverComponent, FavoritesMoviesModalComponent, GenreCarouselComponent, GameCarouselComponent,
                  FilterPipe],
-  entryComponents: [HomeComponent, MovieModalComponent, FilterMoviePopoverComponent, FavoritesMoviesModalComponent, GenreCarouselComponent, GameCarouselComponent],
+  entryComponents: [HomeComponent, FilterMoviePopoverComponent, FavoritesMoviesModalComponent, GenreCarouselComponent, GameCarouselComponent],
 })
 export class HomeModule {}

@@ -5,7 +5,3 @@ export enum TypeGame {
   '0-1023' = 1023,
 }
 
-export enum GenreGame {
-  'geometric' = 0,
-  'linear' = 1,
-}

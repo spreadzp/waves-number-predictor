@@ -1,328 +1,32 @@
 {
   "games": [
     {
-      "rounds": [
-        {
-          "gamersBetUp": [
-            "gamer_1",
-            "gamer_1",
-            "gamer_1",
-            "gamer_1"
-          ],
-          "gamersBetDown": [
-            "gamer_2",
-            "gamer_2",
-            "gamer_2",
-            "gamer_2",
-            "gamer_2"
-          ],
-          "minNumberRange": 0,
-          "maxNumberRange": 127
-        },
-        {
-          "gamersBetUp": [
-            "gamer_1"
-          ],
-          "gamersBetDown": [
-            "gamer_3",
-            "gamer_3",
-            "gamer_3",
-            "gamer_3"
-          ],
-          "numberRound": 1,
-          "maxNumberRange": 127,
-          "minNumberRange": 64,
-          "isLastWinnerRangeUp": true
-        },
-        {
-          "gamersBetUp": [
-            "gamer_1",
-            "gamer_1",
-            "gamer_2",
-            "gamer_2",
-            "gamer_2"
-          ],
-          "gamersBetDown": [
-            "gamer_3",
-            "gamer_3",
-            "gamer_3"
-          ],
-          "numberRound": 2,
-          "maxNumberRange": 127,
-          "minNumberRange": 96,
-          "isLastWinnerRangeUp": true
-        },
-        {
-          "gamersBetUp": [
-            "gamer_3"
-          ],
-          "gamersBetDown": [
-            "gamer_2"
-          ],
-          "numberRound": 3,
-          "maxNumberRange": 127,
-          "minNumberRange": 112,
-          "isLastWinnerRangeUp": true
-        },
-        {
-          "gamersBetUp": [
-            "gamer_3"
-          ],
-          "gamersBetDown": [
-            "gamer_2"
-          ],
-          "numberRound": 4,
-          "maxNumberRange": 119,
-          "minNumberRange": 112,
-          "isLastWinnerRangeUp": false
-        },
-        {
-          "gamersBetUp": [
-            "gamer_3"
-          ],
-          "gamersBetDown": [
-            "gamer_2"
-          ],
-          "numberRound": 5,
-          "maxNumberRange": 119,
-          "minNumberRange": 116,
-          "isLastWinnerRangeUp": true
-        },
-        {
-          "gamersBetUp": [
-            "gamer_2"
-          ],
-          "gamersBetDown": [
-            "gamer_3"
-          ],
-          "numberRound": 6,
-          "maxNumberRange": 119,
-          "minNumberRange": 118,
-          "isLastWinnerRangeUp": false
-        }
-      ],
-      "winners": [
-        {
-          "addressGamer": "gamer_2",
-          "sumBets": 15
-        },
-        {
-          "addressGamer": "gamer_3",
-          "sumBets": 15
-        }
-      ],
-      "gamerBets": [
-        {
-          "addressGamer": "gamer_2",
-          "sumBets": 12
-        },
-        {
-          "addressGamer": "gamer_1",
-          "sumBets": 7
-        },
-        {
-          "addressGamer": "gamer_3",
-          "sumBets": 11
-        }
-      ],
-      "bank": 30,
-      "minBet": 1,
-      "gameOver": true,
-      "typeGame": "0-127",
-      "numberGame": 1,
-      "id": "32d08b44-65b1-4333-8eb5-de81a391fc41",
-      "secretNumberOfGame": 118
-    },
-    {
+      "gamerBets": [],
       "rounds": [],
       "winners": [],
-      "gamerBets": [],
-      "minBet": 5,
-      "bank": 5,
+      "bank": 0,
+      "typeAddRate": 0,
       "gameOver": false,
       "typeGame": "0-255",
-      "numberGame": 1,
-      "id": "32d08b44-65b1-4333-8eb5-de81a391fc42"
-    },
-    {
-      "rounds": [],
-      "winners": [],
-      "gamerBets": [],
-      "minBet": 1,
-      "bank": 0,
-      "gameOver": false,
-      "typeGame": "0-511",
-      "numberGame": 1,
-      "id": "32d08b44-65b1-4333-8eb5-de81a391fc43"
-    },
-    {
-      "rounds": [],
-      "winners": [],
-      "gamerBets": [],
-      "minBet": 10,
-      "bank": 0,
-      "gameOver": false,
-      "typeGame": "0-1023",
-      "numberGame": 1,
-      "id": "32d08b44-65b1-4333-8eb5-de81a391fc44"
+      "numberGame": 6,
+      "minBet": 2,
+      "id": "65fe2b12-339f-46dc-9a3e-68ce062ec553"
     },
     {
       "gamerBets": [
         {
           "addressGamer": "gamer_2",
-          "sumBets": 35
-        },
-        {
-          "addressGamer": "gamer_1",
-          "sumBets": 60
+          "sumBets": 14
         },
         {
           "addressGamer": "gamer_3",
-          "sumBets": 50
+          "sumBets": 51
         }
       ],
       "rounds": [
         {
           "gamersBetUp": [
-            "gamer_1",
-            "gamer_1",
-            "gamer_1",
-            "gamer_1"
-          ],
-          "gamersBetDown": [
-            "gamer_2"
-          ],
-          "minNumberRange": 0,
-          "maxNumberRange": 127
-        },
-        {
-          "gamersBetUp": [
-            "gamer_1",
-            "gamer_1"
-          ],
-          "gamersBetDown": [
-            "gamer_2",
-            "gamer_2",
-            "gamer_2"
-          ],
-          "numberRound": 1,
-          "maxNumberRange": 63,
-          "minNumberRange": 0,
-          "isLastWinnerRangeUp": false
-        },
-        {
-          "gamersBetUp": [
-            "gamer_3",
-            "gamer_3",
-            "gamer_3",
-            "gamer_3",
-            "gamer_1",
-            "gamer_1"
-          ],
-          "gamersBetDown": [
-            "gamer_2"
-          ],
-          "numberRound": 2,
-          "maxNumberRange": 63,
-          "minNumberRange": 32,
-          "isLastWinnerRangeUp": true
-        },
-        {
-          "gamersBetUp": [
-            "gamer_3",
-            "gamer_1"
-          ],
-          "gamersBetDown": [
-            "gamer_2"
-          ],
-          "numberRound": 3,
-          "maxNumberRange": 47,
-          "minNumberRange": 32,
-          "isLastWinnerRangeUp": false
-        },
-        {
-          "gamersBetUp": [
-            "gamer_1",
             "gamer_3"
-          ],
-          "gamersBetDown": [
-            "gamer_2"
-          ],
-          "numberRound": 4,
-          "maxNumberRange": 47,
-          "minNumberRange": 40,
-          "isLastWinnerRangeUp": true
-        },
-        {
-          "gamersBetUp": [
-            "gamer_3"
-          ],
-          "gamersBetDown": [
-            "gamer_1"
-          ],
-          "numberRound": 5,
-          "maxNumberRange": 47,
-          "minNumberRange": 44,
-          "isLastWinnerRangeUp": true
-        },
-        {
-          "gamersBetUp": [
-            "gamer_3"
-          ],
-          "gamersBetDown": [
-            "gamer_1"
-          ],
-          "numberRound": 6,
-          "maxNumberRange": 47,
-          "minNumberRange": 46,
-          "isLastWinnerRangeUp": false
-        }
-      ],
-      "winners": [
-        {
-          "addressGamer": "gamer_2",
-          "sumBets": 36.25
-        },
-        {
-          "addressGamer": "gamer_2",
-          "sumBets": 36.25
-        },
-        {
-          "addressGamer": "gamer_1",
-          "sumBets": 36.25
-        },
-        {
-          "addressGamer": "gamer_1",
-          "sumBets": 36.25
-        }
-      ],
-      "bank": 145,
-      "minBet": 5,
-      "gameOver": true,
-      "typeGame": "0-127",
-      "numberGame": 2,
-      "id": "998b8ab4-f8ff-489f-b20f-4c766fd5200b",
-      "secretNumberOfGame": 46
-    },
-    {
-      "gamerBets": [
-        {
-          "addressGamer": "gamer_2",
-          "sumBets": 40
-        },
-        {
-          "addressGamer": "gamer_1",
-          "sumBets": 40
-        },
-        {
-          "addressGamer": "gamer_3",
-          "sumBets": 40
-        }
-      ],
-      "rounds": [
-        {
-          "gamersBetUp": [
-            "gamer_1"
           ],
           "gamersBetDown": [
             "gamer_2"
@@ -335,7 +39,7 @@
             "gamer_2"
           ],
           "gamersBetDown": [
-            "gamer_1"
+            "gamer_3"
           ],
           "numberRound": 1,
           "maxNumberRange": 127,
@@ -347,7 +51,736 @@
             "gamer_3"
           ],
           "gamersBetDown": [
+            "gamer_2"
+          ],
+          "numberRound": 2,
+          "maxNumberRange": 95,
+          "minNumberRange": 64,
+          "isLastWinnerRangeUp": false
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 3,
+          "maxNumberRange": 95,
+          "minNumberRange": 80,
+          "isLastWinnerRangeUp": true
+        },
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "numberRound": 4,
+          "maxNumberRange": 87,
+          "minNumberRange": 80,
+          "isLastWinnerRangeUp": false
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 5,
+          "maxNumberRange": 87,
+          "minNumberRange": 84,
+          "isLastWinnerRangeUp": true
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 6,
+          "maxNumberRange": 85,
+          "minNumberRange": 84,
+          "isLastWinnerRangeUp": true
+        }
+      ],
+      "winners": [
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 9.285714285714286
+        },
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 9.285714285714286
+        },
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 9.285714285714286
+        },
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 9.285714285714286
+        },
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 9.285714285714286
+        },
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 9.285714285714286
+        },
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 9.285714285714286
+        }
+      ],
+      "bank": 65,
+      "typeAddRate": 0,
+      "gameOver": true,
+      "typeGame": "0-127",
+      "numberGame": 6,
+      "minBet": 2,
+      "id": "65fe2b12-339f-46dc-9a3e-68ce062ec552",
+      "secretNumberOfGame": 85
+    },
+    {
+      "gamerBets": [],
+      "rounds": [],
+      "winners": [],
+      "bank": 0,
+      "typeAddRate": 0,
+      "gameOver": false,
+      "typeGame": "0-511",
+      "numberGame": 6,
+      "minBet": 2,
+      "id": "65fe2b12-339f-46dc-9a3e-68ce062ec554"
+    },
+    {
+      "gamerBets": [
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 105
+        },
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 86
+        },
+        {
+          "addressGamer": "gamer_1",
+          "sumBets": 105
+        }
+      ],
+      "rounds": [
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "minNumberRange": 0,
+          "maxNumberRange": 1023
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3",
+            "gamer_3"
+          ],
+          "numberRound": 1,
+          "maxNumberRange": 1023,
+          "minNumberRange": 512,
+          "isLastWinnerRangeUp": true
+        },
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "numberRound": 2,
+          "maxNumberRange": 767,
+          "minNumberRange": 512,
+          "isLastWinnerRangeUp": false
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 3,
+          "maxNumberRange": 767,
+          "minNumberRange": 640,
+          "isLastWinnerRangeUp": true
+        },
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "numberRound": 4,
+          "maxNumberRange": 767,
+          "minNumberRange": 704,
+          "isLastWinnerRangeUp": true
+        },
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "numberRound": 5,
+          "maxNumberRange": 767,
+          "minNumberRange": 736,
+          "isLastWinnerRangeUp": true
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 6,
+          "maxNumberRange": 767,
+          "minNumberRange": 752,
+          "isLastWinnerRangeUp": true
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 7,
+          "maxNumberRange": 767,
+          "minNumberRange": 760,
+          "isLastWinnerRangeUp": true
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 8,
+          "maxNumberRange": 763,
+          "minNumberRange": 760,
+          "isLastWinnerRangeUp": false
+        },
+        {
+          "gamersBetUp": [
             "gamer_1"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "numberRound": 9,
+          "maxNumberRange": 761,
+          "minNumberRange": 760,
+          "isLastWinnerRangeUp": false
+        }
+      ],
+      "winners": [
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 26.90909090909091
+        },
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 26.90909090909091
+        },
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 26.90909090909091
+        },
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 26.90909090909091
+        },
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 26.90909090909091
+        },
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 26.90909090909091
+        },
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 26.90909090909091
+        },
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 26.90909090909091
+        },
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 26.90909090909091
+        },
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 26.90909090909091
+        },
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 26.90909090909091
+        }
+      ],
+      "bank": 296,
+      "typeAddRate": 0,
+      "gameOver": true,
+      "typeGame": "0-1023",
+      "numberGame": 6,
+      "minBet": 5,
+      "id": "65fe2b12-339f-46dc-9a3e-68ce062ec555",
+      "secretNumberOfGame": 760
+    },
+    {
+      "gamerBets": [
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 51
+        },
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 40
+        }
+      ],
+      "rounds": [
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "minNumberRange": 0,
+          "maxNumberRange": 127
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 1,
+          "maxNumberRange": 63,
+          "minNumberRange": 0,
+          "isLastWinnerRangeUp": false
+        },
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "numberRound": 2,
+          "maxNumberRange": 63,
+          "minNumberRange": 32,
+          "isLastWinnerRangeUp": true
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 3,
+          "maxNumberRange": 47,
+          "minNumberRange": 32,
+          "isLastWinnerRangeUp": false
+        },
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2",
+            "gamer_2"
+          ],
+          "numberRound": 4,
+          "maxNumberRange": 39,
+          "minNumberRange": 32,
+          "isLastWinnerRangeUp": false
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 5,
+          "maxNumberRange": 35,
+          "minNumberRange": 32,
+          "isLastWinnerRangeUp": false
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 6,
+          "maxNumberRange": 33,
+          "minNumberRange": 32,
+          "isLastWinnerRangeUp": true
+        }
+      ],
+      "winners": [
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 45.5
+        },
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 45.5
+        }
+      ],
+      "bank": 91,
+      "gameOver": true,
+      "typeGame": "0-127",
+      "typeAddRate": 0,
+      "numberGame": 7,
+      "minBet": 2,
+      "id": "9302cca3-6213-49c8-8ebd-7da031e5e801",
+      "secretNumberOfGame": 33
+    },
+    {
+      "gamerBets": [
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 40
+        },
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 51
+        }
+      ],
+      "rounds": [
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "minNumberRange": 0,
+          "maxNumberRange": 127
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 1,
+          "maxNumberRange": 127,
+          "minNumberRange": 64,
+          "isLastWinnerRangeUp": true
+        },
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "numberRound": 2,
+          "maxNumberRange": 95,
+          "minNumberRange": 64,
+          "isLastWinnerRangeUp": false
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 3,
+          "maxNumberRange": 79,
+          "minNumberRange": 64,
+          "isLastWinnerRangeUp": false
+        },
+        {
+          "gamersBetUp": [],
+          "gamersBetDown": [],
+          "numberRound": 4,
+          "maxNumberRange": 67,
+          "minNumberRange": 64,
+          "isLastWinnerRangeUp": false
+        },
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "numberRound": 5,
+          "maxNumberRange": 67,
+          "minNumberRange": 64
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 6,
+          "maxNumberRange": 65,
+          "minNumberRange": 64,
+          "isLastWinnerRangeUp": true
+        }
+      ],
+      "winners": [
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 22.75
+        },
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 22.75
+        },
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 22.75
+        },
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 22.75
+        }
+      ],
+      "bank": 91,
+      "gameOver": true,
+      "typeGame": "0-127",
+      "numberGame": 8,
+      "minBet": 2,
+      "typeAddRate": 0,
+      "id": "fa5fb074-841d-446f-a571-491a07833480",
+      "secretNumberOfGame": 65
+    },
+    {
+      "gamerBets": [
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 5
+        }
+      ],
+      "rounds": [
+        {
+          "gamersBetUp": [],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "minNumberRange": 0,
+          "maxNumberRange": 1023
+        }
+      ],
+      "winners": [],
+      "bank": 5,
+      "gameOver": false,
+      "typeGame": "0-1023",
+      "numberGame": 7,
+      "minBet": 5,
+      "typeAddRate": 0,
+      "id": "26d77238-fe8d-46ee-8c52-647727644924"
+    },
+    {
+      "gamerBets": [
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 51
+        },
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 40
+        }
+      ],
+      "rounds": [
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "minNumberRange": 0,
+          "maxNumberRange": 127
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 1,
+          "maxNumberRange": 63,
+          "minNumberRange": 0,
+          "isLastWinnerRangeUp": false
+        },
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "numberRound": 2,
+          "maxNumberRange": 31,
+          "minNumberRange": 0,
+          "isLastWinnerRangeUp": false
+        },
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "numberRound": 3,
+          "maxNumberRange": 31,
+          "minNumberRange": 16,
+          "isLastWinnerRangeUp": true
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 4,
+          "maxNumberRange": 31,
+          "minNumberRange": 24,
+          "isLastWinnerRangeUp": true
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 5,
+          "maxNumberRange": 27,
+          "minNumberRange": 24,
+          "isLastWinnerRangeUp": false
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 6,
+          "maxNumberRange": 25,
+          "minNumberRange": 24,
+          "isLastWinnerRangeUp": false
+        }
+      ],
+      "winners": [
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 13
+        },
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 13
+        },
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 13
+        },
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 13
+        },
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 13
+        },
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 13
+        },
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 13
+        }
+      ],
+      "bank": 91,
+      "gameOver": true,
+      "typeGame": "0-127",
+      "numberGame": 9,
+      "minBet": 2,
+      "typeAddRate": 0,
+      "id": "ac402431-f61b-4946-ad09-5912c9e0c9e4",
+      "secretNumberOfGame": 24
+    },
+    {
+      "gamerBets": [
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 51
+        },
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 24
+        }
+      ],
+      "rounds": [
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "minNumberRange": 0,
+          "maxNumberRange": 127
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 1,
+          "maxNumberRange": 127,
+          "minNumberRange": 64,
+          "isLastWinnerRangeUp": true
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
           ],
           "numberRound": 2,
           "maxNumberRange": 127,
@@ -356,38 +789,26 @@
         },
         {
           "gamersBetUp": [
-            "gamer_1"
+            "gamer_3"
           ],
           "gamersBetDown": [
             "gamer_2"
           ],
           "numberRound": 3,
-          "maxNumberRange": 111,
-          "minNumberRange": 96,
-          "isLastWinnerRangeUp": false
+          "maxNumberRange": 127,
+          "minNumberRange": 112,
+          "isLastWinnerRangeUp": true
         },
         {
           "gamersBetUp": [
-            "gamer_1"
+            "gamer_3"
           ],
           "gamersBetDown": [
-            "gamer_3"
+            "gamer_2"
           ],
           "numberRound": 4,
-          "maxNumberRange": 103,
-          "minNumberRange": 96,
-          "isLastWinnerRangeUp": false
-        },
-        {
-          "gamersBetUp": [
-            "gamer_1"
-          ],
-          "gamersBetDown": [
-            "gamer_3"
-          ],
-          "numberRound": 5,
-          "maxNumberRange": 103,
-          "minNumberRange": 100,
+          "maxNumberRange": 127,
+          "minNumberRange": 120,
           "isLastWinnerRangeUp": true
         },
         {
@@ -395,156 +816,171 @@
             "gamer_2"
           ],
           "gamersBetDown": [
-            "gamer_3",
-            "gamer_1"
+            "gamer_3"
+          ],
+          "numberRound": 5,
+          "maxNumberRange": 123,
+          "minNumberRange": 120,
+          "isLastWinnerRangeUp": false
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
           ],
           "numberRound": 6,
-          "maxNumberRange": 101,
-          "minNumberRange": 100,
+          "maxNumberRange": 123,
+          "minNumberRange": 122,
+          "isLastWinnerRangeUp": false
+        }
+      ],
+      "winners": [],
+      "bank": 75,
+      "gameOver": true,
+      "typeGame": "0-127",
+      "numberGame": 10,
+      "minBet": 2,
+      "typeAddRate": 0,
+      "id": "183f5450-1a49-4c3a-83af-33b33c95cfb9",
+      "secretNumberOfGame": 122
+    },
+    {
+      "gamerBets": [
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 14
+        },
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 51
+        }
+      ],
+      "rounds": [
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "minNumberRange": 0,
+          "maxNumberRange": 127
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 1,
+          "maxNumberRange": 127,
+          "minNumberRange": 64,
+          "isLastWinnerRangeUp": true
+        },
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "numberRound": 2,
+          "maxNumberRange": 95,
+          "minNumberRange": 64,
+          "isLastWinnerRangeUp": false
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 3,
+          "maxNumberRange": 95,
+          "minNumberRange": 80,
+          "isLastWinnerRangeUp": true
+        },
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "numberRound": 4,
+          "maxNumberRange": 87,
+          "minNumberRange": 80,
+          "isLastWinnerRangeUp": false
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 5,
+          "maxNumberRange": 87,
+          "minNumberRange": 84,
+          "isLastWinnerRangeUp": true
+        },
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "numberRound": 6,
+          "maxNumberRange": 85,
+          "minNumberRange": 84,
           "isLastWinnerRangeUp": false
         }
       ],
       "winners": [
         {
           "addressGamer": "gamer_2",
-          "sumBets": 24
-        },
-        {
-          "addressGamer": "gamer_3",
-          "sumBets": 24
-        },
-        {
-          "addressGamer": "gamer_3",
-          "sumBets": 24
-        },
-        {
-          "addressGamer": "gamer_3",
-          "sumBets": 24
-        },
-        {
-          "addressGamer": "gamer_1",
-          "sumBets": 24
+          "sumBets": 65
         }
       ],
-      "bank": 120,
+      "bank": 65,
       "gameOver": true,
       "typeGame": "0-127",
-      "numberGame": 3,
-      "minBet": 5,
-      "id": "d57d3292-e9ef-43e3-8155-ad7af16daef6",
-      "secretNumberOfGame": 100
+      "numberGame": 11,
+      "minBet": 2,
+      "typeAddRate": 0,
+      "id": "4c1c6f4a-0fd3-49a0-9030-0da9594b36ab",
+      "secretNumberOfGame": 84
     },
     {
       "gamerBets": [
         {
           "addressGamer": "gamer_2",
-          "sumBets": 10
-        },
-        {
-          "addressGamer": "gamer_1",
-          "sumBets": 5
-        },
-        {
-          "addressGamer": "gamer_3",
-          "sumBets": 10
+          "sumBets": 2
         }
       ],
       "rounds": [
         {
-          "gamersBetUp": [
-            "gamer_1"
-          ],
+          "gamersBetUp": [],
           "gamersBetDown": [
             "gamer_2"
           ],
           "minNumberRange": 0,
           "maxNumberRange": 127
-        },
-        {
-          "gamersBetUp": [
-            "gamer_3"
-          ],
-          "gamersBetDown": [
-            "gamer_2"
-          ],
-          "numberRound": 1,
-          "maxNumberRange": 63,
-          "minNumberRange": 0,
-          "isLastWinnerRangeUp": false
-        },
-        {
-          "gamersBetUp": [],
-          "gamersBetDown": [],
-          "numberRound": 2,
-          "maxNumberRange": 31,
-          "minNumberRange": 0,
-          "isLastWinnerRangeUp": false
         }
       ],
       "winners": [],
-      "bank": 25,
+      "bank": 2,
       "gameOver": false,
       "typeGame": "0-127",
-      "numberGame": 4,
-      "genre": "geometric",
-      "minBet": 5,
-      "id": "ff24bee6-bab7-4364-ba90-e39b3860faba"
-    },
-    {
-      "gamerBets": [
-        {
-          "addressGamer": "gamer_2",
-          "sumBets": 10
-        },
-        {
-          "addressGamer": "gamer_1",
-          "sumBets": 5
-        },
-        {
-          "addressGamer": "gamer_3",
-          "sumBets": 10
-        }
-      ],
-      "rounds": [
-        {
-          "gamersBetUp": [
-            "gamer_1"
-          ],
-          "gamersBetDown": [
-            "gamer_2"
-          ],
-          "minNumberRange": 0,
-          "maxNumberRange": 127
-        },
-        {
-          "gamersBetUp": [
-            "gamer_3"
-          ],
-          "gamersBetDown": [
-            "gamer_2"
-          ],
-          "numberRound": 1,
-          "maxNumberRange": 63,
-          "minNumberRange": 0,
-          "isLastWinnerRangeUp": false
-        },
-        {
-          "gamersBetUp": [],
-          "gamersBetDown": [],
-          "numberRound": 2,
-          "maxNumberRange": 31,
-          "minNumberRange": 0,
-          "isLastWinnerRangeUp": false
-        }
-      ],
-      "winners": [],
-      "bank": 25,
-      "gameOver": false,
-      "typeGame": "0-127",
-      "numberGame": 4,
-      "genre": "linear",
-      "minBet": 5,
-      "id": "ff24bee6-bab7-4364-ba90-e39b3860faba"
+      "numberGame": 12,
+      "minBet": 2,
+      "typeAddRate": 0,
+      "id": "553dacef-406c-429b-8009-57c54a4c129c"
     }
   ]
 }

@@ -2,7 +2,7 @@ export class Game {
     id: string;
     typeGame: string;
     gameOver: boolean;
-    genre: string;
+    typeAddRate: number;
     title: string;
     genreImage: string;
     notes: string;

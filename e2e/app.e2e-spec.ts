@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('angular-ionic-ngxs-movies App', () => {
+describe('gambling-on-waves App', () => {
   let page: AppPage;
 
   beforeEach(() => {

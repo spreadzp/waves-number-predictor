@@ -21,11 +21,12 @@ import { WavesService } from '../../providers/waves-service';
 import { Game, Round, DirectionBet, GamerBet } from '../../models/game.model';
 import { GamesService } from '../../providers/games-service';
 import { GameState } from '../../store/state/games.state';
-import { LikeGame, AddGame, FilterGames, EditGame } from '../../store/actions/games.actions';
+import { LikeGame, AddGame, FilterGames, EditGame, FavoriteGame } from '../../store/actions/games.actions';
 import { SoundsService } from '../../providers/sounds.service';
 import { interval } from 'rxjs/observable/interval';
 import { CountdownComponent } from 'ngx-countdown';
 import { TypeGame } from '../../helpers/type-game';
+import { TypeAddRate } from '../../helpers/typeAddRate';
 
 @Component({
   selector: 'app-page-game-details',
@@ -40,6 +41,7 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
   id: string;
   genreGame: string;
   countDownStart = false;
+  typeAddRate: number;
   game: Game;
   games: Game[] = [];
   currentGame: Game = null;
@@ -123,15 +125,15 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
     timer(0, 1000).subscribe(() => {
       this.fetchGameById(this.id).subscribe(
         game => {
-        if (game && Array.isArray(game)) {
-          this.fetchGameState(game[0]);
-          this.currentRound.numberRound = game[0].rounds.length;
-        }
+          if (game && Array.isArray(game) && !game[0].gameOver) {
+            this.fetchGameState(game[0]);
+            this.currentRound.numberRound = game[0].rounds.length;
+          }
 
-      },
-      err => {
-        this.iziToast.errorConnection('Error connection!', `You have error connection ${err}`,'red');
-      }
+        },
+        err => {
+          this.iziToast.errorConnection('Error connection!', `You have error connection ${err}`, 'red');
+        }
       );
     })
     /* this.gamesService.getGame(this.id).subscribe(game => {
@@ -246,12 +248,12 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
 
   }
 
-  notFinishGame(typeGame: number): Observable<Game> {
+  /* notFinishGame(typeGame: number): Observable<Game> {
     this.filters.typeGame = typeGame;
     return this.store.dispatch([
       new FilterGames(this.filters.typeGame),
     ]);
-  }
+  } */
 
   ionViewWillEnter() {
     console.log('252 ionViewWillEnter');
@@ -270,17 +272,17 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
       this.game = game;
       // console.log('187 this.game :', this.game);
       let genre = '';
-      if (this.game && this.game.genre) {
-        genre = this.game.genre.toLowerCase().split(',', 1)[0];
-        if (this.genreImages.indexOf(genre) !== -1) {
-          this.game.genreImage = 'assets/movies-genres/' + genre + '.png';
-        }
-      } else {
-        genre = 'action';
-        if (this.game && this.genreImages.indexOf(genre) !== -1) {
-          this.game.genreImage = 'assets/movies-genres/' + genre + '.png';
-        }
-      }
+      /*  if (this.game && this.game.genre) {
+         genre = this.game.genre.toLowerCase().split(',', 1)[0];
+         if (this.genreImages.indexOf(genre) !== -1) {
+           this.game.genreImage = 'assets/movies-genres/' + genre + '.png';
+         }
+       } else {
+         genre = 'action';
+         if (this.game && this.genreImages.indexOf(genre) !== -1) {
+           this.game.genreImage = 'assets/movies-genres/' + genre + '.png';
+         }
+       } */
     });
   }
 
@@ -384,7 +386,7 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
 
         if (exist.length === 0) {
           this.store.dispatch(
-            new FavoriteMovie(this.game)).subscribe(() => {
+            new FavoriteGame(this.game)).subscribe(() => {
               this.iziToast.success('Favorite movie', 'Favorite Movie added.');
             });
         } else {
@@ -453,15 +455,18 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
 
   makeBetDown() {
     //!this.currentRound.gamersBetUp.includes(this.selectedRadioGroup.value) &&
-    if (!this.currentGame.rounds[this.currentRound.numberRound - 1].gamersBetUp.includes(this.selectedRadioGroup.value)) {
-      this.currentRound.gamersBetDown.push(this.selectedRadioGroup.value);
-      this.addGamerBet(this.selectedRadioGroup.value);
-      this.updateGame(this.currentRound.numberRound - 1, { 'gamersBetDown': this.selectedRadioGroup.value });
+    const gamerAddress = this.selectedRadioGroup.value;
+    if (!this.currentGame.rounds[this.currentRound.numberRound - 1].gamersBetUp.includes(gamerAddress)) {
+      this.currentRound.gamersBetDown.push(gamerAddress);
+      const gamerBetInTheRound = this.defineBet(gamerAddress);
+      this.addGamerBet(gamerAddress);
+      this.updateGame(this.currentRound.numberRound - 1, { 'gamersBetDown': gamerAddress });
       // this.soundsService.play('click');
-      this.iziToast.success(`Success bet in the range ${this.defineRange(DirectionBet.RangeDown)}`, `${this.selectedRadioGroup.value} made bet ${this.betValue} tokens`);
+      this.iziToast.success(`Success bet in the range ${this.defineRange(DirectionBet.RangeDown)}`, `${gamerAddress} made bet ${gamerBetInTheRound} tokens`);
     } else {
       this.iziToast.show('Fail bet', `You has already been bet in the range ${this.defineRange(DirectionBet.RangeUp)}`, 'red', 'ico-error', 'assets/avatar.png');
     }
+
 
   }
 
@@ -491,20 +496,28 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
       return this.currentGame.minBet;
     } else {
       if (this.currentGame) {
-        const prevRound = this.currentGame.rounds[this.currentRound.numberRound - 1];
+        const prevRound = this.currentGame.rounds[this.currentRound.numberRound - 2];
         const isTrueLastBet = prevRound.isLastWinnerRangeUp ?
           prevRound.gamersBetUp.includes(gamerAddress) :
           prevRound.gamersBetDown.includes(gamerAddress);
         return isTrueLastBet ? this.currentGame.minBet :
-          this.currentGame.minBet * (this.currentRound.numberRound) > this.totalGamersBeds(gamerAddress) ?
-            this.currentGame.minBet * (this.currentRound.numberRound) - this.totalGamersBeds(gamerAddress) :
-            this.currentGame.minBet;
+          (this.defineRoundBet() > this.totalGamersBeds(gamerAddress) ?
+            this.defineRoundBet() - this.totalGamersBeds(gamerAddress) :
+            this.currentGame.minBet);
+      } else {
+        return this.currentGame.minBet;
       }
     }
   }
 
   defineRoundBet() {
-
+    if (this.currentGame) {
+      if (this.currentGame.typeAddRate === TypeAddRate.geometric) {
+        return (this.currentRound.numberRound) ** 2 + this.currentGame.minBet;
+      } else {
+        return this.currentGame.minBet * (this.currentRound.numberRound) + this.currentGame.minBet;
+      }
+    }
   }
 
   addGamerBet(addressGamer) {
@@ -525,12 +538,14 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
 
   makeBetUp() {
     //!this.currentRound.gamersBetDown.includes(this.selectedRadioGroup.value) &&
-    if (!this.currentGame.rounds[this.currentRound.numberRound - 1].gamersBetDown.includes(this.selectedRadioGroup.value)) {
-      this.currentRound.gamersBetUp.push(this.selectedRadioGroup.value);
+    const gamerAddress = this.selectedRadioGroup.value;
+    if (!this.currentGame.rounds[this.currentRound.numberRound - 1].gamersBetDown.includes(gamerAddress)) {
+      this.currentRound.gamersBetUp.push(gamerAddress);
+      const gamerBetInTheRound = this.defineBet(gamerAddress);
       this.addGamerBet(this.selectedRadioGroup.value);
-      this.updateGame(this.currentRound.numberRound - 1, { 'gamersBetUp': this.selectedRadioGroup.value });
-      // this.soundsService.play('click');
-      this.iziToast.success(`Success bet in the range ${this.defineRange(DirectionBet.RangeUp)}`, `${this.selectedRadioGroup.value}  made bet ${this.betValue} tokens`);
+      this.updateGame(this.currentRound.numberRound - 1, { 'gamersBetUp': gamerAddress });
+      //  this.soundsService.play('click');
+      this.iziToast.success(`Success bet in the range ${this.defineRange(DirectionBet.RangeUp)}`, `${gamerAddress}  made bet ${gamerBetInTheRound} tokens`);
     } else {
       this.iziToast.show('Fail bet', `You has already been bet in the range ${this.defineRange(DirectionBet.RangeDown)}`, 'red', 'ico-error', 'assets/avatar.png');
     }
@@ -667,11 +682,14 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
       this.currentRound.isLastWinnerRangeUp = this.winnerRangeDirection();
 
       if (((this.currentRound.numberRound) % (this.degreeGame) === 0)) {
+        const winnersRound = this.currentGame.rounds[this.currentRound.numberRound - 1];
         const secretNumber = (this.currentRound.isLastWinnerRangeUp) ?
           round.maxNumberRange : round.minNumberRange;
         this.currentGame.secretNumberOfGame = secretNumber;
         let listWinnersWithPrizes = '';
-        let countWinners = (this.currentRound.isLastWinnerRangeUp) ? round.gamersBetUp.length : round.gamersBetDown.length;
+        let countWinners = (this.currentRound.isLastWinnerRangeUp) ?
+         winnersRound.gamersBetUp.length :
+          winnersRound.gamersBetDown.length;
         let avgPrize = this.currentGame.bank / countWinners;
         console.log('this.currentRound :', this.currentRound);
         console.log('this.currentGame.bank  :', this.currentGame.bank);
@@ -679,7 +697,7 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
         console.log('avgPrize :', avgPrize);
         /// need refactoring
         if (this.currentRound.isLastWinnerRangeUp) {
-          for (const item of round.gamersBetUp) {
+          for (const item of winnersRound.gamersBetUp) {
             this.currentGame.winners.push({
               addressGamer: item,
               sumBets: avgPrize
@@ -688,7 +706,7 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
             // listWinnersWithPrizes += `${item} : ${avgPrize}`;
           }
         } else {
-          for (const item of round.gamersBetDown) {
+          for (const item of winnersRound.gamersBetDown) {
             this.currentGame.winners.push({
               addressGamer: item,
               sumBets: avgPrize
@@ -747,6 +765,7 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
     this.currentGame.typeGame = this.genreGame;
     this.currentGame.numberGame = game.numberGame + 1;
     this.currentGame.minBet = game.minBet;
+    this.currentGame.typeAddRate = this.game.typeAddRate;
     console.log('startNewGame :', this.currentGame);
     this.id = '';
     this.store.dispatch(

@@ -12,8 +12,8 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-movie-modal',
-  templateUrl: 'movie.modal.html',
-  styleUrls: ['./movie.modal.scss'],
+  templateUrl: 'game.modal.html',
+  styleUrls: ['./game.modal.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class GameModalComponent implements OnInit, AfterViewInit {

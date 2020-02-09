@@ -22,18 +22,21 @@ import { SearchImageService } from './providers/search-image-service';
 import { WavesService } from './providers/waves-service';
 import { GamesService } from './providers/games-service';
 import { GameState } from './store/state/games.state';
-import { YoutubeModalComponent } from './modals/youtube-modal/youtube.modal';
 import { PagesModule } from './pages/pages.module';
-import { CommentModule } from './modals/comment-modal/comment.module';
+// import { CommentModule } from './modals/comment-modal/comment.module';
 import { SoundsService } from './providers/sounds.service';
 import { NativeAudio } from '@ionic-native/native-audio/ngx';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CommentModalComponent } from './modals/comment-modal/comment.modal';
+import { YoutubeModalComponent } from './modals/youtube-modal/youtube.modal';
+import { GameModalComponent } from './modals/game-modal/game.modal';
 
 
 @NgModule({
   declarations: [
-    AppComponent
-    // GenreCarouselComponent,
+    AppComponent,
+    YoutubeModalComponent,
+    GameModalComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +49,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     NgxsLoggerPluginModule.forRoot(),
     NgxsFormPluginModule.forRoot(),
     PagesModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
   providers: [MoviesService, YoutubeApiService, SearchImageService, WavesService, GamesService,
      SoundsService, NativeAudio, // New provider, don't forget to add comma
