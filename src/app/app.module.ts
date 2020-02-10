@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { IonicErrorHandler } from 'ionic-angular';
 
 // NGXS
@@ -30,8 +30,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommentModalComponent } from './modals/comment-modal/comment.modal';
 import { YoutubeModalComponent } from './modals/youtube-modal/youtube.modal';
 import { GameModalComponent } from './modals/game-modal/game.modal';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { LanguageService } from './providers/language.service';
 
-
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, 'assets/i18/', '.json');
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -50,8 +55,15 @@ import { GameModalComponent } from './modals/game-modal/game.modal';
     NgxsFormPluginModule.forRoot(),
     PagesModule,
     BrowserAnimationsModule,
+    TranslateModule.forRoot({
+      loader: {
+          provide: TranslateLoader,
+          useFactory: (createTranslateLoader),
+          deps: [HttpClient]
+      }
+  })
   ],
-  providers: [MoviesService, YoutubeApiService, SearchImageService, WavesService, GamesService,
+  providers: [MoviesService, LanguageService, YoutubeApiService, SearchImageService, WavesService, GamesService,
      SoundsService, NativeAudio, // New provider, don't forget to add comma
      {provide: ErrorHandler, useClass: ErrorHandler}],
   bootstrap: [AppComponent]

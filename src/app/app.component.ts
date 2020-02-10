@@ -1,5 +1,6 @@
 import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 import { WavesService } from './providers/waves-service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +10,7 @@ import { WavesService } from './providers/waves-service';
 })
 export class AppComponent implements OnInit {
   title = 'app';
+
   constructor(private wavesService: WavesService) {
     
   }

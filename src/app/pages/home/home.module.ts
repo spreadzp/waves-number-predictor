@@ -16,6 +16,8 @@ import { GenreCarouselComponent } from '../../components/genre-carousel/genre-ca
 
 import { FilterPipe } from '../../pipes/filter.pipe';
 import { GameCarouselComponent } from '../../components/game-carousel/game-carousel.component';
+import { TranslateWordPipe } from '../../pipes/translate';
+import { LanguagesModalComponent } from '../../modals/languages-modal/languages.modal';
 
 @NgModule({
   imports: [
@@ -27,8 +29,8 @@ import { GameCarouselComponent } from '../../components/game-carousel/game-carou
     FormsModule,
     StarRatingModule.forRoot()
   ],
-  declarations: [HomeComponent, FilterMoviePopoverComponent, FavoritesMoviesModalComponent, GenreCarouselComponent, GameCarouselComponent,
-                 FilterPipe],
-  entryComponents: [HomeComponent, FilterMoviePopoverComponent, FavoritesMoviesModalComponent, GenreCarouselComponent, GameCarouselComponent],
+  declarations: [HomeComponent, FilterMoviePopoverComponent,LanguagesModalComponent, FavoritesMoviesModalComponent, GenreCarouselComponent, GameCarouselComponent,
+                 FilterPipe, TranslateWordPipe],
+  entryComponents: [HomeComponent, FilterMoviePopoverComponent, LanguagesModalComponent, FavoritesMoviesModalComponent, GenreCarouselComponent, GameCarouselComponent],
 })
 export class HomeModule {}

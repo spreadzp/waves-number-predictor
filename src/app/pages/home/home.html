@@ -1,7 +1,11 @@
 <ion-header no-border>
   <ion-toolbar color='primary'>
-      <ion-title i18n>Games List</ion-title>
+      <ion-title>{{ 'HELLO' | translate:param }}</ion-title>
+      
       <ion-buttons slot='end'>
+        <ion-button (click)="showLanguage()">
+          <ion-icon slot="icon-only" name="heart"></ion-icon>
+      </ion-button>
         <ion-button (click)="showFavoritesMovies()">
             <ion-icon slot="icon-only" name="heart"></ion-icon>
         </ion-button>
