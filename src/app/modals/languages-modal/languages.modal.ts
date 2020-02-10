@@ -20,14 +20,18 @@ export class LanguagesModalComponent implements OnInit {
   modal: any = {
     title: ''
   };
-  languages = ['en', 'ru', 'zh'];
+  languages = [
+    { lang: 'en', src: 'assets/flags/en.svg' },
+    { lang: 'ru', src: 'assets/flags/ru.svg' },
+    { lang: 'zh', src: 'assets/flags/zh.svg' }
+  ];
 
   constructor(private modalCtrl: ModalController, private navParams: NavParams, private store: Store, private router: Router,
-              private alertCtrl: AlertController, private translate: LanguageService) {
+    private alertCtrl: AlertController, private translate: LanguageService) {
   }
 
   ngOnInit() {
-    this.modal = { ...this.navParams.data.modalProps};
+    this.modal = { ...this.navParams.data.modalProps };
     console.log(this.modal);
     this.deleteAll();
   }

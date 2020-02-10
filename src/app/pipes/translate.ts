@@ -1,5 +1,4 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Movie } from '../models/movie.model';
 import { TranslateService } from '@ngx-translate/core';
 
 @Pipe({
@@ -10,9 +9,7 @@ export class TranslateWordPipe implements PipeTransform {
   private phrase = null;
   constructor(private translate: TranslateService) { }
   transform(items, value): string {
-    console.log(items, value);
       this.translate.get(items, value).subscribe((res: string) => {
-      console.log(res);
       //=> 'hello world'
       this.phrase = res;
       return this.phrase;

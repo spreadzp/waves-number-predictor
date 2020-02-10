@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, ViewChild, ElementRef, Input, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Movie } from '../../models/movie.model';
@@ -30,6 +30,7 @@ import { fadeInAnimation } from '../../animations/fade-in.animation';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguagesModalComponent } from '../../modals/languages-modal/languages.modal';
 import { LanguageService } from '../../providers/language.service';
+import { GameCarouselComponent } from '../../components/game-carousel/game-carousel.component';
 
 @Component({
   selector: 'app-page-home',
@@ -58,7 +59,8 @@ export class HomeComponent implements OnInit {
   @ViewChild(IonContent, { read: ElementRef, static: true }) content: IonContent;
   searchControl: FormControl;
   iconView = 'apps';
-  param = { value: 'world' };
+  typeChoisedIcon: string;
+  @ViewChild(GameCarouselComponent, { read: ElementRef, static: true }) carousel: GameCarouselComponent;
 
 
   constructor(private store: Store, private router: Router, private modalCtrl: ModalController,
@@ -156,15 +158,23 @@ export class HomeComponent implements OnInit {
       );
   }
 
+  setTypeIcon(event: string) {
+    this.typeChoisedIcon = event.toLowerCase();
+  }
+
   viewGameDetails(item: Movie | Game) {
     // console.log('viewMovieDetails', movie);
+    console.log('this.carousel ; :', this.carousel );
+    debugger;
     if ((item as Game).gameOver === true) {
       const selectedGame = (item as Game);
       this.showGameOver(selectedGame.secretNumberOfGame, selectedGame.winners);
+    } else if (this.typeChoisedIcon === 'statistic') {
+      this.router.navigate(['/statistic']);
     } else {
       console.log('item as Game :', item as Game);
       const route = (item as Game).rounds !== undefined ? '/game-details/' : '/detail/';
-      console.log('!!!!!!!!!!!route :', route);
+      console.log('!!!!!!!!!!!route  :', route);
       const detailsURL = `${route}${item.id}`;
       this.router.navigate([detailsURL]);
     }
@@ -245,6 +255,10 @@ export class HomeComponent implements OnInit {
   changeView() {
     console.log('HomePage::changeView() | method called');
     this.iconView = this.iconView === 'apps' ? 'list' : 'apps';
+  }
+
+  switchSound() {
+
   }
 
   showLanguage() {

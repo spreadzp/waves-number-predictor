@@ -60,9 +60,6 @@
                 <ion-list>
                   <ion-radio-group allow-empty-selection="true" name="radio-group"
                     (ionChange)="radioGroupChange($event)">
-                    <ion-list-header>
-                      <ion-label>{{ 'HELLO'}}</ion-label>
-                    </ion-list-header>
 
                     <ion-item *ngFor="let item of radio_list" (ionFocus)="radioFocus()"
                       (ionSelect)="radioSelect($event)" (ionBlur)="radioBlur()">
@@ -78,7 +75,7 @@
 
               </ion-row>
               <ion-row>
-                <p><b>Current round {{currentRound.numberRound}}</b><br />
+                <p><b>{{'CURRENT_ROUND' | translate:{value:currentRound.numberRound} }} </b><br />
                 </p>
               </ion-row>
               <ion-row>

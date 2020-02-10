@@ -2,10 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 
-import { GameDetailsComponent } from './game-details';
-import { GameDetailsComponentRoutingModule } from './game-details-routing.module';
-
-
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { StarRatingModule } from 'angular-star-rating';
@@ -15,12 +11,14 @@ import { ShowActorsModalComponent } from '../../modals/show-actors-modal/show.ac
 import { CountdownModule } from 'ngx-countdown';
 import { TranslateWordPipe } from '../../pipes/translate';
 import { TranslateWordModule } from '../../pipes/translate.modules';
+import { StatisticComponent } from './statistic';
+import { StatisticComponentRoutingModule } from './statistic-routing.module';
 
 @NgModule({
   imports: [
     CommonModule,
     IonicModule,
-    GameDetailsComponentRoutingModule,
+    StatisticComponentRoutingModule,
     ReactiveFormsModule,
     FormsModule,
     StarRatingModule.forRoot(),
@@ -28,7 +26,7 @@ import { TranslateWordModule } from '../../pipes/translate.modules';
     TranslateWordModule
 
   ],
-  declarations: [GameDetailsComponent, CommentModalComponent, ShowCommentsModalComponent, ShowActorsModalComponent],
-  entryComponents: [GameDetailsComponent, CommentModalComponent, ShowCommentsModalComponent, ShowActorsModalComponent],
+  declarations: [StatisticComponent],
+  entryComponents: [StatisticComponent],
 })
-export class GameDetailsModule {}
+export class StatisticModule {}

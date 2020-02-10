@@ -27,6 +27,7 @@ import { interval } from 'rxjs/observable/interval';
 import { CountdownComponent } from 'ngx-countdown';
 import { TypeGame } from '../../helpers/type-game';
 import { TypeAddRate } from '../../helpers/typeAddRate';
+import { LanguageService } from '../../providers/language.service';
 
 @Component({
   selector: 'app-page-game-details',

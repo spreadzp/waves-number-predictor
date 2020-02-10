@@ -18,7 +18,8 @@ export class GamesService {
   getGames(start: number, end: number): Observable<Game[]> {
     return this.http
     // Type-checking the response => .get<Game[]>
-    .get<Game[]>(this.URL_BASE + `games?_start=${start}&_end=${end}&_sort=year,title&_order=desc,asc`)
+    .get<Game[]>(this.URL_BASE + `games`)
+    //.get<Game[]>(this.URL_BASE + `games?_start=${start}&_end=${end}&_sort=year,title&_order=desc,asc`)
     .pipe(
       retryWhen(error => error.pipe(delay(500))),
       timeout(5000)
@@ -116,7 +117,7 @@ export class GamesService {
    // const t: Game[];
     return this.http
     // Type-checking the response => .get<Game[]>
-    .get<Game[]>(this.URL_BASE + `games?typeGame=${strFilters}&&gameOver=false`)
+    .get<Game[]>(this.URL_BASE + `games?${strFilters}`)
     // `games${strFilters}_sort=year,title&_order=desc,asc&_limit=20`)
     .pipe(
       retryWhen(error => error.pipe(delay(500))),
@@ -126,9 +127,8 @@ export class GamesService {
 
   checkFilters(filters: any) {
     let strFilters = '';
-    strFilters += typeof filters['genre'] !== 'undefined' && filters['genre'] !== ''  ? `${filters.genre}` : '?';
-    /* strFilters += typeof filters['years'] !== 'undefined' ? `year_gte=${filters.years.lower}&year_lte=${filters.years.upper}&` : '';
-    strFilters += typeof filters['rate'] !== 'undefined' ? `rate=${filters.rate}&` : ''; */
+    strFilters += typeof filters['genre'] === 'undefined' || filters['genre'] === ''  || filters['genre'] === 'Statistic' ? '' : `typeGame=${filters.genre}&&`;
+    strFilters += typeof filters['gameOver'] !== 'undefined' ? `gameOver=${filters.gameOver}` : '';
     return strFilters;
   }
 

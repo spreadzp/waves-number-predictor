@@ -3,9 +3,10 @@ import { TranslateService } from "@ngx-translate/core";
 
 @Injectable()
 export class LanguageService {
+  
   constructor(private translate: TranslateService) {
-
   }
+
   use(lang: string) {
     this.translate.use(lang);
   }

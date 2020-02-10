@@ -1,3 +1,7 @@
 {
-  "HELLO": "привет {{value}}"
+  "HELLO": "привет {{value}}",
+  "LANGUAGE": "Язык",
+  "TITLE_GAME": "Угадай счастливое число!",
+  "CURRENT_ROUND": "Сейчас раунд №: {{value}}",
+  "STATISTIC": "Статистика игр"
 }
