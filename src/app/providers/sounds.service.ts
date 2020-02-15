@@ -71,4 +71,15 @@ export class SoundsService {
 
   }
 
+  stop(idFile: string) {
+    if(idFile === 'all') {
+      console.log('switch off audio :');
+      this.nativeAudio = null;
+    } else {
+      this.nativeAudio.stop(idFile)
+      .then((resultStop) => console.log('resultStop :', resultStop) )
+    }
+
+  }
+
 }

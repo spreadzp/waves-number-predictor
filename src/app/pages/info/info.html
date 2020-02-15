@@ -4,20 +4,32 @@
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
     <ion-title>{{'STATISTIC' | translate}}</ion-title>
+
   </ion-toolbar>
 </ion-header>
 
+<ion-content id="demo"></ion-content>
+
 <ion-content class="outer-content">
-  <svg viewBox="0 0 100 75">
-    <path d="M15,35 C15,60 50,60 50,35 50,10 85,10 85,35" id="bezier" fill="none" stroke="hsla(0, 75%, 50%, 0.2)" stroke-width="0.5" />
-    <text font-family="Source Sans Pro" font-size="6" fill="hsla(210, 75%, 50%, 0.85)">
-      <textPath href="#bezier" id="tp" startOffset="10%">
-       {{numberRound}}
-      </textPath>
+  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 200 200">
+    <defs>
+
+      <path d="M0, 0a100, 100 1 1, 0 200, 0a100, 100 0 1, 0 -200, 0" id="txt-path"></path>
+    </defs>
+
+    <text fill="#D54E02" font-size="25.5" font-family="Helvetica Neue" font-weight="600">
+
+      <textPath startOffset="0" xlink:href="#txt-path">As the dawn began to break I had to surrender. The universe will have it's way; too powerful to master.</textPath>
     </text>
   </svg>
-  <label for="sOffset">Text start offset:</label>
-  <input type="range" min="0" max="100" value="10" id="sOffset">
+
+  <svg viewBox="0 0 340 333">
+
+    <path class="path" fill="white" stroke="black" stroke-width="4" d="M66.039,133.545c0,0-21-57,18-67s49-4,65,8
+      s30,41,53,27s66,4,58,32s-5,44,18,57s22,46,0,45s-54-40-68-16s-40,88-83,48s11-61-11-80s-79-7-70-41
+      C46.039,146.545,53.039,128.545,66.039,133.545z"/>
+
+  </svg>
 </ion-content>
 
 

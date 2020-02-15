@@ -1,5 +1,5 @@
 <ion-header no-border>
-  <ion-toolbar color='primary'>
+  <ion-toolbar color='secondary'>
     <ion-title>{{ 'TITLE_GAME' | translate }}</ion-title>
 
 
@@ -22,7 +22,7 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="secondary">
     <ion-searchbar #search [formControl]="searchControl" animated="true" show-cancel-button placeholder="Search">
     </ion-searchbar>
   </ion-toolbar>
@@ -70,13 +70,13 @@
         <ion-label>
           <h2>{{ game.typeGame }}Id game {{game.id}}</h2>
           <h3 class="notes">
-            <ion-icon name="calendar" color="primary" slot="start"></ion-icon>Bank game {{ game.bank }}
+            <ion-icon name="calendar" color="secondary" slot="start"></ion-icon>Bank game {{ game.bank }}
           </h3>
           <h2 [className]="(!game.gameOver) ? 'blinking' : ''">
             {{ (game.gameOver) ? 'The game is over': 'Current round : ' + (game.rounds.length +1) + ' You can play the game!'}}
           </h2>
           <h5 class="notes">
-            <!--  <span *ngIf="game && game.rounds && game.rounds.length !== undefined"><ion-icon name="thumbs-up" color="primary" slot="start"></ion-icon>{{ game.rounds.length }} | </span> -->
+            <!--  <span *ngIf="game && game.rounds && game.rounds.length !== undefined"><ion-icon name="thumbs-up" color="secondary" slot="start"></ion-icon>{{ game.rounds.length }} | </span> -->
             <span *ngIf="game.rate !== undefined">
               <ion-icon name="star" color="tertiary" slot="start"></ion-icon>{{ game.rate }}
             </span>
@@ -90,7 +90,7 @@
 
       <!-- Sliding options. -->
       <ion-item-options side="end">
-        <ion-item-option class="round-button" color="primary" (click)="editGame(game)">
+        <ion-item-option class="round-button" color="secondary" (click)="editGame(game)">
           <ion-icon name="create"></ion-icon>
         </ion-item-option>
         <ion-item-option class="round-button" color="danger" (click)="deleteGame(game)">
@@ -113,11 +113,11 @@
         <ion-label>
           <h2>{{ movie.title }}</h2>
           <h3 class="notes">
-            <ion-icon name="calendar" color="primary" slot="start"></ion-icon>{{ movie.year }}
+            <ion-icon name="calendar" color="secondary" slot="start"></ion-icon>{{ movie.year }}
           </h3>
           <h5 class="notes">
             <span *ngIf="movie.likes !== undefined">
-              <ion-icon name="thumbs-up" color="primary" slot="start"></ion-icon>{{ movie.likes }} |
+              <ion-icon name="thumbs-up" color="secondary" slot="start"></ion-icon>{{ movie.likes }} |
             </span>
             <span *ngIf="movie.rate !== undefined">
               <ion-icon name="star" color="tertiary" slot="start"></ion-icon>{{ movie.rate }}
@@ -132,7 +132,7 @@
 
       <!-- Sliding options. -->
       <ion-item-options side="end">
-        <ion-item-option class="round-button" color="primary" (click)="editMovie(movie)">
+        <ion-item-option class="round-button" color="secondary" (click)="editMovie(movie)">
           <ion-icon name="create"></ion-icon>
         </ion-item-option>
         <ion-item-option class="round-button" color="danger" (click)="deleteMovie(movie)">
@@ -222,7 +222,7 @@
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="secondary">
     <ion-title>© {{ currentYear }} CARAVAN </ion-title>
     <ion-buttons slot="end">
       <div class="github-button"><iframe allowtransparency="true" scrolling="no" frameborder="0"

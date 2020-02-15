@@ -12,8 +12,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
 
 import { StarRatingModule } from 'angular-star-rating';
 
-import { GenreCarouselComponent } from '../../components/genre-carousel/genre-carousel.component';
-
 import { FilterPipe } from '../../pipes/filter.pipe';
 import { GameCarouselComponent } from '../../components/game-carousel/game-carousel.component';
 import { TranslateWordPipe } from '../../pipes/translate';
@@ -33,8 +31,8 @@ import { TranslateWordModule } from '../../pipes/translate.modules';
     TooltipsModule.forRoot(),
     TranslateWordModule
   ],
-  declarations: [HomeComponent, FilterMoviePopoverComponent,LanguagesModalComponent, FavoritesMoviesModalComponent, GenreCarouselComponent, GameCarouselComponent,
+  declarations: [HomeComponent, FilterMoviePopoverComponent,LanguagesModalComponent, FavoritesMoviesModalComponent, GameCarouselComponent,
                  FilterPipe],
-  entryComponents: [HomeComponent, FilterMoviePopoverComponent, LanguagesModalComponent, FavoritesMoviesModalComponent, GenreCarouselComponent, GameCarouselComponent],
+  entryComponents: [HomeComponent, FilterMoviePopoverComponent, LanguagesModalComponent, FavoritesMoviesModalComponent, GameCarouselComponent],
 })
 export class HomeModule {}

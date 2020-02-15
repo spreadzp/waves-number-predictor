@@ -31,18 +31,15 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguagesModalComponent } from '../../modals/languages-modal/languages.modal';
 import { LanguageService } from '../../providers/language.service';
 import { GameCarouselComponent } from '../../components/game-carousel/game-carousel.component';
+import { SoundsService } from '../../providers/sounds.service';
 
 @Component({
   selector: 'app-page-home',
   templateUrl: './home.html',
   styleUrls: ['./home.scss'],
   encapsulation: ViewEncapsulation.None,
-  // make fade in animation available to this component
-  // animations: [fadeInAnimation],
-
-  // attach the fade in animation to the host (root) element of this component
-  // host: { '[@fadeInAnimation]': '' }
 })
+
 export class HomeComponent implements OnInit {
 
   currentYear = new Date().getFullYear();
@@ -65,7 +62,7 @@ export class HomeComponent implements OnInit {
 
   constructor(private store: Store, private router: Router, private modalCtrl: ModalController,
     private actions$: Actions, private popoverCtrl: PopoverController,
-    private iziToast: IziToastService, translate: LanguageService) {
+    private iziToast: IziToastService, translate: LanguageService, private soundsService: SoundsService) {
     console.log('constructor home');
     this.start = 0;
     this.end = 50;
@@ -164,7 +161,7 @@ export class HomeComponent implements OnInit {
 
   viewGameDetails(item: Movie | Game) {
     // console.log('viewMovieDetails', movie);
-    console.log('this.carousel ; :', this.carousel );
+    console.log('this.carousel ; :', this.carousel);
     debugger;
     if ((item as Game).gameOver === true) {
       const selectedGame = (item as Game);
@@ -258,7 +255,7 @@ export class HomeComponent implements OnInit {
   }
 
   switchSound() {
-
+    this.soundsService.stop('all');
   }
 
   showLanguage() {

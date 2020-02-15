@@ -1,5 +1,5 @@
 <ion-header no-border>
-  <ion-toolbar color='primary'>
+  <ion-toolbar color='secondary'>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
@@ -21,6 +21,10 @@
                 <ion-label>{{ game?.genre }}</ion-label>
               </ion-chip>
             </ion-item>
+            <ion-button (click)="switchSound()">
+              <ion-icon slot="icon-only" ios="ios-volume-off" md="md-volume-off" positionh="left" tooltip="I'm a beautiful tooltip" style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"
+              class="md button button-solid ion-activatable ion-focusable hydrated"></ion-icon>
+            </ion-button>
             <ion-item class="image">
               <img *ngIf="game.poster" [src]="movie?.poster" height="300px" alt="Movie Poster GameDetals Page">
               <img *ngIf="!game.poster"
@@ -144,25 +148,25 @@
 
             <ion-row no-padding justify-content-center>
               <ion-col col-auto text-left>
-                <ion-button fill="clear" size="small" color="primary" (click)="onClickLike()">
+                <ion-button fill="clear" size="small" color="secondary" (click)="onClickLike()">
                   <ion-icon name="thumbs-up" slot="start"></ion-icon>
                   Like
                 </ion-button>
               </ion-col>
               <ion-col col-auto text-right>
-                <ion-button fill="clear" size="small" color="primary" (click)="onClickComment()">
+                <ion-button fill="clear" size="small" color="secondary" (click)="onClickComment()">
                   <ion-icon name='chatboxes' slot="start"></ion-icon>
                   Comment
                 </ion-button>
               </ion-col>
               <ion-col col-auto text-center>
-                <ion-button fill="clear" size="small" color="primary" (click)="onClickFavorite()">
+                <ion-button fill="clear" size="small" color="secondary" (click)="onClickFavorite()">
                   <ion-icon name='heart' slot="start"></ion-icon>
                   Favorite
                 </ion-button>
               </ion-col>
               <ion-col col-auto text-center>
-                <ion-button fill="clear" size="small" color="primary" (click)="onClickShare()">
+                <ion-button fill="clear" size="small" color="secondary" (click)="onClickShare()">
                   <ion-icon name='share-alt' slot="start"></ion-icon>
                   Share
                 </ion-button>
@@ -208,19 +212,19 @@
 
             <ion-row no-padding justify-content-center>
               <ion-col col-auto text-left>
-                <ion-button fill="clear" size="small" color="primary" (click)="goToSpeakerTwitter(speaker)">
+                <ion-button fill="clear" size="small" color="secondary" (click)="goToSpeakerTwitter(speaker)">
                   <ion-icon name="logo-twitter" slot="start"></ion-icon>
                   Tweet
                 </ion-button>
               </ion-col>
               <ion-col col-auto text-center>
-                <ion-button fill="clear" size="small" color="primary" (click)="openSpeakerShare(speaker)">
+                <ion-button fill="clear" size="small" color="secondary" (click)="openSpeakerShare(speaker)">
                   <ion-icon name='share-alt' slot="start"></ion-icon>
                   Share
                 </ion-button>
               </ion-col>
               <ion-col col-auto text-right>
-                <ion-button fill="clear" size="small" color="primary" (click)="openContact(speaker)">
+                <ion-button fill="clear" size="small" color="secondary" (click)="openContact(speaker)">
                   <ion-icon name='chatboxes' slot="start"></ion-icon>
                   Contact
                 </ion-button>
@@ -237,7 +241,7 @@
 -->
 
 <ion-footer>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="secondary">
     <ion-title>© {{ currentYear }} Caravan </ion-title>
     <ion-buttons slot="end">
       <div class="github-button"><iframe allowtransparency="true" scrolling="no" frameborder="0"

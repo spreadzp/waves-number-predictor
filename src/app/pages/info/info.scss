@@ -1,0 +1,113 @@
+.action-button {
+    padding-right: 10px;
+}
+
+.github-button {
+    width: 49px;
+    height: 20px;
+    padding-right: 5px;
+    display: inline;
+}
+
+.genre-image {
+    width: 30px;
+    height: 30px;
+    padding: 3px;
+}
+
+ion-card {
+    width: auto;
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    ion-item img {
+        width: calc(100% - 400px);;
+        margin: auto;
+    }
+}
+
+/* Large desktops and laptops */
+
+@media (min-width: 1200px) {
+    ion-item img {
+        width: calc(100% - 500px);;
+        margin: auto;
+    }
+}
+
+.card .image .item-md {
+    padding-left: 0px;
+}
+
+.card .image .item-md .item-inner {
+    padding-right: 0px;
+}
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro);
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+/* app-page-info {
+  height: 100%;
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+  justify-content:center;
+  width:100%;
+  color:white;
+} */
+
+svg:not(:root) {
+  overflow: visible;
+}
+
+svg {
+  height: 1px;
+  max-width: 100%;
+  width: 200px;
+  margin: 100px;
+  padding: 50px;
+}
+
+.path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: dash 5s linear alternate infinite;
+}
+
+@keyframes dash {
+  from {
+    stroke-dashoffset: 822;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* app-page-info {
+  background: #000;
+} */
+#demo{
+  margin-top: 100px;
+  position:relative;
+  width: auto;
+  height:300px;
+  background:#000 ;
+  margin:auto;
+  overflow:hidden;
+}
+
+#demo h3 {
+  position:absolute;
+  font-family: 'Asap', sans-serif;
+  font-weight:700;
+  margin:0;
+  padding:0;
+  width:800px;
+  text-align:center;
+  visibility:hidden;
+  font-size:120px;
+  top:65px;
+}

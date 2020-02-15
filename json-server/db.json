@@ -1311,11 +1311,138 @@
       "secretNumberOfGame": 114
     },
     {
-      "gamerBets": [],
-      "rounds": [],
-      "winners": [],
-      "bank": 0,
-      "gameOver": false,
+      "gamerBets": [
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 61
+        },
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 51
+        },
+        {
+          "addressGamer": "gamer_1",
+          "sumBets": 51
+        }
+      ],
+      "rounds": [
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "minNumberRange": 0,
+          "maxNumberRange": 127
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 1,
+          "maxNumberRange": 127,
+          "minNumberRange": 64,
+          "isLastWinnerRangeUp": true
+        },
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "numberRound": 2,
+          "maxNumberRange": 127,
+          "minNumberRange": 96,
+          "isLastWinnerRangeUp": true
+        },
+        {
+          "gamersBetUp": [
+            "gamer_2"
+          ],
+          "gamersBetDown": [
+            "gamer_3"
+          ],
+          "numberRound": 3,
+          "maxNumberRange": 127,
+          "minNumberRange": 112,
+          "isLastWinnerRangeUp": true
+        },
+        {
+          "gamersBetUp": [
+            "gamer_3"
+          ],
+          "gamersBetDown": [
+            "gamer_2"
+          ],
+          "numberRound": 4,
+          "maxNumberRange": 127,
+          "minNumberRange": 120,
+          "isLastWinnerRangeUp": true
+        },
+        {
+          "gamersBetUp": [],
+          "gamersBetDown": [],
+          "numberRound": 5,
+          "maxNumberRange": 121,
+          "minNumberRange": 120,
+          "isLastWinnerRangeUp": false
+        },
+        {
+          "gamersBetUp": [
+            "gamer_1"
+          ],
+          "gamersBetDown": [
+            "gamer_3",
+            "gamer_2",
+            "gamer_2",
+            "gamer_2",
+            "gamer_2",
+            "gamer_2",
+            "gamer_2"
+          ],
+          "numberRound": 6,
+          "maxNumberRange": 121,
+          "minNumberRange": 120,
+          "isLastWinnerRangeUp": false
+        }
+      ],
+      "winners": [
+        {
+          "addressGamer": "gamer_3",
+          "sumBets": 23.285714285714285
+        },
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 23.285714285714285
+        },
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 23.285714285714285
+        },
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 23.285714285714285
+        },
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 23.285714285714285
+        },
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 23.285714285714285
+        },
+        {
+          "addressGamer": "gamer_2",
+          "sumBets": 23.285714285714285
+        }
+      ],
+      "bank": 163,
+      "gameOver": true,
       "typeGame": "0-127",
       "numberGame": 13,
       "minBet": 2,
@@ -1326,7 +1453,8 @@
       "numVotes": 1,
       "comments": [
         "Liza the best!"
-      ]
+      ],
+      "secretNumberOfGame": 120
     },
     {
       "gamerBets": [],
@@ -1475,11 +1603,11 @@
       "winners": [],
       "bank": 0,
       "gameOver": false,
-      "typeGame": "0-255",
-      "numberGame": 8,
+      "typeGame": "0-127",
+      "numberGame": 14,
       "minBet": 2,
       "typeAddRate": 0,
-      "id": "5ce0d7d9-2ca2-41bb-8160-e2b79964955b"
+      "id": "5558cf7a-ad81-43be-ba0e-f3a966a33570"
     }
   ]
 }
