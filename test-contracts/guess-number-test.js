@@ -9,7 +9,7 @@ describe('GAME test suite', async function () {
     let companyScript;
     let companyTx;
     let seedInv1 = "waves private node seed with waves tokens";
-    const owner2 = "hjkghgjhkgjhkgjhkkda";
+    const owner4 = "hjkghgjhkgjhkgjhkkdajhkljh";
     const owner3 = "hjkghgjhkgjhkgjhkkdaerwe";
     let seed2 = "tooth great gown say drill repair fluid unveil mosquito column design pyramid dust wreck safe";
     let seedGamer1 = "yard antique adult age neglect distance patch reopen pulp scrub clean muffin helmet robot trap";
@@ -18,13 +18,13 @@ describe('GAME test suite', async function () {
     let assetId;
     let paymentAmount = 1 * wvs;
     // let preSellScript;
-    const countTokens = 1000 * wvs;
-    const idGameTocken = '7pNXT4T2mN14EQbqreQce6tybgwPhApyvViC9QNy6eYE';
+    const countTokens = "1000000000";
+    const idGameTocken = '9Bfxo5B66ZEv7WChZJE8STWCqGvWj8eULUxgStfj1Vvk';
 
 
     const accounts = {};
     before(async function () {
-        // companyScript = file('game.ride');
+        companyScript = file('guessnumber.ride');
         //console.log('companyScript :', companyScript);
         // const compiledCompany = compile(companyScript);
        // console.log('compiledCompany :', compiledCompany);
@@ -48,10 +48,10 @@ describe('GAME test suite', async function () {
             reissuable: true,
             fee: 1.005 * wvs
         }
-        /*const txIssue = issue(issueParam, owner3);
+        /* const txIssue = issue(issueParam, owner3);
         await broadcast(txIssue);
         assetId = txIssue.id;
-        await waitForTx(txIssue.id);*/
+        await waitForTx(txIssue.id); */
     })
 
     it('2 truly balance of the tokens', async function () {
@@ -73,20 +73,10 @@ describe('GAME test suite', async function () {
         console.log('seedGamer3 :', seedGamer3);
         console.log('seedGamer2 :', seedGamer2);
         console.log('seedGamer1 :', seedGamer1);   */
-        // await assetBalance(idGameTocken, address(owner3))
-        //     .then((assetBal) => {
-        //         expect(assetBal).to.equal(Number(countTokens));
-        //     });
-//         const recipient = address(seedGamer1);
-//         const sendTokensG1 = await transfer({recipient: recipient,
-//           amount: 100 * wvs, assetId: idGameTocken, fee: 0.05 * wvs}, owner3);
-//   await broadcast(sendTokensG1);
-//   await waitForTx(sendTokensG1.id);
-//   const recipient2 = address(seedGamer2);
-//   const sendTokensG2 = await transfer({recipient: recipient2,
-//     amount: 100 * wvs, assetId: idGameTocken, fee: 0.05 * wvs}, owner3);
-// await broadcast(sendTokensG2);
-// await waitForTx(sendTokensG2.id);
+        await assetBalance(idGameTocken, address(owner3))
+            .then((assetBal) => {
+                expect(assetBal).to.equal(Number(countTokens));
+            });
     });
     it('3 start the game', async function () {
         const iTxSet = invokeScript({
@@ -99,12 +89,12 @@ describe('GAME test suite', async function () {
             payment: []
         }, owner3);
 
-        console.dir('$$$$$$$$', iTxSet);
-        //await broadcast(iTxSet);
-        //await waitForTx(iTxSet.id);
+        await broadcast(iTxSet);
+        await waitForTx(iTxSet.id);
+        // console.dir(iTxSet);
 
-
-        //const state = await stateChanges(iTxSet.id)
+        const state = await stateChanges(iTxSet.id)
+        // console.dir(state);
         // console.log('data[0] :', data[0]);
     })
 

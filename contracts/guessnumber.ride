@@ -2,9 +2,12 @@
 {-# CONTENT_TYPE DAPP #-}
 {-# SCRIPT_TYPE ACCOUNT #-}
 
-let startRoundHeight = 5
+let startNewRoundHeight = 5
 let idGameToken = base58'9Bfxo5B66ZEv7WChZJE8STWCqGvWj8eULUxgStfj1Vvk'
+let degreeMaxNumber = 7
+let minBet = 100000
 
+# create random hash for last round
 func randomizer(inv: Invocation) = {
     let lastPlay = match getBinary(this, "lastPlay") {
         case s:ByteVector => s
@@ -88,7 +91,7 @@ func setGamerBet(addressGamer: String, directionRate: String, directionGamer: St
 }
 
 func getBet(round: Int, addressGamer: String) =  {
-  let minBet = 100000000
+
   if(round > 1 ) then {
     let winnerOfPrevRound = getCurrentGameAndPrevRound()
     let winnerBetFromPrevRound = match getInteger(this, winnerOfPrevRound + addressGamer) {
@@ -146,16 +149,16 @@ func startRound() = {
   }
   if(i.caller != this) then
     throw("Only owner can start the game.")
-  else if(numberOfRound == 1 && i.caller == this && !isGameStarted ) then
+  else if( numberOfRound == 1 && !isOppositeRate() && i.caller == this && !isGameStarted ) then
     let currentNumberGame = getCurrentNumberGame()
     #invoke script
     # sendPrize(currentNumberGame)  ?
     let newNumberGame = currentNumberGame
     WriteSet([
-      DataEntry("numberGame", newNumberGame),
+      DataEntry("numberGame", currentNumberGame),
       DataEntry("startGame", !isGameStarted),
       DataEntry("numberRound", numberOfRound),
-      DataEntry(newNumberGame.toString() + "_bankOfGame", 0)
+      DataEntry(currentNumberGame.toString() + "_bankOfGame", 0)
       ])
   else if (i.caller == this && isOppositeRate() && !isGameStarted) then
     setWinnersPrevRound(numberOfRound, randhash.toInt() % 1000)

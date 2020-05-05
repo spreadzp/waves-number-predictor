@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http'; 
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { timeout, retryWhen, delay, map, filter } from 'rxjs/operators';
+import { verifyAuthData, libs } from '@waves/waves-transactions';
 import {
     transfer as createTransfer,
     data as createData,
   } from '@waves/waves-transactions';
-declare const WavesKeeper: any;  
+declare const WavesKeeper: any;
 
 @Injectable()
 export class WavesService {
@@ -17,20 +18,26 @@ export class WavesService {
   constructor(private http: HttpClient) {
   }
 
-  login(): any {
+  async login() {
     const authData = { data: "Auth on my site" };
+    // console.log(' WavesKeeper :', WavesKeeper);
         if (WavesKeeper) {
-            WavesKeeper.auth( authData )
-            .then(auth => {
-                console.log( auth ); //displaying the result on the console
-                /*...processing data */
-            }).catch(error => {
-                console.error( error ); // displaying the result on the console
-                /*...processing errors */
-            })
+
+            await this.getPublicState();
         } else {
             alert("To Auth WavesKeeper should be installed.");
         }
+  }
+
+  async getPublicState() {
+    try {
+        const state = await WavesKeeper.publicState();
+        console.log(state); // displaying the result in the console
+        /*... processing data*/
+    } catch(error) {
+        console.error(error); // displaying the result in the console
+        /*... processing errors */
+    }
   }
 
   makeBet(bet: number) {
@@ -52,7 +59,7 @@ export class WavesService {
   WavesKeeper.signAndPublishTransaction(txData).then((data) => {
     console.log('data :', data);
       //data - a line ready for sending to Waves network's node (server)
-  }).catch((error) => { 
+  }).catch((error) => {
       //processing errors
   });
   }

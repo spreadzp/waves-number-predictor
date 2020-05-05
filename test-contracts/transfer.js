@@ -9,6 +9,9 @@ describe('Transfer tokens', async function () {
     let companyScript;
     let companyTx;
     let seedInv1 = "waves private node seed with waves tokens";
+    const owner3 = "hjkghgjhkgjhkgjhkkdaerwe"
+    const owner2 = "hjkghgjhkgjhkgjhkkda"
+    const owner4 = "hjkghgjhkgjhkgjhkkdajhkljh";
     let seedDev2 = "tooth great gown say drill repair fluid unveil mosquito column design pyramid dust wreck safe";
     let seedGamer1 = "yard antique adult age neglect distance patch reopen pulp scrub clean muffin helmet robot trap";
     let seedGamer2 = "weather conduct sentence below fix love crucial rabbit setup hair seed ridge mammal crush nest";
@@ -17,8 +20,8 @@ describe('Transfer tokens', async function () {
     let paymentAmount = 1 * wvs;
     // let preSellScript;
     const countTokens = "100000000000";
- 
-    
+
+
     const accounts = {};
     before(async function () {
      /*    await setupAccounts(
@@ -39,17 +42,35 @@ describe('Transfer tokens', async function () {
         console.log('seedGamer3 :', seedGamer3);
         console.log('seedGamer2 :', seedGamer2);
         console.log('seedGamer1 :', seedGamer1); */
-        
+
     });
 
     it('1 can success transfer', async function () {
-        /* const sendTokensG1 =  await transfer({recipient: "3ML9ixR6ipV89Kw5VSpdvBhyGD3LhseETx3",
-                amount: 1000 * wvs, fee: 0.05 * wvs}, seedDev2);
+       const recipient = address(seedGamer1);
+      console.log('recipient :', recipient);
+        const sendTokensG1 =  await transfer({recipient: recipient,
+                amount: 919 * wvs, fee: 0.05 * wvs}, seedInv1);
         await broadcast(sendTokensG1);
-        await waitForTx(sendTokensG1.id); */
-        const sendTokensG2 =  await transfer({recipient: "3MFWiYgNSS5Amj4HSbg5Lv1sUNm6AusRqxu                                  ",
-                amount: 1000 * wvs, fee: 0.05 * wvs}, seedDev2);
+        await waitForTx(sendTokensG1.id);
+       /*  const sendTokensG2 =  await transfer({recipient: "3MFWiYgNSS5Amj4HSbg5Lv1sUNm6AusRqxu                                  ",
+                amount: 10 * wvs, fee: 0.05 * wvs}, seedDev2);
         await broadcast(sendTokensG2);
-        await waitForTx(sendTokensG2.id);
+        await waitForTx(sendTokensG2.id); */
     })
-})      
+    /* it('2 can success transfer gamer1', async function () {
+      const recipient = address(seedGamer1);
+      console.log('recipient :', recipient);
+        const sendTokensG1 =  await transfer({recipient: recipient,
+                amount: 50 * wvs, fee: 0.05 * wvs}, seedDev2);
+        await broadcast(sendTokensG1);
+        await waitForTx(sendTokensG1.id);
+    })
+    it('3 can success transfer gamer2', async function () {
+      const recipient = address(seedGamer2);
+      console.log('recipient :', recipient);
+        const sendTokensG1 =  await transfer({recipient: recipient,
+                amount: 50 * wvs, fee: 0.05 * wvs}, seedDev2);
+        await broadcast(sendTokensG1);
+        await waitForTx(sendTokensG1.id);
+    }) */
+})

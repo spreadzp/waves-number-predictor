@@ -700,4 +700,8 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
   switchSound() {
     this.soundsService = null;
   }
+
+  betOnWawes() {
+    this.wavesService.login();
+  }
 }

@@ -9,6 +9,8 @@ with Waves blockchain and APP with Angular, Ionic 4, Capacitor and NGXS (State M
     
     $ cd json-server 
     $ json-server --watch db.json
+    $ npm install -g @waves/surfboard
+    $ sudo docker run -d -p 6869:6869 wavesplatform/waves-private-node
 ```
 
 ## Development server
@@ -18,13 +20,7 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
-## Capacitor: Add Platforms
-
-``` bash
-    $ npx cap add ios
-    $ npx cap add android
-```
-
+ 
 ## Capacitor: Syncing your app
 Every time you perform a build (e.g. npm run build) that changes your web directory (default: www), you'll need to copy those changes down to your native projects:
 
