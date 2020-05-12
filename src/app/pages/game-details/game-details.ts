@@ -1,4 +1,10 @@
-import { Component, ViewEncapsulation, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ViewEncapsulation,
+  OnInit,
+  AfterViewInit,
+  ViewChild,
+} from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable, Subscription, timer } from 'rxjs';
 
@@ -13,7 +19,14 @@ import { ShowCommentsModalComponent } from '../../modals/show-comments-modal/sho
 import { ShowActorsModalComponent } from '../../modals/show-actors-modal/show.actors.modal';
 
 import { LikeMovie, FavoriteMovie } from '../../store/actions/movies.actions';
-import { map, skip, takeUntil, filter, scan, withLatestFrom } from 'rxjs/operators';
+import {
+  map,
+  skip,
+  takeUntil,
+  filter,
+  scan,
+  withLatestFrom,
+} from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { IziToastService } from '../../providers/izi-toast.service';
@@ -21,7 +34,13 @@ import { WavesService } from '../../providers/waves-service';
 import { Game, Round, DirectionBet, GamerBet } from '../../models/game.model';
 import { GamesService } from '../../providers/games-service';
 import { GameState } from '../../store/state/games.state';
-import { LikeGame, AddGame, FilterGames, EditGame, FavoriteGame } from '../../store/actions/games.actions';
+import {
+  LikeGame,
+  AddGame,
+  FilterGames,
+  EditGame,
+  FavoriteGame,
+} from '../../store/actions/games.actions';
 import { SoundsService } from '../../providers/sounds.service';
 import { CountdownComponent } from 'ngx-countdown';
 import { TypeGame } from '../../helpers/type-game';
@@ -31,10 +50,9 @@ import { TypeAddRate } from '../../helpers/typeAddRate';
   selector: 'app-page-game-details',
   templateUrl: './game-details.html',
   styleUrls: ['./game-details.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class GameDetailsComponent implements OnInit, AfterViewInit {
-
   currentYear = new Date().getFullYear();
   selectedGame: Observable<Game>;
   id: string;
@@ -45,7 +63,7 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
   games: Game[] = [];
   currentGame: Game = null;
   currentRound: Round = null;
-  defaultSelectedRadio = "gamer_2";
+  defaultSelectedRadio = 'gamer_2';
   numberRound = 1;
   startMinNumberRange = 0;
   startMaxNumberRange: number;
@@ -56,7 +74,7 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
   firstRangeMax = 0;
   secondRangeMin = 0;
   secondRangeMax = 0;
-  isWinnerRangeUp = false
+  isWinnerRangeUp = false;
   avgRange = 0;
   showSecretGame = false;
   betValue = 1;
@@ -67,10 +85,9 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
   configTime = { leftTime: 30 };
   filters: any = {
     typeGame: 128,
-    id: ''
-  }
-
-
+    id: '',
+  };
+  title = 'INFO';
   //Get value on ionChange on IonRadioGroup
   selectedRadioGroup: any;
   selectedRadioItem: any;
@@ -83,76 +100,96 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
       text: 'Gamer1',
       disabled: false,
       checked: false,
-      color: 'primary'
-    }, {
+      color: 'primary',
+    },
+    {
       id: '2',
       name: 'radio_list',
       value: 'gamer_2',
       text: 'Gamer2',
       disabled: false,
       checked: true,
-      color: 'secondary'
-    }, {
+      color: 'secondary',
+    },
+    {
       id: '3',
       name: 'radio_list',
       value: 'gamer_3',
       text: 'Gamer3',
       disabled: false,
       checked: false,
-      color: 'danger'
+      color: 'danger',
     },
   ];
-  genreImages: string[] = ['0-127', 'comedy', 'crime', 'documentary', 'drama', 'fantasy', 'film noir',
-    'horror', 'romance', 'science fiction', 'westerns', 'animation', 'food'];
+  genreImages: string[] = [
+    '0-127',
+    'comedy',
+    'crime',
+    'documentary',
+    'drama',
+    'fantasy',
+    'film noir',
+    'horror',
+    'romance',
+    'science fiction',
+    'westerns',
+    'animation',
+    'food',
+  ];
 
   @ViewChild('betDown', { static: false }) betDown: any;
   @ViewChild('betUp', { static: false }) betUp: any;
   @ViewChild('cd', { static: false }) private countdown: CountdownComponent;
 
-  constructor(private store: Store, private youtubeApiService: YoutubeApiService, private modalCtrl: ModalController,
-    private activatedRoute: ActivatedRoute, private iziToast: IziToastService, private wavesService: WavesService,
-    private gamesService: GamesService, private soundsService: SoundsService, private router: Router) {
-  }
+  constructor(
+    private store: Store,
+    private youtubeApiService: YoutubeApiService,
+    private modalCtrl: ModalController,
+    private activatedRoute: ActivatedRoute,
+    private iziToast: IziToastService,
+    private wavesService: WavesService,
+    private gamesService: GamesService,
+    private soundsService: SoundsService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
     const gameFromId = this.getGameDetails(this.id);
     this.currentRound = new Round();
     this.setImageGame(gameFromId);
     timer(0, 1000).subscribe(() => {
       this.fetchGameById(this.id).subscribe(
-        game => {
+        (game) => {
           if (game && Array.isArray(game) && !game[0].gameOver) {
             this.fetchGameState(game[0]);
             this.currentRound.numberRound = game[0].rounds.length;
           }
-
         },
-        err => {
-          this.iziToast.errorConnection('Error connection!', `You have error connection ${err}`, 'red');
+        (err) => {
+          this.iziToast.errorConnection(
+            'Error connection!',
+            `You have error connection ${err}`,
+            'red'
+          );
         }
       );
-    })
-
+    });
   }
 
   fetchGameById(id: string) {
     return this.gamesService.getGame(id);
-
   }
 
   fetchGameState(game: Game) {
     if (!game) {
-
-      this.fetchGameById(this.id).subscribe(game => {
+      this.fetchGameById(this.id).subscribe((game) => {
         // console.log('@@@@@@@@@@@@@@@@@game :', game);
 
         if (game && Array.isArray(game)) {
           this.fetchGameState(game[0]);
           this.currentRound.numberRound = game[0].rounds.length;
         }
-
       });
     } else if (game.gameOver && game.id === this.id) {
       //this.showGameOver(game.secretNumberOfGame, game.winners);
@@ -166,64 +203,74 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
         this.currentGame.rounds.push(new Round());
         this.defineRanges(this.startMinNumberRange, this.startMaxNumberRange);
         this.defineCurrentRound(this.currentGame.rounds);
-        this.currentGame.rounds[this.currentRound.numberRound - 1].minNumberRange = this.startMinNumberRange;
-        this.currentGame.rounds[this.currentRound.numberRound - 1].maxNumberRange = this.startMaxNumberRange;
-      } if (this.currentGame.rounds.length && this.checkRoundRangeNumbers(this.currentGame.rounds.length - 1)) {
+        this.currentGame.rounds[
+          this.currentRound.numberRound - 1
+        ].minNumberRange = this.startMinNumberRange;
+        this.currentGame.rounds[
+          this.currentRound.numberRound - 1
+        ].maxNumberRange = this.startMaxNumberRange;
+      }
+      if (
+        this.currentGame.rounds.length &&
+        this.checkRoundRangeNumbers(this.currentGame.rounds.length - 1)
+      ) {
         this.defineCurrentRound(this.currentGame.rounds);
         const numRounds = this.currentRound.numberRound - 1;
         //console.log('numRounds :', numRounds);
-        this.defineRanges(this.currentGame.rounds[this.currentRound.numberRound - 1].minNumberRange,
-          this.currentGame.rounds[this.currentRound.numberRound - 1].maxNumberRange);
+        this.defineRanges(
+          this.currentGame.rounds[this.currentRound.numberRound - 1]
+            .minNumberRange,
+          this.currentGame.rounds[this.currentRound.numberRound - 1]
+            .maxNumberRange
+        );
       }
     }
-
   }
 
   checkRoundRangeNumbers(numberRange) {
     const r = this.currentGame.rounds[numberRange].minNumberRange;
     const e = this.currentGame.rounds[numberRange].maxNumberRange;
-    return (r + e) ? true : false;
-
+    return r + e ? true : false;
   }
 
   defineCurrentRound(rounds: Round[]) {
     if (rounds && rounds.length) {
       this.currentRound.numberRound = rounds.length;
     } else {
-      this.currentRound.numberRound = 1
+      this.currentRound.numberRound = 1;
     }
   }
 
   ngAfterViewInit() {
     this.soundsService.preload('click', 'assets/sounds/click.mp3');
-    if (this.betDown && this.betUp && this.betDown.ionChange && this.betUp.ionChange) {
+    if (
+      this.betDown &&
+      this.betUp &&
+      this.betDown.ionChange &&
+      this.betUp.ionChange
+    ) {
       this.betDown.ionChange.pipe(skip(1)).subscribe((ev) => {
-
         this.soundsService.play('click');
-
       });
       this.betUp.ionChange.pipe(skip(1)).subscribe((ev) => {
-
         this.soundsService.play('click');
-
       });
     }
-
   }
 
   ionViewWillEnter() {
     console.log('252 ionViewWillEnter');
-
   }
 
   getGameDetails(id: string) {
     console.log('id :', id);
-    return this.store.select(GameState.gameById).pipe(map(filterFn => filterFn(id)));
-
+    return this.store
+      .select(GameState.gameById)
+      .pipe(map((filterFn) => filterFn(id)));
   }
 
   setImageGame(game: Observable<Game>) {
-    game.subscribe(game => {
+    game.subscribe((game) => {
       // console.log(game);
       this.game = game;
       // console.log('187 this.game :', this.game);
@@ -235,19 +282,22 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
     console.log('GameDetailssPage::watchTrailer | method called');
 
     //  Code to use Youtube Api Service: providers/youtube-api-service.ts
-    this.youtubeApiService.searchMovieTrailer(this.game.title)
-      .subscribe(result => {
+    this.youtubeApiService.searchMovieTrailer(this.game.title).subscribe(
+      (result) => {
         if (result.items.length > 0) {
           console.log(result);
           const { videoId } = result.items[0].id;
           //this.game.videoId = videoId;
 
           // Code to use capacitor-youtube-player plugin.
-          console.log('GameDetailssPage::watchTrailer -> platform: ' + Capacitor.platform);
+          console.log(
+            'GameDetailssPage::watchTrailer -> platform: ' + Capacitor.platform
+          );
           if (Capacitor.platform === 'web') {
             const componentProps = { modalProps: { item: this.game } };
             this.presentModal(componentProps, YoutubeModalComponent);
-          } else { // Native
+          } else {
+            // Native
             this.testYoutubePlayerPlugin();
           }
 
@@ -260,18 +310,27 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
           */
         }
       },
-        error => {
-          this.iziToast.show('Watch Trailer', 'Sorry, an error has occurred.', 'red', 'ico-error', 'assets/avatar.png');
-        });
-
+      (error) => {
+        this.iziToast.show(
+          'Watch Trailer',
+          'Sorry, an error has occurred.',
+          'red',
+          'ico-error',
+          'assets/avatar.png'
+        );
+      }
+    );
   }
 
   async presentModal(componentProps: any, component) {
-    console.log('GameDetailssPage::presentModal | method called -> movie', this.game);
+    console.log(
+      'GameDetailssPage::presentModal | method called -> movie',
+      this.game
+    );
     // const componentProps = { modalProps: { item: this.game}};
     const modal = await this.modalCtrl.create({
       component: component,
-      componentProps: componentProps
+      componentProps: componentProps,
     });
     await modal.present();
     const { data } = await modal.onWillDismiss();
@@ -281,7 +340,6 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
   }
 
   async testYoutubePlayerPlugin() {
-
     const { YoutubePlayer } = Plugins;
 
     const result = await YoutubePlayer.echo({ value: 'hola' });
@@ -306,13 +364,17 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
 
   onClickComment() {
     console.log('GameDetailssPage::onClickComment');
-    const componentProps = { modalProps: { title: 'Comment', game: this.game } };
+    const componentProps = {
+      modalProps: { title: 'Comment', game: this.game },
+    };
     this.presentModal(componentProps, CommentModalComponent);
   }
 
   onClickShowComment() {
     console.log('GameDetailssPage::onClickShowComment');
-    const componentProps = { modalProps: { title: 'Comments', game: this.game } };
+    const componentProps = {
+      modalProps: { title: 'Comments', game: this.game },
+    };
     this.presentModal(componentProps, ShowCommentsModalComponent);
   }
 
@@ -324,18 +386,22 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
       const favorites = state.catalog.favorites;
 
       if (typeof favorites !== 'undefined') {
-
-        const exist = favorites.filter(item => {
+        const exist = favorites.filter((item) => {
           return item.title === this.game.title;
         });
 
         if (exist.length === 0) {
-          this.store.dispatch(
-            new FavoriteGame(this.game)).subscribe(() => {
-              this.iziToast.success('Favorite movie', 'Favorite Movie added.');
-            });
+          this.store.dispatch(new FavoriteGame(this.game)).subscribe(() => {
+            this.iziToast.success('Favorite movie', 'Favorite Movie added.');
+          });
         } else {
-          this.iziToast.show('Favorite movie', 'The movie has already been added.', 'red', 'ico-error', 'assets/avatar.png');
+          this.iziToast.show(
+            'Favorite movie',
+            'The movie has already been added.',
+            'red',
+            'ico-error',
+            'assets/avatar.png'
+          );
         }
       }
     }
@@ -346,10 +412,11 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
     if (navigator['share']) {
       navigator['share']({
         title: 'WebShare API Demo',
-        url: 'https://codepen.io/ayoisaiah/pen/YbNazJ'
-      }).then(() => {
-        console.log('Thanks for sharing!');
+        url: 'https://codepen.io/ayoisaiah/pen/YbNazJ',
       })
+        .then(() => {
+          console.log('Thanks for sharing!');
+        })
         .catch(console.error);
     } else {
       // fallback
@@ -361,26 +428,26 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
     console.log('this.currentGame :', this.currentGame);
     const componentProps = {
       modalProps: {
-        game: this.currentGame
-      }
+        game: this.currentGame,
+      },
     };
     this.presentModal(componentProps, ShowActorsModalComponent);
   }
 
   radioGroupChange(event) {
-    // console.log("radioGroupChange", event.detail);
+    // console.log('radioGroupChange', event.detail);
     this.selectedRadioGroup = event.detail;
   }
 
   radioFocus() {
-    console.log("radioFocus");
+    console.log('radioFocus');
   }
   radioSelect(event) {
-    console.log("radioSelect", event.detail);
+    console.log('radioSelect', event.detail);
     this.selectedRadioItem = event.detail;
   }
   radioBlur() {
-    console.log("radioBlur");
+    console.log('radioBlur');
   }
 
   makeBet() {
@@ -389,34 +456,54 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
 
   defineRange(flagRange: DirectionBet) {
     if (flagRange === DirectionBet.RangeDown) {
-      return (this.firstRangeMax - this.firstRangeMin) === 0 ?
-        this.firstRangeMax.toString() : this.firstRangeMin.toString() + " - " + this.firstRangeMax.toString();
-
+      return this.firstRangeMax - this.firstRangeMin === 0
+        ? this.firstRangeMax.toString()
+        : this.firstRangeMin.toString() + ' - ' + this.firstRangeMax.toString();
     } else {
-      return (this.secondRangeMax - this.secondRangeMin) === 0 ?
-        this.secondRangeMax.toString() : this.secondRangeMin.toString() + " - " + this.secondRangeMax.toString()
+      return this.secondRangeMax - this.secondRangeMin === 0
+        ? this.secondRangeMax.toString()
+        : this.secondRangeMin.toString() +
+            ' - ' +
+            this.secondRangeMax.toString();
     }
   }
   makeBetDown() {
     const gamerAddress = this.selectedRadioGroup.value;
-    if (!this.currentGame.rounds[this.currentRound.numberRound - 1].gamersBetUp.includes(gamerAddress)) {
+    if (
+      !this.currentGame.rounds[
+        this.currentRound.numberRound - 1
+      ].gamersBetUp.includes(gamerAddress)
+    ) {
       this.currentRound.gamersBetDown.push(gamerAddress);
       const gamerBetInTheRound = this.defineBet(gamerAddress);
       this.addGamerBet(gamerAddress);
-      this.updateGame(this.currentRound.numberRound - 1, { 'gamersBetDown': gamerAddress });
+      this.updateGame(this.currentRound.numberRound - 1, {
+        gamersBetDown: gamerAddress,
+      });
       this.soundsService.play('click');
-      this.iziToast.success(`Success bet in the range ${this.defineRange(DirectionBet.RangeDown)}`, `${gamerAddress} made bet ${gamerBetInTheRound} tokens`);
+      this.iziToast.success(
+        `Success bet in the range ${this.defineRange(DirectionBet.RangeDown)}`,
+        `${gamerAddress} made bet ${gamerBetInTheRound} tokens`
+      );
     } else {
-      this.iziToast.show('Fail bet', `You has already been bet in the range ${this.defineRange(DirectionBet.RangeUp)}`, 'red', 'ico-error', 'assets/avatar.png');
+      this.iziToast.show(
+        'Fail bet',
+        `You has already been bet in the range ${this.defineRange(
+          DirectionBet.RangeUp
+        )}`,
+        'red',
+        'ico-error',
+        'assets/avatar.png'
+      );
     }
-
-
   }
 
   findIndexGamersBet(gamerAddress) {
     if (this.currentGame) {
       if (this.currentGame.gamerBets.length > 0) {
-        return this.currentGame.gamerBets.findIndex(item => item.addressGamer === gamerAddress);
+        return this.currentGame.gamerBets.findIndex(
+          (item) => item.addressGamer === gamerAddress
+        );
       } else {
         return 0;
       }
@@ -426,8 +513,10 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
   totalGamersBeds(gamerAddress) {
     if (this.currentGame) {
       if (this.currentGame.gamerBets.length > 0) {
-        const gamerBet = this.currentGame.gamerBets.find(item => item.addressGamer === gamerAddress);
-        return (gamerBet) ? gamerBet.sumBets : 0;
+        const gamerBet = this.currentGame.gamerBets.find(
+          (item) => item.addressGamer === gamerAddress
+        );
+        return gamerBet ? gamerBet.sumBets : 0;
       } else {
         return 0;
       }
@@ -439,14 +528,17 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
       return this.currentGame.minBet;
     } else {
       if (this.currentGame) {
-        const prevRound = this.currentGame.rounds[this.currentRound.numberRound - 2];
-        const isTrueLastBet = prevRound.isLastWinnerRangeUp ?
-          prevRound.gamersBetUp.includes(gamerAddress) :
-          prevRound.gamersBetDown.includes(gamerAddress);
-        return isTrueLastBet ? this.currentGame.minBet :
-          (this.defineRoundBet() > this.totalGamersBeds(gamerAddress) ?
-            this.defineRoundBet() - this.totalGamersBeds(gamerAddress) :
-            this.currentGame.minBet);
+        const prevRound = this.currentGame.rounds[
+          this.currentRound.numberRound - 2
+        ];
+        const isTrueLastBet = prevRound.isLastWinnerRangeUp
+          ? prevRound.gamersBetUp.includes(gamerAddress)
+          : prevRound.gamersBetDown.includes(gamerAddress);
+        return isTrueLastBet
+          ? this.currentGame.minBet
+          : this.defineRoundBet() > this.totalGamersBeds(gamerAddress)
+          ? this.defineRoundBet() - this.totalGamersBeds(gamerAddress)
+          : this.currentGame.minBet;
       } else {
         return this.currentGame.minBet;
       }
@@ -456,9 +548,12 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
   defineRoundBet() {
     if (this.currentGame) {
       if (this.currentGame.typeAddRate === TypeAddRate.geometric) {
-        return (this.currentRound.numberRound) ** 2 + this.currentGame.minBet;
+        return this.currentRound.numberRound ** 2 + this.currentGame.minBet;
       } else {
-        return this.currentGame.minBet * (this.currentRound.numberRound) + this.currentGame.minBet;
+        return (
+          this.currentGame.minBet * this.currentRound.numberRound +
+          this.currentGame.minBet
+        );
       }
     }
   }
@@ -470,7 +565,7 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
     if (indexGamerBets === -1 || this.currentGame.gamerBets.length === 0) {
       const newBets = {
         addressGamer: addressGamer,
-        sumBets: gamerBet
+        sumBets: gamerBet,
       };
       this.currentGame.gamerBets.push(newBets);
     } else {
@@ -481,21 +576,38 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
 
   makeBetUp() {
     const gamerAddress = this.selectedRadioGroup.value;
-    if (!this.currentGame.rounds[this.currentRound.numberRound - 1].gamersBetDown.includes(gamerAddress)) {
+    if (
+      !this.currentGame.rounds[
+        this.currentRound.numberRound - 1
+      ].gamersBetDown.includes(gamerAddress)
+    ) {
       this.currentRound.gamersBetUp.push(gamerAddress);
       const gamerBetInTheRound = this.defineBet(gamerAddress);
       this.addGamerBet(this.selectedRadioGroup.value);
-      this.updateGame(this.currentRound.numberRound - 1, { 'gamersBetUp': gamerAddress });
+      this.updateGame(this.currentRound.numberRound - 1, {
+        gamersBetUp: gamerAddress,
+      });
       this.soundsService.play('click');
-      this.iziToast.success(`Success bet in the range ${this.defineRange(DirectionBet.RangeUp)}`, `${gamerAddress}  made bet ${gamerBetInTheRound} tokens`);
+      this.iziToast.success(
+        `Success bet in the range ${this.defineRange(DirectionBet.RangeUp)}`,
+        `${gamerAddress}  made bet ${gamerBetInTheRound} tokens`
+      );
     } else {
-      this.iziToast.show('Fail bet', `You has already been bet in the range ${this.defineRange(DirectionBet.RangeDown)}`, 'red', 'ico-error', 'assets/avatar.png');
+      this.iziToast.show(
+        'Fail bet',
+        `You has already been bet in the range ${this.defineRange(
+          DirectionBet.RangeDown
+        )}`,
+        'red',
+        'ico-error',
+        'assets/avatar.png'
+      );
     }
-
   }
   defineRanges(minNumber: number, maxNumber: number) {
     let sumMinAndMax = maxNumber + minNumber;
-    this.avgRange = sumMinAndMax % 2 === 0 ? sumMinAndMax / 2 : (sumMinAndMax + 1) / 2;
+    this.avgRange =
+      sumMinAndMax % 2 === 0 ? sumMinAndMax / 2 : (sumMinAndMax + 1) / 2;
     this.firstRangeMin = minNumber;
     this.firstRangeMax = this.avgRange - 1;
     this.secondRangeMin = this.avgRange;
@@ -506,7 +618,8 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
 
   defineRangesRound(minNumber: number, maxNumber: number) {
     let sumMinAndMax = maxNumber + minNumber;
-    this.avgRange = sumMinAndMax % 2 === 0 ? sumMinAndMax / 2 : (sumMinAndMax + 1) / 2;
+    this.avgRange =
+      sumMinAndMax % 2 === 0 ? sumMinAndMax / 2 : (sumMinAndMax + 1) / 2;
     this.firstRangeMin = minNumber;
     this.firstRangeMax = this.avgRange - 1;
     this.secondRangeMin = this.avgRange;
@@ -516,8 +629,13 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
     return { min: minNumber, max: maxNumber };
   }
 
-  setRange(isWinnerDirectionUp: boolean, lastAvgRange: number, minRange: number, maxRange: number) {
-    let newRanges: { min: number, max: number };
+  setRange(
+    isWinnerDirectionUp: boolean,
+    lastAvgRange: number,
+    minRange: number,
+    maxRange: number
+  ) {
+    let newRanges: { min: number; max: number };
     if (isWinnerDirectionUp) {
       newRanges = this.defineRangesRound(lastAvgRange, maxRange);
     } else {
@@ -529,10 +647,10 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
     newRound.minNumberRange = newRanges.min;
     this.currentGame.rounds.push(newRound);
     this.updateGame(this.currentRound.numberRound, {
-      'isLastWinnerRangeUp': isWinnerDirectionUp,
-      'maxNumberRange': this.currentRound.maxNumberRange,
-      'minNumberRange': this.currentRound.minNumberRange,
-      'numberRound': this.currentRound.numberRound
+      isLastWinnerRangeUp: isWinnerDirectionUp,
+      maxNumberRange: this.currentRound.maxNumberRange,
+      minNumberRange: this.currentRound.minNumberRange,
+      numberRound: this.currentRound.numberRound,
     });
   }
 
@@ -543,7 +661,9 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
         if (Array.isArray(this.currentGame.rounds[numberRound][key])) {
           this.currentGame.rounds[numberRound][key].push(data[key]);
           console.log('data[key] 1:', data[key]);
-        } else if (this.currentGame.hasOwnProperty(key) === data.hasOwnProperty(key)) {
+        } else if (
+          this.currentGame.hasOwnProperty(key) === data.hasOwnProperty(key)
+        ) {
           this.currentGame[key] = data[key];
           console.log('data[key] 2:', data[key]);
         } else {
@@ -552,18 +672,21 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
         }
       }
     }
-    this.store.dispatch(
-      new EditGame(this.currentGame)
-    ).subscribe((t) => console.log('471 t :', t)
-    );
+    this.store
+      .dispatch(new EditGame(this.currentGame))
+      .subscribe((t) => console.log('471 t :', t));
   }
 
   checkOppositeBet() {
     if (!this.currentGame || !this.currentGame.rounds.length) {
       return false;
     } else {
-      const countBetUp = this.currentGame.rounds[this.currentRound.numberRound - 1].gamersBetUp.length;
-      const countBetDown = this.currentGame.rounds[this.currentRound.numberRound - 1].gamersBetDown.length;
+      const countBetUp = this.currentGame.rounds[
+        this.currentRound.numberRound - 1
+      ].gamersBetUp.length;
+      const countBetDown = this.currentGame.rounds[
+        this.currentRound.numberRound - 1
+      ].gamersBetDown.length;
       if (countBetUp > 0 && countBetDown > 0) {
         this.timerForStartNextRound();
         return true;
@@ -595,15 +718,18 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
       this.numberRound++;
       this.currentRound.isLastWinnerRangeUp = this.winnerRangeDirection();
 
-      if (((this.currentRound.numberRound) % (this.degreeGame) === 0)) {
-        const winnersRound = this.currentGame.rounds[this.currentRound.numberRound - 1];
-        const secretNumber = (this.currentRound.isLastWinnerRangeUp) ?
-          round.maxNumberRange : round.minNumberRange;
+      if (this.currentRound.numberRound % this.degreeGame === 0) {
+        const winnersRound = this.currentGame.rounds[
+          this.currentRound.numberRound - 1
+        ];
+        const secretNumber = this.currentRound.isLastWinnerRangeUp
+          ? round.maxNumberRange
+          : round.minNumberRange;
         this.currentGame.secretNumberOfGame = secretNumber;
         let listWinnersWithPrizes = '';
-        let countWinners = (this.currentRound.isLastWinnerRangeUp) ?
-          winnersRound.gamersBetUp.length :
-          winnersRound.gamersBetDown.length;
+        let countWinners = this.currentRound.isLastWinnerRangeUp
+          ? winnersRound.gamersBetUp.length
+          : winnersRound.gamersBetDown.length;
         let avgPrize = this.currentGame.bank / countWinners;
         console.log('this.currentRound :', this.currentRound);
         console.log('this.currentGame.bank  :', this.currentGame.bank);
@@ -614,8 +740,8 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
           for (const item of winnersRound.gamersBetUp) {
             this.currentGame.winners.push({
               addressGamer: item,
-              sumBets: avgPrize
-            })
+              sumBets: avgPrize,
+            });
             console.log('item :', item);
             // listWinnersWithPrizes += `${item} : ${avgPrize}`;
           }
@@ -623,31 +749,32 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
           for (const item of winnersRound.gamersBetDown) {
             this.currentGame.winners.push({
               addressGamer: item,
-              sumBets: avgPrize
-            })
+              sumBets: avgPrize,
+            });
           }
 
           this.showSecretGame = true;
           this.currentGame.gameOver = true;
-
         }
         this.updateGame(this.currentRound.numberRound - 1, {
-          'secretNumberOfGame': this.currentGame.secretNumberOfGame,
-          'isLastWinnerRangeUp': this.currentRound.isLastWinnerRangeUp,
-          'gameOver': true,
-          'winners': this.currentGame.winners
-        })
+          secretNumberOfGame: this.currentGame.secretNumberOfGame,
+          isLastWinnerRangeUp: this.currentRound.isLastWinnerRangeUp,
+          gameOver: true,
+          winners: this.currentGame.winners,
+        });
         // console.log('listWinnersWithPrizes :', listWinnersWithPrizes);
         this.finishOldAndStartNewGame();
 
-
         //this.iziToast.gameOver(`Secret number of the game is ${secretNumber}`, `Winners got prize ${listWinnersWithPrizes}`);
-
       } else {
         this.showSecretGame = false;
-        this.setRange(this.currentRound.isLastWinnerRangeUp, this.avgRange, round.minNumberRange, round.maxNumberRange);
+        this.setRange(
+          this.currentRound.isLastWinnerRangeUp,
+          this.avgRange,
+          round.minNumberRange,
+          round.maxNumberRange
+        );
       }
-
     }
   }
 
@@ -656,8 +783,10 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
     for (const item of winners) {
       listWinnersWithPrizes += `${item.addressGamer} : ${item.sumBets}`;
     }
-    this.iziToast.gameOver(`The game is over! Secret number of the game is ${secretNumber}`, `Winners got prize ${listWinnersWithPrizes}`);
-
+    this.iziToast.gameOver(
+      `The game is over! Secret number of the game is ${secretNumber}`,
+      `Winners got prize ${listWinnersWithPrizes}`
+    );
   }
 
   finishOldAndStartNewGame() {
@@ -665,7 +794,6 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
 
     this.startNewGame(this.currentGame);
     this.defineRanges(this.startMinNumberRange, this.startMaxNumberRange);
-
   }
 
   startNewGame(game?: Game) {
@@ -679,22 +807,17 @@ export class GameDetailsComponent implements OnInit, AfterViewInit {
     this.currentGame.typeAddRate = this.game.typeAddRate;
     console.log('startNewGame :', this.currentGame);
     this.id = '';
-    this.store.dispatch(
-      new AddGame(this.currentGame)
-    ).subscribe((t) => {
-
+    this.store.dispatch(new AddGame(this.currentGame)).subscribe((t) => {
       if (endedGame.gameOver) {
         console.log('game.gameOver :', game.gameOver);
         this.showGameOver(endedGame.secretNumberOfGame, endedGame.winners);
         this.router.navigateByUrl('/home');
       }
-
-    }
-    );
+    });
   }
 
   winnerRangeDirection() {
-    return this.isWinnerRangeUp = Math.round((Math.random() * 1) + 0) === 0;
+    return (this.isWinnerRangeUp = Math.round(Math.random() * 1 + 0) === 0);
   }
 
   switchSound() {

@@ -47,6 +47,7 @@ export class HomeComponent implements OnInit {
   @Select(state => state.catalog.movies) movies$: Observable<Movie[]>;
   @Select(state => state.catalogGame.games) games$: Observable<Game[]>;
   // movies$: Observable<Movie[]>;
+  title = 'TITLE_GAME';
   start: number;
   end: number;
   showScrollTop: Boolean = false;
@@ -61,16 +62,13 @@ export class HomeComponent implements OnInit {
 
 
   constructor(private store: Store, private router: Router, private modalCtrl: ModalController,
-    private actions$: Actions, private popoverCtrl: PopoverController,
-    private iziToast: IziToastService, translate: LanguageService, private soundsService: SoundsService) {
+    private actions$: Actions,
+    private iziToast: IziToastService) {
     console.log('constructor home');
     this.start = 0;
     this.end = 50;
     this.searchControl = new FormControl();
-    translate.setDefaultLang('en');
 
-    // the lang to use, if the lang isn't available, it will use the current loader to get them
-    translate.use('en');
   }
 
   ionViewWillEnter() {
@@ -227,49 +225,11 @@ export class HomeComponent implements OnInit {
     this.fetchMovies(this.start, this.end);
   }
 
-  async presentPopover(event) {
-    // console.log('presentPopover');
-    const popover = await this.popoverCtrl.create({
-      component: FilterMoviePopoverComponent,
-      event: event
-    });
 
-    await popover.present();
-
-    const { data } = await popover.onWillDismiss();
-
-    if (data) {
-      console.log('data popover.onWillDismiss', data);
-    }
-
-  }
 
   scrollToTop() {
     // console.log('scrollToTop', this.content);
     this.content['nativeElement'].scrollToTop();
-  }
-
-  changeView() {
-    console.log('HomePage::changeView() | method called');
-    this.iconView = this.iconView === 'apps' ? 'list' : 'apps';
-  }
-
-  switchSound() {
-    this.soundsService.stop('all');
-  }
-
-  showLanguage() {
-    console.log('HomePage::showLanguage() | method called');
-    const state = JSON.parse(localStorage.getItem('@@STATE'));
-    const componentProps = { modalProps: { title: 'Language', favoritesMovies: state.catalog.language } };
-    this.presentModal(componentProps, LanguagesModalComponent);
-  }
-
-  showFavoritesMovies() {
-    console.log('HomePage::showFavoritesMovies() | method called');
-    const state = JSON.parse(localStorage.getItem('@@STATE'));
-    const componentProps = { modalProps: { title: 'Favorites Movies', favoritesMovies: state.catalog.favorites } };
-    this.presentModal(componentProps, FavoritesMoviesModalComponent);
   }
 
 }

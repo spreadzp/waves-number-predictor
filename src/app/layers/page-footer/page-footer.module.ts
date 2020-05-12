@@ -10,26 +10,22 @@ import { ShowActorsModalComponent } from '../../modals/show-actors-modal/show.ac
 import { CountdownModule } from 'ngx-countdown';
 import { TranslateWordPipe } from '../../pipes/translate';
 import { TranslateWordModule } from '../../pipes/translate.modules';
-import { StatisticComponent } from './statistic';
-import { StatisticComponentRoutingModule } from './statistic-routing.module';
-import { PageFooterModule } from '../../layers/page-footer/page-footer.module';
-import { PageHeaderModule } from '../../layers/page-header/page-header.module';
+import { PageFooterComponent } from './page-footer.component';
 
 @NgModule({
   imports: [
     CommonModule,
     IonicModule,
-    StatisticComponentRoutingModule,
     ReactiveFormsModule,
     FormsModule,
     StarRatingModule.forRoot(),
     CountdownModule,
-    TranslateWordModule,
-    PageFooterModule,
-    PageHeaderModule
-
+    TranslateWordModule
   ],
-  declarations: [StatisticComponent],
-  entryComponents: [StatisticComponent],
+  exports: [
+    PageFooterComponent
+  ],
+  declarations: [PageFooterComponent],
+  entryComponents: [PageFooterComponent],
 })
-export class StatisticModule {}
+export class PageFooterModule { }

@@ -18,6 +18,8 @@ import { TranslateWordPipe } from '../../pipes/translate';
 import { LanguagesModalComponent } from '../../modals/languages-modal/languages.modal';
 import { TooltipsModule } from 'ionic4-tooltips';
 import { TranslateWordModule } from '../../pipes/translate.modules';
+import { PageFooterModule } from '../../layers/page-footer/page-footer.module';
+import { PageHeaderModule } from '../../layers/page-header/page-header.module';
 
 @NgModule({
   imports: [
@@ -29,10 +31,18 @@ import { TranslateWordModule } from '../../pipes/translate.modules';
     FormsModule,
     StarRatingModule.forRoot(),
     TooltipsModule.forRoot(),
-    TranslateWordModule
+    TranslateWordModule,
+    PageFooterModule,
+    PageHeaderModule
   ],
-  declarations: [HomeComponent, FilterMoviePopoverComponent,LanguagesModalComponent, FavoritesMoviesModalComponent, GameCarouselComponent,
-                 FilterPipe],
-  entryComponents: [HomeComponent, FilterMoviePopoverComponent, LanguagesModalComponent, FavoritesMoviesModalComponent, GameCarouselComponent],
+  declarations: [
+    HomeComponent,
+    GameCarouselComponent,
+    FilterPipe,
+  ],
+  entryComponents: [
+    HomeComponent,
+    GameCarouselComponent,
+  ],
 })
 export class HomeModule {}

@@ -3,5 +3,8 @@
   "LANGUAGE": "Язык",
   "TITLE_GAME": "Угадай счастливое число!",
   "CURRENT_ROUND": "Сейчас раунд №: {{value}}",
-  "STATISTIC": "Статистика игр"
+  "STATISTIC": "Статистика игр",
+  "INFO": "Справка",
+  "BET_UP": "Орел",
+  "BET_DOWN": "Решка"
 }

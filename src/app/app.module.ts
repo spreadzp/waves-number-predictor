@@ -23,7 +23,6 @@ import { WavesService } from './providers/waves-service';
 import { GamesService } from './providers/games-service';
 import { GameState } from './store/state/games.state';
 import { PagesModule } from './pages/pages.module';
-// import { CommentModule } from './modals/comment-modal/comment.module';
 import { SoundsService } from './providers/sounds.service';
 import { NativeAudio } from '@ionic-native/native-audio/ngx';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -36,6 +35,9 @@ import { LanguageService } from './providers/language.service';
 import { TooltipsModule } from 'ionic4-tooltips';
 import { TranslateWordPipe } from './pipes/translate';
 import { TranslateWordModule } from './pipes/translate.modules';
+import { PageFooterModule } from './layers/page-footer/page-footer.module';
+import { PageFooterComponent } from './layers/page-footer/page-footer.component';
+import { HideHeaderDirective } from './directives/hide-header.directive';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18/', '.json');

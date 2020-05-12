@@ -12,6 +12,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "serv": "cd json-server && json-server --watch db.json",
+    "waves-locale": "sudo docker run -d -p 6869:6869 wavesplatform/waves-private-node",
     "tg": "npx surfboard test game-test.js",
     "tr": "npx surfboard test transfer.js",
     "issue": "npx surfboard test issue-token-test.js",

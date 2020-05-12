@@ -1,0 +1,29 @@
+<ion-header no-border>
+  <ion-toolbar color='secondary'>
+    <ion-title>{{ title | translate }}</ion-title>
+
+
+    <ion-buttons slot='end'>
+      <ion-button (click)="switchSound()">
+        <ion-icon slot="icon-only" ios="ios-volume-off" md="md-volume-off" positionh="left" tooltip="I'm a beautiful tooltip" style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"
+        class="md button button-solid ion-activatable ion-focusable hydrated"></ion-icon>
+      </ion-button>
+      <ion-button (click)="showLanguage()"  tooltip="Call" event="hover" navTooltip>
+        <ion-icon slot="icon-only" name="flag"></ion-icon>
+      </ion-button>
+      <ion-button (click)="showFavoritesMovies()">
+        <ion-icon slot="icon-only" name="heart"></ion-icon>
+      </ion-button>
+      <ion-button (click)="changeView()">
+        <ion-icon slot="icon-only" [name]="iconView"></ion-icon>
+      </ion-button>
+      <ion-button (click)="presentPopover($event)">
+        <ion-icon slot="icon-only" name="options"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar color="secondary">
+    <ion-searchbar #search [formControl]="searchControl" animated="true" show-cancel-button placeholder="Search">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>

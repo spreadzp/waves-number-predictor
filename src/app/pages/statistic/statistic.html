@@ -1,37 +1,15 @@
-<ion-header no-border>
-  <ion-toolbar color='secondary'>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home"></ion-back-button>
-    </ion-buttons>
-    <ion-title>{{'STATISTIC' | translate}}</ion-title>
-  </ion-toolbar>
-</ion-header>
-
+<app-page-header title="{{title}}"></app-page-header>
 <ion-content class="outer-content">
   <svg viewBox="0 0 100 75">
-    <path d="M15,35 C15,60 50,60 50,35 50,10 85,10 85,35" id="bezier" fill="none" stroke="hsla(0, 75%, 50%, 0.2)" stroke-width="0.5" />
+    <path d="M15,35 C15,60 50,60 50,35 50,10 85,10 85,35" id="bezier" fill="none" stroke="hsla(0, 75%, 50%, 0.2)"
+      stroke-width="0.5" />
     <text font-family="Source Sans Pro" font-size="6" fill="hsla(210, 75%, 50%, 0.85)">
       <textPath href="#bezier" id="tp" startOffset="10%">
-       {{numberRound}}
+        {{numberRound}}
       </textPath>
     </text>
   </svg>
   <label for="sOffset">Text start offset:</label>
   <input type="range" min="0" max="100" value="10" id="sOffset">
 </ion-content>
-
-
-
-<ion-footer>
-  <ion-toolbar color="secondary">
-    <ion-title>© {{ currentYear }} Caravan </ion-title>
-    <ion-buttons slot="end">
-      <div class="github-button"><iframe allowtransparency="true" scrolling="no" frameborder="0"
-          src="https://buttons.github.io/buttons.html#href=https%3A%2F%2Fgithub.com%2Fabritopach%2Fangular-ionic-master-detail&amp;title=&amp;aria-label=Star%20abritopach%2Fangular-ionic-master-detail%20on%20GitHub&amp;data-icon=octicon-star&amp;data-text=Star"
-          style="width: 50px; height: 20px; border: none;"></iframe></div>
-      <div class="github-button"><iframe allowtransparency="true" scrolling="no" frameborder="0"
-          src="https://buttons.github.io/buttons.html#href=https%3A%2F%2Fgithub.com%2Fabritopach&amp;title=&amp;aria-label=Follow%20%40abritopach%20on%20GitHub&amp;data-text=GitHub"
-          style="width: 67px; height: 20px; border: none;"></iframe></div>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-footer>
+<app-page-footer></app-page-footer>

@@ -15,6 +15,11 @@ import { ShowActorsModalComponent } from '../../modals/show-actors-modal/show.ac
 import { CountdownModule } from 'ngx-countdown';
 import { TranslateWordPipe } from '../../pipes/translate';
 import { TranslateWordModule } from '../../pipes/translate.modules';
+import { PageFooterComponent } from '../../layers/page-footer/page-footer.component';
+import { PageFooterModule } from '../../layers/page-footer/page-footer.module';
+import { PageHeaderModule } from '../../layers/page-header/page-header.module';
+import { HideHeaderDirective } from '../../directives/hide-header.directive';
+import { HideHeaderModule } from '../../directives/hide-header.directive.module';
 
 @NgModule({
   imports: [
@@ -25,7 +30,10 @@ import { TranslateWordModule } from '../../pipes/translate.modules';
     FormsModule,
     StarRatingModule.forRoot(),
     CountdownModule,
-    TranslateWordModule
+    TranslateWordModule,
+    PageFooterModule,
+    PageHeaderModule,
+    HideHeaderModule
 
   ],
   declarations: [GameDetailsComponent, CommentModalComponent, ShowCommentsModalComponent, ShowActorsModalComponent],

@@ -3,7 +3,10 @@
   "LANGUAGE": "Language",
   "TITLE_GAME": "Guess the lucky number!",
   "CURRENT_ROUND": "Current number round {{value}}",
-  "STATISTIC": "Statistic of games"
+  "STATISTIC": "Statistic of games",
+  "INFO": "Info",
+  "BET_UP": "Heads",
+  "BET_DOWN": "Tails"
 
 }
 
