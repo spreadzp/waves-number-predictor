@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable, Subscription, timer } from 'rxjs';
+import { trigger, state, transition, style, animate } from '@angular/animations';
 
 import { YoutubeApiService } from '../../providers/youtube-api-service';
 
@@ -51,6 +52,13 @@ import { TypeAddRate } from '../../helpers/typeAddRate';
   templateUrl: './game-details.html',
   styleUrls: ['./game-details.scss'],
   encapsulation: ViewEncapsulation.None,
+  animations: [
+    trigger('fadeInOut', [
+      state('void', style({
+        opacity: 0
+      })),
+      transition('void <=> *', animate(1000)),
+    ])]
 })
 export class GameDetailsComponent implements OnInit, AfterViewInit {
   currentYear = new Date().getFullYear();

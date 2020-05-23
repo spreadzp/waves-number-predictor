@@ -39,20 +39,6 @@ describe('GAME test suite', async function () {
        // console.log('Script has been set')
     });
 
-    it('1 can success issue tokens', async function () {
-        const issueParam = {
-            name: 'GMTK', // process.env.NAME_TOKEN, // + Math.random().toString(36).substring(2, 8).toUpperCase(), // process.env.NAME_TOKEN,
-            description: `Game token free exchange on DEX and free transfer it someone`,
-            quantity: countTokens,
-            decimals: 0,
-            reissuable: true,
-            fee: 1.005 * wvs
-        }
-        /*const txIssue = issue(issueParam, owner3);
-        await broadcast(txIssue);
-        assetId = txIssue.id;
-        await waitForTx(txIssue.id);*/
-    })
 
     it('2 truly balance of the tokens', async function () {
         /* await setupAccounts(

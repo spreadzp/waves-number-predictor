@@ -3,7 +3,7 @@
 {-# SCRIPT_TYPE ACCOUNT #-}
 
 let startNewRoundHeight = 5
-let idGameToken = base58'9Bfxo5B66ZEv7WChZJE8STWCqGvWj8eULUxgStfj1Vvk'
+let idGameToken =  base58'53gHcWVyUNGAfEzKCodyhbmy3yrgjmQAj9rtuU15pRxr'
 let degreeMaxNumber = 7
 let minBet = 100000
 
@@ -115,13 +115,12 @@ func getBet(round: Int, addressGamer: String) =  {
     minBet
 }
 
-func isOppositeRate() = {
-  let numberOfRound = getCurrentNumberRound()
-    let numberOfGamersUp = match getInteger(this, numberOfRound.toString() + "_countGamersUp") {
+func isOppositeRate(numberOfRound: Int) = {
+    let numberOfGamersUp = match getInteger(this, getCurrentNumberGame().toString() + "_" + numberOfRound.toString() + "_countGamersUp") {
       case g:Int => g
       case _ => 0
     }
-    let numberOfGamersDown = match getInteger(this, numberOfRound.toString() + "_countGamersDown") {
+    let numberOfGamersDown = match getInteger(this, getCurrentNumberGame().toString() + "_" + numberOfRound.toString() + "_countGamersDown") {
       case g:Int => g
       case _ => 0
     }
@@ -135,13 +134,14 @@ func getNextNumberGame() = {
   }
 }
 
-# func sendPrize(currentNumberGame: Int) = {
-#   TransferSet([ScriptTransfer(i.caller, amount, unit)])
-# }
+func sendPrize(currentNumberGame: Int) = {
+  TransferSet([ScriptTransfer(i.caller, amount, unit)])
+}
 
 @Callable(i)
 func startRound() = {
   let numberOfRound = getCurrentNumberRound()
+  let prev = numberOfRound - 1
   let randhash = randomizer(i)
   let isGameStarted = match getBoolean(this, "startGame") {
     case g:Boolean => g
@@ -149,7 +149,7 @@ func startRound() = {
   }
   if(i.caller != this) then
     throw("Only owner can start the game.")
-  else if( numberOfRound == 1 && !isOppositeRate() && i.caller == this && !isGameStarted ) then
+  else if( numberOfRound == 1 && !isOppositeRate(numberOfRound) && i.caller == this && !isGameStarted ) then
     let currentNumberGame = getCurrentNumberGame()
     #invoke script
     # sendPrize(currentNumberGame)  ?
@@ -160,10 +160,10 @@ func startRound() = {
       DataEntry("numberRound", numberOfRound),
       DataEntry(currentNumberGame.toString() + "_bankOfGame", 0)
       ])
-  else if (i.caller == this && isOppositeRate() && !isGameStarted) then
+  else if (i.caller == this && isOppositeRate(prev) && isGameStarted) then
     setWinnersPrevRound(numberOfRound, randhash.toInt() % 1000)
   else
-    throw("Same error." + numberOfRound.toString() + isGameStarted.toString())
+    throw("startRound error case." + prev.toString() + isGameStarted.toString() + isOppositeRate(prev).toString())
 }
 
 @Callable(i)
@@ -172,14 +172,26 @@ func stopGame() = {
     case g:Boolean => g
     case _ => false
   } #isOppositeRate() &&  && !isGameStarted
-  if(i.caller == this) then
   let newNumberOfRound = (getCurrentNumberRound() + 1) % 8
+  if(i.caller == this && newNumberOfRound > 0) then
     WriteSet([
-      DataEntry("startGame", !isGameStarted),
       DataEntry("numberRound", newNumberOfRound)
     ])
+  else if (i.caller == this && newNumberOfRound > 0) then
+    WriteSet([
+      DataEntry("startGame", !isGameStarted)
+    ])
+  else if (newNumberOfRound == 0) then
+     sendPrize()
+     let newGame = getNextNumberGame()
+     WriteSet([
+      DataEntry("numberGame", newGame),
+      DataEntry("startGame", !isGameStarted),
+      DataEntry("numberRound", newNumberOfRound + 1),
+      DataEntry(newGame.toString() + "_bankOfGame", 0)
+      ])
   else
-    throw("Only owner can start the game.")
+    throw("Only owner can stop the game")
 }
 
 @Callable(i)
@@ -193,9 +205,9 @@ func makeBetLess() = {
   let currentRound = getCurrentNumberRound()
   let countBet = getBet(currentRound, addressGamer)
   let gamerAlreadyOppositeBet = getGamerBet(addressGamer, "more")
-  if (gamerAlreadyOppositeBet != 0) then
+  if (gamerAlreadyOppositeBet != 0 || pmt.assetId != idGameToken) then
     throw("The gamer already made opposite a bet in the round!")
-  else if(countBet > pmt.amount || pmt.assetId == idGameToken) then
+  else if(countBet > pmt.amount) then
     throw("Payment must be more for the round!" + countBet.toString() + pmt.amount.toString() + currentRound.toString() + addressGamer)
   else if (gamerAlreadyOppositeBet == 0 && pmt.assetId == idGameToken && countBet <= pmt.amount && isGameStarted) then
     setGamerBet(addressGamer, "_less_", "_countGamersDown", pmt.amount)
@@ -214,8 +226,8 @@ func makeBetMore() = {
   let currentRound = getCurrentNumberRound()
   let countBet = getBet(currentRound, addressGamer)
   let gamerAlreadyOppositeBet = getGamerBet(addressGamer, "less")
-  if (gamerAlreadyOppositeBet != 0 || pmt.assetId == idGameToken) then
-    throw("The gamer already made opposite bet in the round!")
+  if (gamerAlreadyOppositeBet != 0 || pmt.assetId != idGameToken) then
+    throw("The gamer already made opposite bet in the round! Or send not true tokens" + gamerAlreadyOppositeBet.toString() + " " +  (pmt.assetId == idGameToken).toString())
   else if(countBet > pmt.amount) then
     throw("Payment must be more for the round!" + countBet.toString() + pmt.amount.toString() + currentRound.toString() + addressGamer)
   else if (gamerAlreadyOppositeBet == 0 && pmt.assetId == idGameToken && countBet <= pmt.amount && isGameStarted) then

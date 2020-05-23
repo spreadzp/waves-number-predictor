@@ -6,6 +6,7 @@ import { SoundsService } from '../../providers/sounds.service';
 import { LanguagesModalComponent } from '../../modals/languages-modal/languages.modal';
 import { FavoritesMoviesModalComponent } from '../../modals/favorites-movies-modal/favorites.movies.modal';
 import { FilterMoviePopoverComponent } from '../../popovers/filter-movie.popover';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-page-header',
@@ -15,12 +16,14 @@ import { FilterMoviePopoverComponent } from '../../popovers/filter-movie.popover
 export class PageHeaderComponent implements OnInit {
   @Input() title: string;
   iconView = 'apps';
+  searchControl: FormControl;
   constructor( private popoverCtrl: PopoverController, private modalCtrl: ModalController,
     private iziToast: IziToastService, translate: LanguageService, private soundsService: SoundsService) {
       translate.setDefaultLang('en');
 
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     translate.use('en');
+    this.searchControl = new FormControl();
      }
 
   ngOnInit() {

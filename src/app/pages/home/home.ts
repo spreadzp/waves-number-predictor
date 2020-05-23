@@ -160,7 +160,6 @@ export class HomeComponent implements OnInit {
   viewGameDetails(item: Movie | Game) {
     // console.log('viewMovieDetails', movie);
     console.log('this.carousel ; :', this.carousel);
-    debugger;
     if ((item as Game).gameOver === true) {
       const selectedGame = (item as Game);
       this.showGameOver(selectedGame.secretNumberOfGame, selectedGame.winners);
