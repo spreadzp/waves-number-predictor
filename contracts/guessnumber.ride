@@ -3,7 +3,7 @@
 {-# SCRIPT_TYPE ACCOUNT #-}
 
 let startNewRoundHeight = 5
-let idGameToken =  base58'53gHcWVyUNGAfEzKCodyhbmy3yrgjmQAj9rtuU15pRxr'
+let idGameToken =  base58'Es6rS1n1eC9Xz5RZRvYh8GzyXwzafozUUCkJMPVGU1Mt'
 let degreeMaxNumber = 7
 let minBet = 100000
 
@@ -134,8 +134,26 @@ func getNextNumberGame() = {
   }
 }
 
-func sendPrize(currentNumberGame: Int) = {
-  TransferSet([ScriptTransfer(i.caller, amount, unit)])
+func sendPrize(currentNumberGame: Int, lastNumberGame: Int) = {
+  # TransferSet([ScriptTransfer(i.caller, amount, unit)])
+  let bankOfTheGame = match getInteger(this, currentNumberGame.toString() + "_bankOfGame") {
+    case a:Int => a
+    case _ => 1
+  }
+  let winners = match( this.getString(lastNumberGame.toString() + "lastRoundWinner")){
+      case x: String => x
+      case _ => ""
+  }
+  TransferSet([ScriptTransfer(this, 555, idGameToken)])
+}
+
+func saveDataStartGame(numberGame: Int, isGameStarted: Boolean, numberOfRound: Int ) = {
+ WriteSet([
+      DataEntry("numberGame", numberGame),
+      DataEntry("startGame", isGameStarted),
+      DataEntry("numberRound", numberOfRound + 1),
+      DataEntry(numberGame.toString() + "_bankOfGame", 0)
+      ])
 }
 
 @Callable(i)
@@ -153,13 +171,8 @@ func startRound() = {
     let currentNumberGame = getCurrentNumberGame()
     #invoke script
     # sendPrize(currentNumberGame)  ?
-    let newNumberGame = currentNumberGame
-    WriteSet([
-      DataEntry("numberGame", currentNumberGame),
-      DataEntry("startGame", !isGameStarted),
-      DataEntry("numberRound", numberOfRound),
-      DataEntry(currentNumberGame.toString() + "_bankOfGame", 0)
-      ])
+    # let newNumberGame = currentNumberGame
+    saveDataStartGame(currentNumberGame, !isGameStarted, numberOfRound)
   else if (i.caller == this && isOppositeRate(prev) && isGameStarted) then
     setWinnersPrevRound(numberOfRound, randhash.toInt() % 1000)
   else
@@ -172,27 +185,25 @@ func stopGame() = {
     case g:Boolean => g
     case _ => false
   } #isOppositeRate() &&  && !isGameStarted
-  let newNumberOfRound = (getCurrentNumberRound() + 1) % 8
+  let lastRound = getCurrentNumberRound()
+  let newNumberOfRound = (lastRound + 1) % 8
+
   if(i.caller == this && newNumberOfRound > 0) then
     WriteSet([
-      DataEntry("numberRound", newNumberOfRound)
-    ])
-  else if (i.caller == this && newNumberOfRound > 0) then
-    WriteSet([
+      DataEntry("numberRound", newNumberOfRound),
       DataEntry("startGame", !isGameStarted)
     ])
   else if (newNumberOfRound == 0) then
-     sendPrize()
-     let newGame = getNextNumberGame()
-     WriteSet([
-      DataEntry("numberGame", newGame),
-      DataEntry("startGame", !isGameStarted),
-      DataEntry("numberRound", newNumberOfRound + 1),
-      DataEntry(newGame.toString() + "_bankOfGame", 0)
-      ])
+    let lastNumberGame = getCurrentNumberGame()
+    let newGame = getNextNumberGame()
+    saveDataStartGame(newGame, !isGameStarted, newNumberOfRound)
+    # sendPrize(lastNumberGame, lastRound)
   else
     throw("Only owner can stop the game")
 }
+
+
+
 
 @Callable(i)
 func makeBetLess() = {
@@ -212,7 +223,7 @@ func makeBetLess() = {
   else if (gamerAlreadyOppositeBet == 0 && pmt.assetId == idGameToken && countBet <= pmt.amount && isGameStarted) then
     setGamerBet(addressGamer, "_less_", "_countGamersDown", pmt.amount)
   else
-    throw("works with waves only")
+    throw("Less throw"+ gamerAlreadyOppositeBet.toString() + countBet.toString() + pmt.amount.toString() + isGameStarted.toString())
 }
 
 @Callable(i)
@@ -233,7 +244,7 @@ func makeBetMore() = {
   else if (gamerAlreadyOppositeBet == 0 && pmt.assetId == idGameToken && countBet <= pmt.amount && isGameStarted) then
     setGamerBet(addressGamer, "_more_", "_countGamersUp", pmt.amount)
   else
-    throw("works with waves only")
+    throw("More throw"+ gamerAlreadyOppositeBet.toString() + countBet.toString() + pmt.amount.toString() + isGameStarted.toString())
 }
 
 @Verifier(tx)

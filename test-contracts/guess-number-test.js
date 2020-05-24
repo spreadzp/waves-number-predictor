@@ -22,7 +22,7 @@ describe("GAME test suite", async function () {
   let paymentAmount = 1 * wvs;
   // let preSellScript;
   const countTokens = "1000000000";
-  const idGameToken = "53gHcWVyUNGAfEzKCodyhbmy3yrgjmQAj9rtuU15pRxr";
+  const idGameToken = "Es6rS1n1eC9Xz5RZRvYh8GzyXwzafozUUCkJMPVGU1Mt";
 
   const accounts = {};
   before(async function () {
