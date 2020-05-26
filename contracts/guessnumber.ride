@@ -3,9 +3,10 @@
 {-# SCRIPT_TYPE ACCOUNT #-}
 
 let startNewRoundHeight = 5
-let idGameToken =  base58'Es6rS1n1eC9Xz5RZRvYh8GzyXwzafozUUCkJMPVGU1Mt'
+let idGameToken =  base58'5sbZf9fYqqvd7SrzHjnr2MhyxSPGpEdhACpTMXD486Vj'
 let degreeMaxNumber = 7
 let minBet = 100000
+let dividerOfGame = 8
 
 # create random hash for last round
 func randomizer(inv: Invocation) = {
@@ -30,6 +31,9 @@ func getCurrentNumberGame() = {
     case a:Int => a
     case _ => 1
   }
+}
+func getPrevNumberGame() = {
+  getCurrentNumberGame() - 1
 }
 
 func getCurrentGameAndRound() = {
@@ -151,7 +155,7 @@ func saveDataStartGame(numberGame: Int, isGameStarted: Boolean, numberOfRound: I
  WriteSet([
       DataEntry("numberGame", numberGame),
       DataEntry("startGame", isGameStarted),
-      DataEntry("numberRound", numberOfRound + 1),
+      DataEntry("numberRound", numberOfRound),
       DataEntry(numberGame.toString() + "_bankOfGame", 0)
       ])
 }
@@ -165,18 +169,29 @@ func startRound() = {
     case g:Boolean => g
     case _ => false
   }
+  let currentNumberGame = getCurrentNumberGame()
   if(i.caller != this) then
     throw("Only owner can start the game.")
   else if( numberOfRound == 1 && !isOppositeRate(numberOfRound) && i.caller == this && !isGameStarted ) then
-    let currentNumberGame = getCurrentNumberGame()
+
     #invoke script
     # sendPrize(currentNumberGame)  ?
     # let newNumberGame = currentNumberGame
     saveDataStartGame(currentNumberGame, !isGameStarted, numberOfRound)
-  else if (i.caller == this && isOppositeRate(prev) && isGameStarted) then
+  else if (i.caller == this && isOppositeRate(prev) && !isGameStarted) then
     setWinnersPrevRound(numberOfRound, randhash.toInt() % 1000)
+  else if (numberOfRound == 0 && !isGameStarted) then
+      sendPrize(currentNumberGame, getPrevNumberGame())
+  else if (numberOfRound == 0 && isGameStarted) then
+      WriteSet([
+       DataEntry("numberRound", numberOfRound + 1)
+      ])
+  else if( numberOfRound > 1 && isOppositeRate(prev) && i.caller == this && !isGameStarted ) then
+    WriteSet([
+      DataEntry("startGame", !isGameStarted)
+    ])
   else
-    throw("startRound error case." + prev.toString() + isGameStarted.toString() + isOppositeRate(prev).toString())
+    throw("startRound error case." + isGameStarted.toString() + isOppositeRate(prev).toString())
 }
 
 @Callable(i)
@@ -186,24 +201,24 @@ func stopGame() = {
     case _ => false
   } #isOppositeRate() &&  && !isGameStarted
   let lastRound = getCurrentNumberRound()
-  let newNumberOfRound = (lastRound + 1) % 8
+  let newNumberOfRound = (lastRound + 1) % dividerOfGame
 
-  if(i.caller == this && newNumberOfRound > 0) then
+  if(i.caller == this && newNumberOfRound >= 1 && isOppositeRate(lastRound)) then
     WriteSet([
-      DataEntry("numberRound", newNumberOfRound),
-      DataEntry("startGame", !isGameStarted)
+      DataEntry("numberRound", newNumberOfRound)
     ])
-  else if (newNumberOfRound == 0) then
-    let lastNumberGame = getCurrentNumberGame()
-    let newGame = getNextNumberGame()
-    saveDataStartGame(newGame, !isGameStarted, newNumberOfRound)
-    # sendPrize(lastNumberGame, lastRound)
+  else if (newNumberOfRound < 1) then
+    if(newNumberOfRound == 1) then
+      let newGame = getNextNumberGame()
+      saveDataStartGame(newGame, isGameStarted, newNumberOfRound)
+    else
+      WriteSet([
+        DataEntry("numberGame", getCurrentNumberGame() + 1),
+        DataEntry("numberRound", newNumberOfRound)
+      ])
   else
     throw("Only owner can stop the game")
 }
-
-
-
 
 @Callable(i)
 func makeBetLess() = {
@@ -250,8 +265,8 @@ func makeBetMore() = {
 @Verifier(tx)
 func verify() = {
     match(tx) {
-        case t:DataTransaction => false
-        case t:SetScriptTransaction => false
+        case t:DataTransaction => true # should be false for production
+        case t:SetScriptTransaction => true # should be false for production
         case _ => sigVerify(tx.bodyBytes, tx.proofs[0], tx.senderPublicKey)
     }
 }

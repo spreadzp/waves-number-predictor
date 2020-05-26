@@ -22,7 +22,7 @@ describe("GAME test suite", async function () {
   let paymentAmount = 1 * wvs;
   // let preSellScript;
   const countTokens = "1000000000";
-  const idGameToken = "Es6rS1n1eC9Xz5RZRvYh8GzyXwzafozUUCkJMPVGU1Mt";
+  const idGameToken = "5sbZf9fYqqvd7SrzHjnr2MhyxSPGpEdhACpTMXD486Vj";
 
   const accounts = {};
   before(async function () {
@@ -111,6 +111,7 @@ describe("GAME test suite", async function () {
 
   it("5 make Bet More", async function () {
     const numberGame = await accountDataByKey("numberGame", address(owner3));
+    console.log('numberGame More :>> ', numberGame);
     const numberRoundState = await accountDataByKey(
       "numberRound",
       address(owner3)
@@ -119,7 +120,7 @@ describe("GAME test suite", async function () {
     const prev =
       numberGame.value.toString() +
       "_" +
-      (numberRoundState.value - 1).toString() +
+      (numberRoundState.value <= 1) ? numberRoundState.value : (numberRoundState.value - 1).toString() +
       "_";
     const rateGamerInGame = await accountDataByKey(t, address(owner3));
     console.log("prev :", prev);
@@ -187,6 +188,7 @@ describe("GAME test suite", async function () {
 
   it("7 make Bet Less", async function () {
     const numberGame = await accountDataByKey("numberGame", address(owner3));
+    console.log('numberGame Less :>> ', numberGame);
     //const numberRoundState = await accountDataByKey("numberRound", address(owner3));
     const t = numberGame.value.toString() + "_" + address(seedGamer1);
     const rateGamerInGame = await accountDataByKey(t, address(owner3));
@@ -198,7 +200,7 @@ describe("GAME test suite", async function () {
     const prev =
       numberGame.value.toString() +
       "_" +
-      (numberRoundState.value - 1).toString() +
+      (numberRoundState.value <= 1) ? numberRoundState.value : (numberRoundState.value - 1).toString() +
       "_";
     console.log("prev :", prev);
     console.log("numberRoundState :", numberRoundState);
