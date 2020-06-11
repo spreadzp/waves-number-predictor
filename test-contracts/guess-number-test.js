@@ -22,7 +22,7 @@ describe("GAME test suite", async function () {
   let paymentAmount = 1 * wvs;
   // let preSellScript;
   const countTokens = "1000000000";
-  const idGameToken = "FGv3T3PT7KCQyi4xa4smp26v2Fjm9rS4z6iZEd2DjYgL";
+  const idGameToken = "6abp1c1jcDVnTvYhiuCReCpnW4njtT8wSFtN5K47n79D";
 
   const accounts = {};
   before(async function () {
@@ -441,7 +441,29 @@ describe("GAME test suite", async function () {
     console.log("state :", state);
   });
 
-  it("18 should success withdraw after finish the game", async function () {
+
+  it("18 Should start new round", async function () {
+    const iTxSet = invokeScript(
+      {
+        dApp: address(owner3),
+        fee: 0.09 * wvs,
+        call: {
+          function: "startRound",
+          args: [],
+        },
+        payment: [],
+      },
+      owner3
+    );
+    await broadcast(iTxSet);
+    await waitForTx(iTxSet.id);
+    const state = await stateChanges(iTxSet.id);
+    console.log("state :", state);
+    const stGame = state.data.find((item) => item.key === "startGame");
+    expect(stGame.key).to.equal("startGame");
+    expect(stGame.value).to.equal(true);
+  });
+  it("19 should success withdraw after finish the game", async function () {
     const numberGameState = await accountDataByKey(
       "numberGame",
       address(owner3)
@@ -489,7 +511,7 @@ describe("GAME test suite", async function () {
     }
   });
 
-  it("19 should success withdraw after finish the game", async function () {
+  it("20 should success withdraw after finish the game", async function () {
     const numberGameState = await accountDataByKey(
       "numberGame",
       address(owner3)
@@ -513,7 +535,8 @@ describe("GAME test suite", async function () {
       );
       console.log('hasWinner :>> ', hasWinner);
 
-      const hasWinnerPrize = await accountDataByKey(prevNumberGame + "_" + address(seedGamer1) + "_HasPrize",
+      const hasWinnerPrize = await accountDataByKey(
+      prevNumberGame + "_" + address(seedGamer1) + "_GetPrize",
       address(owner3)
       );
       console.log('hasWinnerPrize :>> ', hasWinnerPrize);
@@ -542,26 +565,5 @@ describe("GAME test suite", async function () {
     } else {
       expect(numberGameState.value).to.equal(1);
     }
-  });
-  it("20 Should start new round", async function () {
-    const iTxSet = invokeScript(
-      {
-        dApp: address(owner3),
-        fee: 0.09 * wvs,
-        call: {
-          function: "startRound",
-          args: [],
-        },
-        payment: [],
-      },
-      owner3
-    );
-    await broadcast(iTxSet);
-    await waitForTx(iTxSet.id);
-    const state = await stateChanges(iTxSet.id);
-    console.log("state :", state);
-    const stGame = state.data.find((item) => item.key === "startGame");
-    expect(stGame.key).to.equal("startGame");
-    expect(stGame.value).to.equal(true);
   });
 });

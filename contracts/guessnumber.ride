@@ -3,7 +3,7 @@
 {-# SCRIPT_TYPE ACCOUNT #-}
 
 let startNewRoundHeight = 5
-let idGameToken =  base58'FGv3T3PT7KCQyi4xa4smp26v2Fjm9rS4z6iZEd2DjYgL'
+let idGameToken =  base58'6abp1c1jcDVnTvYhiuCReCpnW4njtT8wSFtN5K47n79D'
 let minBet = 100000
 let maxNumberRound = 8
 
@@ -94,12 +94,12 @@ func setGamerBet(addressGamer: String, directionRate: String, directionGamer: St
       case _ => 0
     }
     if(maxNumberRound == newNumberOfRound + 1) then
-     WriteSet([
-      DataEntry(getCurrentGameAndRound() + directionRate + addressGamer, currentBet),
-      DataEntry(getCurrentGameAndRound() + directionGamer, numOfGamersCurrDirection + 1),
-      DataEntry(getCurrentNumberGame().toString() + "_BankOfGame", sumOfBank + currentBet),
-      DataEntry(getCurrentNumberGame().toString() + "_" + addressGamer, sumGamerBets + currentBet),
-      DataEntry(getCurrentNumberGame().toString() + "_" + addressGamer + "_" + defineCoinPart(directionRate), true)
+      WriteSet([
+        DataEntry(getCurrentGameAndRound() + directionRate + addressGamer, currentBet),
+        DataEntry(getCurrentGameAndRound() + directionGamer, numOfGamersCurrDirection + 1),
+        DataEntry(getCurrentNumberGame().toString() + "_BankOfGame", sumOfBank + currentBet),
+        DataEntry(getCurrentNumberGame().toString() + "_" + addressGamer, sumGamerBets + currentBet),
+        DataEntry(getCurrentNumberGame().toString() + "_" + addressGamer + "_" + defineCoinPart(directionRate) + "_GetPrize", false)
       ])
     else
     WriteSet([
@@ -107,7 +107,6 @@ func setGamerBet(addressGamer: String, directionRate: String, directionGamer: St
       DataEntry(getCurrentGameAndRound() + directionGamer, numOfGamersCurrDirection + 1),
       DataEntry(getCurrentNumberGame().toString() + "_BankOfGame", sumOfBank + currentBet),
       DataEntry(getCurrentNumberGame().toString() + "_" + addressGamer, sumGamerBets + currentBet)
-
       ])
 }
 
@@ -154,8 +153,6 @@ func getNextNumberGame() = {
     case _ => 1
   }
 }
-
-
 
 func saveDataStartGame(numberGame: Int, isGameStarted: Boolean, numberOfRound: Int ) = {
  WriteSet([
@@ -279,14 +276,14 @@ func withdraw(numberGame: String) = {
   # адрес приз из этой игры, получаем значение приза проверяем больше ли баланс чем приз, и пересылаем на адрес,
   # отнимаем из общей суммы призов, помечаем что адрес получил приз
   let isGameOver = match getBoolean(this, numberGame + "_GameOver") {
-      case a:Boolean => a
-      case _ => false
-    }
+    case a:Boolean => a
+    case _ => false
+  }
   # получаем орел или решка победили в игре а может число
   let winnerSign = match(this.getString( numberGame + "_WinnerSign")) {
-      case a:String => a
-      case _ => ""
-    }
+    case a:String => a
+    case _ => ""
+  }
   # проработать как получить адрес победителя, создавать на последнем раунде запись адресов
   # орел/решка и теперь запрашивать по ключам номера игры и победной решки/орла найти адрес
   # в победителях иначе пустая строка или false
@@ -294,24 +291,23 @@ func withdraw(numberGame: String) = {
       case x: Boolean => x
       case _ => false
   }
-let isHasPrize = match getBoolean(this, numberGame + addressGamer + "_HasPrize") {
-      case a:Boolean => a
-      case _ => false
-    }
+  let isHasPrize = match getBoolean(this, numberGame + addressGamer + "_GetPrize") {
+    case a:Boolean => a
+    case _ => false
+  }
   let valuePrize = match getInteger(this, numberGame + "_ValuePrize") {
-      case a:Int => a
-      case _ => 0
-    }
+    case a:Int => a
+    case _ => 0
+  }
   let bankOfGame = match getInteger(this, numberGame + "_BankOfGame") {
-      case a:Int => a
-      case _ => 0
-    }
+    case a:Int => a
+    case _ => 0
+  }
 
-  if(isGameOver && isWinner && isHasPrize &&  bankOfGame >= valuePrize) then
-    #
+  if(isGameOver && isWinner && isHasPrize && bankOfGame >= valuePrize) then
     ScriptResult(
       WriteSet([
-              DataEntry(numberGame + addressGamer + "_HasPrize", false),
+              DataEntry(numberGame + addressGamer + "_GetPrize", true),
               DataEntry(numberGame + "_BankOfGame", bankOfGame - valuePrize)
           ]),
       TransferSet([ScriptTransfer(i.caller, valuePrize, idGameToken)])
@@ -319,7 +315,6 @@ let isHasPrize = match getBoolean(this, numberGame + addressGamer + "_HasPrize")
   else
     throw("The address is not the winner" + isGameOver.toString() + isWinner.toString() + isHasPrize.toString() +  bankOfGame.toString() + valuePrize.toString() )
 }
-
 
 @Verifier(tx)
 func verify() = {
